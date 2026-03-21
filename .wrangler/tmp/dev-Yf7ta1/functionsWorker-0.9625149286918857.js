@@ -13,61 +13,34 @@ async function onRequestPost({ request, env }) {
   try {
     const apiKey = env.GEMINI_API_KEY;
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "API key not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
+      return new Response(JSON.stringify({ error: "API key not configured" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const body = await request.json();
     const { message, history, systemInstruction } = body;
     if (!message) {
-      return new Response(JSON.stringify({ error: "Message is required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
+      return new Response(JSON.stringify({ error: "Message is required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const geminiPayload = {
-      contents: [
-        ...history || [],
-        { role: "user", parts: [{ text: message }] }
-      ],
+      contents: [...history || [], { role: "user", parts: [{ text: message }] }],
       systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : void 0
     };
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-    const geminiResponse = await fetch(geminiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(geminiPayload)
-    });
+    const geminiResponse = await fetch(geminiUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(geminiPayload) });
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
-      return new Response(JSON.stringify({ error: "Gemini API error", details: errorText }), {
-        status: geminiResponse.status,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      });
+      return new Response(JSON.stringify({ error: "Gemini API error", details: errorText }), { status: geminiResponse.status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const geminiData = await geminiResponse.json();
     const responseText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
-    return new Response(JSON.stringify({ text: responseText }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+    return new Response(JSON.stringify({ text: responseText }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Internal server error", message: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" }
-    });
+    return new Response(JSON.stringify({ error: "Internal server error", message: error.message }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 }
 __name(onRequestPost, "onRequestPost");
 __name2(onRequestPost, "onRequestPost");
 async function onRequestOptions() {
-  return new Response(null, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
-    }
-  });
+  return new Response(null, { headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type" } });
 }
 __name(onRequestOptions, "onRequestOptions");
 __name2(onRequestOptions, "onRequestOptions");
