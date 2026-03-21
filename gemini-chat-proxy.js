@@ -1,5 +1,5 @@
-// Cloudflare Pages Function URL
-const PROXY_URL = "/api/chat";
+// Cloudflare Worker URL (Ayrı API servisi olarak barındırıldığı için her alan adıyla çalışır)
+const PROXY_URL = "https://yigit-gemini-proxy.yigit-turkkan.workers.dev";
 
 // Chat history for context
 let chatHistory = [];
