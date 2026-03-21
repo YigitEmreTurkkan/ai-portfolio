@@ -1,5 +1,5 @@
 {
-  "name": "yigit-gemini-proxy",
-  "compatibility_date": "2025-01-06",
-  "main": "cloudflare-worker.js"
+  "name": "ai-portfolio",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2025-01-06"
 }

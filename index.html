@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <title>Yiğit Emre Türkkan – AI Portfolio Chat</title>
   <style>
     :root {
@@ -61,29 +64,31 @@
       0% {
         transform: translate3d(0, 0, 0) scale(1);
       }
+
       50% {
         transform: translate3d(-2%, -3%, 0) scale(1.02);
       }
+
       100% {
         transform: translate3d(2%, 3%, 0) scale(1);
       }
     }
 
-                                                                                                                                                                                                                              /* CV container layout (desktop baseline) */
-                                                                                                                                                                                                                              .cv-card {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
-                                                                                                                                                                                                                                height: 100%;
-                                                                                                                                                                                                                              }
+    /* CV container layout (desktop baseline) */
+    .cv-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
 
-                                                                                                                                                                                                                              .cv-card .card-header {
-                                                                                                                                                                                                                                position: relative;
-                                                                                                                                                                                                                              }
+    .cv-card .card-header {
+      position: relative;
+    }
 
-                                                                                                                                                                                                                              .cv-content {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
-                                                                                                                                                                                                                                min-height: 0;
+    .cv-content {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
     }
 
     .cv-scroll {
@@ -104,11 +109,13 @@
     .app-shell {
       width: 100%;
       display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); /* ~60/40 */
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      /* ~60/40 */
       gap: 48px;
       align-items: stretch;
       height: calc(100vh - 32px);
-      padding-top: 40px; /* global dil switch için boşluk */
+      padding-top: 40px;
+      /* global dil switch için boşluk */
     }
 
     .lang-switch-global {
@@ -197,7 +204,8 @@
         padding-left: calc(8px + env(safe-area-inset-left, 0px));
         height: calc(var(--vh, 1vh) * 100) !important;
         min-height: calc(var(--vh, 1vh) * 100) !important;
-        overflow: hidden !important; /* dışarıda scroll tamamen kapalı */
+        overflow: hidden !important;
+        /* dışarıda scroll tamamen kapalı */
         position: fixed;
         width: 100%;
         inset: 0;
@@ -207,9 +215,11 @@
         display: flex;
         flex-direction: column;
         gap: 6px;
-        min-height: calc(var(--vh, 1vh) * 100) !important; /* tek ekran */
+        min-height: calc(var(--vh, 1vh) * 100) !important;
+        /* tek ekran */
         height: calc(var(--vh, 1vh) * 100) !important;
-        padding-top: 32px; /* dil switch küçüldü, üst boşluk azaltıldı */
+        padding-top: 32px;
+        /* dil switch küçüldü, üst boşluk azaltıldı */
       }
 
       .lang-switch-global {
@@ -239,116 +249,129 @@
         background: rgba(255, 255, 255, 0.04);
       }
 
-                                /* Mobile: collapsed CV sadece header + buton kadar yer kaplasın */
-                                .cv-card {
-                                  flex: 0 0 auto; /* header + expand butonu sıkışmasın */
-                                  height: auto;
-                                }
+      /* Mobile: collapsed CV sadece header + buton kadar yer kaplasın */
+      .cv-card {
+        flex: 0 0 auto;
+        /* header + expand butonu sıkışmasın */
+        height: auto;
+      }
 
-        .cv-card .card {
-          padding: 6px 8px; /* daha kompakt padding */
-        }
+      .cv-card .card {
+        padding: 6px 8px;
+        /* daha kompakt padding */
+      }
 
-                                .header-top-row {
-                                  flex-wrap: wrap; /* küçük ekranlarda wrap olsun */
-                                  gap: 6px;
-                                }
+      .header-top-row {
+        flex-wrap: wrap;
+        /* küçük ekranlarda wrap olsun */
+        gap: 6px;
+      }
 
-                                .cv-name {
-                                  font-size: 0.92rem; /* mobilde daha küçük */
-                                }
+      .cv-name {
+        font-size: 0.92rem;
+        /* mobilde daha küçük */
+      }
 
-                                .badge-role {
-                                  font-size: 0.58rem; /* mobilde daha küçük */
-                                  padding: 2px 6px;
-                                }
+      .badge-role {
+        font-size: 0.58rem;
+        /* mobilde daha küçük */
+        padding: 2px 6px;
+      }
 
-                                .subheading {
-                                  font-size: 0.68rem; /* mobilde daha küçük */
-                                  line-height: 1.3;
-                                }
+      .subheading {
+        font-size: 0.68rem;
+        /* mobilde daha küçük */
+        line-height: 1.3;
+      }
 
-                                .avatar {
-                                  width: 72px; /* mobilde biraz daha büyük */
-                                  height: 72px;
-                                }
+      .avatar {
+        width: 72px;
+        /* mobilde biraz daha büyük */
+        height: 72px;
+      }
 
-                                .cv-contact-row {
-                                  gap: 8px;
-                                  margin-top: 2px;
-                                }
+      .cv-contact-row {
+        gap: 8px;
+        margin-top: 2px;
+      }
 
-                                .cv-card .card-inner {
-                                  height: auto;
-                                }
+      .cv-card .card-inner {
+        height: auto;
+      }
 
-                                /* Chat kartı kalan alanı doldursun; içeriği kendi içinde scroll olsun */
-        #ai-card {
-          flex: 1;
-          min-height: 0;
-          height: calc((var(--vh, 1vh) * 100) - 70px); /* daha fazla görünür alan */
-          max-height: none;
-          display: flex;
-          flex-direction: column;
-        }
+      /* Chat kartı kalan alanı doldursun; içeriği kendi içinde scroll olsun */
+      #ai-card {
+        flex: 1;
+        min-height: 0;
+        height: calc((var(--vh, 1vh) * 100) - 70px);
+        /* daha fazla görünür alan */
+        max-height: none;
+        display: flex;
+        flex-direction: column;
+      }
 
-                                #ai-card .card {
-                                  padding: 10px 12px; /* biraz daha ince padding */
-                                }
+      #ai-card .card {
+        padding: 10px 12px;
+        /* biraz daha ince padding */
+      }
 
-                                #ai-card .card-inner {
-                                  height: 100%;
-                                  display: flex;
-                                  flex-direction: column;
-                                }
+      #ai-card .card-inner {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
 
-                                .mobile-expand-btn {
-                                  display: inline-flex;
-                                  width: 100%;
-                                  align-items: center;
-                                  justify-content: center;
-                                  gap: 6px;
-                                  margin-top: 2px;
-                                  margin-bottom: 2px; /* minimal gap */
-                                  padding: 5px 10px; /* daha da ince */
-                                  border-radius: 8px;
-                                  border: 1px solid rgba(191, 219, 254, 0.85);
-                                  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-                                  color: #f9fafb;
-                                  font-size: 0.7rem;
-                                  font-weight: 600;
-                                  text-align: center;
-                                  cursor: pointer;
-                                  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
-                                }
+      .mobile-expand-btn {
+        display: inline-flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        /* minimal gap */
+        padding: 5px 10px;
+        /* daha da ince */
+        border-radius: 8px;
+        border: 1px solid rgba(191, 219, 254, 0.85);
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: #f9fafb;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-align: center;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+      }
 
-                                                                                                                                                                                                                                .cv-content {
-                                                                                                                                                                                                                                  transition: max-height 0.25s ease;
-                                                                                                                                                                                                                                }
+      .cv-content {
+        transition: max-height 0.25s ease;
+      }
 
-                                                                                                                                                                                                                                /* Mobile: only show CV header + toggle by default */
-                                                                                                                                                                                                                                .cv-card .cv-content {
-                                                                                                                                                                                                                                  overflow: hidden;
-                                                                                                                                                                                                                                  max-height: 0;
-                                                                                                                                                                                                                                }
+      /* Mobile: only show CV header + toggle by default */
+      .cv-card .cv-content {
+        overflow: hidden;
+        max-height: 0;
+      }
 
-                                                                                                                                                                                                                                /* Expanded state handled via body class */
-                                                                                                                                                                                                                                body.is-cv-expanded {
-                                                                                                                                                                                                                                  overflow: hidden; /* lock page scroll */
-                                                                                                                                                                                                                                }
+      /* Expanded state handled via body class */
+      body.is-cv-expanded {
+        overflow: hidden;
+        /* lock page scroll */
+      }
 
-                                                                                                                                                                                                                                body.is-cv-expanded .app-shell {
-                                                                                                                                                                                                                                  height: 100vh;
-                                                                                                                                                                                                                                }
+      body.is-cv-expanded .app-shell {
+        height: 100vh;
+      }
 
-                                                                                                                                                                                                                                body.is-cv-expanded .cv-card .cv-content {
-                                                                                                                                                                                                                                  max-height: 80vh;
-                                                                                                                                                                                                                                  overflow-y: auto !important; /* only CV scrolls */
-                                                                                                                                                                                                                                  -webkit-overflow-scrolling: touch;
-                                                                                                                                                                                                                                }
+      body.is-cv-expanded .cv-card .cv-content {
+        max-height: 80vh;
+        overflow-y: auto !important;
+        /* only CV scrolls */
+        -webkit-overflow-scrolling: touch;
+      }
 
-                                                                                                                                                                                                                                body.is-cv-expanded #ai-card {
-                                                                                                                                                                                                                                  display: none;
+      body.is-cv-expanded #ai-card {
+        display: none;
       }
     }
 
@@ -359,21 +382,21 @@
       box-shadow: var(--shadow-soft);
       padding: 24px 22px;
       position: relative;
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
-                                                                                                                                                                                                                                backdrop-filter: blur(16px);
-                                                                                                                                                                                                                                -webkit-backdrop-filter: blur(16px);
-                                                                                                                                                                                                                                border-color: rgba(255, 255, 255, 0.08);
-                                                                                                                                                                                                                              }
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
 
-                                                                                                                                                                                                                              .card-inner {
-                                                                                                                                                                                                                                max-width: 960px;
-                                                                                                                                                                                                                                margin: 0 auto;
-                                                                                                                                                                                                                                width: 100%;
-                                                                                                                                                                                                                                height: 100%;
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
+    .card-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .card::before {
@@ -389,24 +412,24 @@
     }
 
     .card-header {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 6px;
-                                margin-bottom: 4px;
-                                position: relative;
-                              }
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 4px;
+      position: relative;
+    }
 
-                              /* Top Row: Avatar + Name + Badge (3-way alignment) */
-                              .header-top-row {
+    /* Top Row: Avatar + Name + Badge (3-way alignment) */
+    .header-top-row {
       display: flex;
       align-items: center;
-                                gap: 10px;
-                                width: 100%;
+      gap: 10px;
+      width: 100%;
     }
 
     .avatar {
-                                width: 80px;
-                                height: 80px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 20%, #fef3c7, #4f46e5);
       display: flex;
@@ -414,143 +437,143 @@
       justify-content: center;
       font-weight: 700;
       color: #0b1020;
-                                box-shadow:
-                                  0 0 0 2px rgba(56, 189, 248, 0.9),
-                                  0 0 12px rgba(56, 189, 248, 0.45),
-                                  0 0 20px rgba(147, 51, 234, 0.4);
+      box-shadow:
+        0 0 0 2px rgba(56, 189, 248, 0.9),
+        0 0 12px rgba(56, 189, 248, 0.45),
+        0 0 20px rgba(147, 51, 234, 0.4);
       flex-shrink: 0;
-                                overflow: hidden;
+      overflow: hidden;
     }
 
-                              .header-name-badge {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: flex-start;
-                                gap: 4px;
-                                flex: 1;
-                                min-width: 0;
-                              }
+    .header-name-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
 
-                              .name-row {
+    .name-row {
       display: flex;
       align-items: center;
-                                gap: 1px;
-                                flex-wrap: wrap;
-                              }
+      gap: 1px;
+      flex-wrap: wrap;
+    }
 
-                              .cv-name {
-                                font-size: 1rem;
-                                font-weight: 600;
-                                letter-spacing: 0.01em;
-                                white-space: nowrap;
+    .cv-name {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
     }
 
     .badge-role {
-                                font-size: 0.65rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-                                letter-spacing: 0.1em;
+      letter-spacing: 0.1em;
       color: var(--muted);
       background: rgba(15, 23, 42, 0.9);
       border-radius: var(--radius-pill);
-                                padding: 3px 8px;
+      padding: 3px 8px;
       border: 1px solid rgba(148, 163, 184, 0.4);
-                                display: inline-flex;
-                                align-items: center;
-                                justify-content: center;
-                                text-align: center;
-                                white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: nowrap;
     }
 
     .subheading {
-                                font-size: 0.75rem;
+      font-size: 0.75rem;
       color: var(--muted);
-                                margin-top: 0;
-                                text-align: justify;
-                                line-height: 1.4;
-                              }
+      margin-top: 0;
+      text-align: justify;
+      line-height: 1.4;
+    }
 
-.cv-contact-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+    .cv-contact-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       margin-top: 12px;
-}
+    }
 
-@media (min-width: 881px) {
-  .cv-card .card-header {
-    padding-right: 0;
-    position: relative;
-  }
+    @media (min-width: 881px) {
+      .cv-card .card-header {
+        padding-right: 0;
+        position: relative;
+      }
 
-  .header-name-badge {
-    max-width: 100%;
-  }
+      .header-name-badge {
+        max-width: 100%;
+      }
 
-  .cv-contact-row {
-    position: static;
-    margin-top: 12px;
-    justify-content: center;
-  }
-}
+      .cv-contact-row {
+        position: static;
+        margin-top: 12px;
+        justify-content: center;
+      }
+    }
 
-.btn-contact-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  text-decoration: none;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: background 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
-  flex-shrink: 0;
-}
+    .btn-contact-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+      flex-shrink: 0;
+    }
 
-.btn-contact-icon svg {
-  width: 18px;
-  height: 18px;
-  display: block;
-}
+    .btn-contact-icon svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
 
-.btn-contact-linkedin {
-  background: rgba(15, 23, 42, 0.96);
-  border-color: rgba(56, 189, 248, 0.7);
-  color: #e0f2fe;
-}
+    .btn-contact-linkedin {
+      background: rgba(15, 23, 42, 0.96);
+      border-color: rgba(56, 189, 248, 0.7);
+      color: #e0f2fe;
+    }
 
-.btn-contact-linkedin:hover {
-  background: rgba(10, 102, 194, 0.2);
-  transform: translateY(-1px);
-}
+    .btn-contact-linkedin:hover {
+      background: rgba(10, 102, 194, 0.2);
+      transform: translateY(-1px);
+    }
 
-.btn-contact-email {
-  background: rgba(15, 23, 42, 0.92);
-  border-color: rgba(129, 140, 248, 0.8);
-  color: #e5e7eb;
-}
+    .btn-contact-email {
+      background: rgba(15, 23, 42, 0.92);
+      border-color: rgba(129, 140, 248, 0.8);
+      color: #e5e7eb;
+    }
 
-.btn-contact-github {
-  background: rgba(15, 23, 42, 0.94);
-  border-color: rgba(148, 163, 184, 0.85);
-  color: #e5e7eb;
-}
+    .btn-contact-github {
+      background: rgba(15, 23, 42, 0.94);
+      border-color: rgba(148, 163, 184, 0.85);
+      color: #e5e7eb;
+    }
 
-.btn-contact-github:hover {
-  background: rgba(17, 24, 39, 0.3);
-  transform: translateY(-1px);
-}
+    .btn-contact-github:hover {
+      background: rgba(17, 24, 39, 0.3);
+      transform: translateY(-1px);
+    }
 
-.btn-contact-email {
-  background: rgba(15, 23, 42, 0.92);
-  border-color: rgba(129, 140, 248, 0.8);
-  color: #e5e7eb;
-}
+    .btn-contact-email {
+      background: rgba(15, 23, 42, 0.92);
+      border-color: rgba(129, 140, 248, 0.8);
+      color: #e5e7eb;
+    }
 
-.btn-contact-email:hover {
-  background: rgba(79, 70, 229, 0.2);
-  transform: translateY(-1px);
+    .btn-contact-email:hover {
+      background: rgba(79, 70, 229, 0.2);
+      transform: translateY(-1px);
     }
 
     .pill-row {
@@ -595,143 +618,143 @@
       margin-bottom: 6px;
     }
 
-                                                                                                                                                                                                                              .cv-section {
-                                                                                                                                                                                                                                margin-top: 18px;
-                                                                                                                                                                                                                                margin-bottom: 40px;
-                                                                                                                                                                                                                              }
+    .cv-section {
+      margin-top: 18px;
+      margin-bottom: 40px;
+    }
 
-                                                                                                                                                                                                                              .cv-text {
-                                                                                                                                                                                                                                font-size: 0.8rem;
-                                                                                                                                                                                                                                color: var(--muted);
-                                                                                                                                                                                                                                line-height: 1.6;
-                                                                                                                                                                                                                              }
+    .cv-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
 
-                                                                                                                                                                                                                              .timeline {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
-                                                                                                                                                                                                                                gap: 12px;
-                                                                                                                                                                                                                                margin-top: 8px;
-                                                                                                                                                                                                                              }
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
 
-                                                                                                                                                                                                                              .timeline-item {
-                                                                                                                                                                                                                                padding: 12px 14px;
-                                                                                                                                                                                                                                border-radius: 16px;
-                                                                                                                                                                                                                                border: 1px solid rgba(255, 255, 255, 0.08);
-                                                                                                                                                                                                                                background: rgba(26, 26, 46, 0.6);
-                                                                                                                                                                                                                                backdrop-filter: blur(12px);
-                                                                                                                                                                                                                                -webkit-backdrop-filter: blur(12px);
-                                                                                                                                                                                                                                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-                                                                                                                                                                                                                                position: relative;
-                                                                                                                                                                                                                                overflow: hidden;
-                                                                                                                                                                                                                                transition: transform 0.2s ease, box-shadow 0.2s ease;
-                                                                                                                                                                                                                              }
+    .timeline-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(26, 26, 46, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-                                                                                                                                                                                                                              .timeline-item::before {
-                                                                                                                                                                                                                                content: "";
-                                                                                                                                                                                                                                position: absolute;
-                                                                                                                                                                                                                                inset: 0;
-                                                                                                                                                                                                                                border-radius: inherit;
-                                                                                                                                                                                                                                border: 1px solid rgba(255, 255, 255, 0.1);
-                                                                                                                                                                                                                                pointer-events: none;
-                                                                                                                                                                                                                              }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
 
-                                                                                                                                                                                                                              .timeline-item:hover {
-                                                                                                                                                                                                                                transform: translateY(-4px);
-                                                                                                                                                                                                                                box-shadow: 0 18px 38px rgba(0, 0, 0, 0.4);
-                                                                                                                                                                                                                              }
+    .timeline-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.4);
+    }
 
-                                                                                                                                                                                                                              .timeline-item-header {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
-                                                                                                                                                                                                                                gap: 2px;
-                                                                                                                                                                                                                                margin-bottom: 4px;
-                                                                                                                                                                                                                              }
+    .timeline-item-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 4px;
+    }
 
-                                                                                                                                                                                                                              .timeline-title {
-                                                                                                                                                                                                                                font-size: 0.86rem;
-                                                                                                                                                                                                                                font-weight: 500;
-                                                                                                                                                                                                                                color: #e5e7eb;
-                                                                                                                                                                                                                              }
+    .timeline-title {
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: #e5e7eb;
+    }
 
-                                                                                                                                                                                                                              .timeline-meta {
-                                                                                                                                                                                                                                font-size: 0.75rem;
-                                                                                                                                                                                                                                color: var(--muted);
-                                                                                                                                                                                                                              }
+    .timeline-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
 
-                                                                                                                                                                                                                              .timeline-item ul {
-                                                                                                                                                                                                                                margin-top: 4px;
-                                                                                                                                                                                                                                padding-left: 18px;
-                                                                                                                                                                                                                                list-style: disc;
-                                                                                                                                                                                                                              }
+    .timeline-item ul {
+      margin-top: 4px;
+      padding-left: 18px;
+      list-style: disc;
+    }
 
-                                                                                                                                                                                                                              .timeline-item li {
-                                                                                                                                                                                                                                font-size: 0.78rem;
-                                                                                                                                                                                                                                color: var(--muted);
-                                                                                                                                                                                                                                line-height: 1.5;
-                                                                                                                                                                                                                              }
+    .timeline-item li {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
 
-                                                                                                                                                                                                                              .tech-pills {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-wrap: wrap;
-                                                                                                                                                                                                                                gap: 8px;
-                                                                                                                                                                                                                                margin-top: 10px;
-                                                                                                                                                                                                                              }
+    .tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
 
-                                                                                                                                                                                                                              .tech-pill {
-                                                                                                                                                                                                                                padding: 4px 8px;
-                                                                                                                                                                                                                                border-radius: 999px;
-                                                                                                                                                                                                                                background: rgba(255, 255, 255, 0.06);
-                                                                                                                                                                                                                                border: 1px solid rgba(255, 255, 255, 0.1);
-                                                                                                                                                                                                                                font-size: 0.72rem;
-                                                                                                                                                                                                                                color: rgba(226, 232, 240, 0.88);
-                                                                                                                                                                                                                              }
+    .tech-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.72rem;
+      color: rgba(226, 232, 240, 0.88);
+    }
 
-                                                                                                                                                                                                                              .meta-row {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-wrap: wrap;
-                                                                                                                                                                                                                                gap: 8px;
-                                                                                                                                                                                                                                margin-top: 12px;
-                                                                                                                                                                                                                              }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
 
-                                                                                                                                                                                                                              .meta-block {
-                                                                                                                                                                                                                                flex: 1 1 140px;
-                                                                                                                                                                                                                                min-width: 0;
-                                                                                                                                                                                                                              }
+    .meta-block {
+      flex: 1 1 140px;
+      min-width: 0;
+    }
 
-                                                                                                                                                                                                                              .meta-label {
-                                                                                                                                                                                                                                font-size: 0.76rem;
-                                                                                                                                                                                                                                text-transform: uppercase;
-                                                                                                                                                                                                                                letter-spacing: 0.12em;
-                                                                                                                                                                                                                                color: var(--muted);
-                                                                                                                                                                                                                                margin-bottom: 4px;
-                                                                                                                                                                                                                              }
+    .meta-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
 
-                                                                                                                                                                                                                              .meta-tags {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-wrap: wrap;
-                                                                                                                                                                                                                                gap: 6px;
-                                                                                                                                                                                                                              }
+    .meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
 
-                                                                                                                                                                                                                              .meta-tag {
-                                                                                                                                                                                                                                font-size: 0.74rem;
-                                                                                                                                                                                                                                padding: 4px 9px;
-                                                                                                                                                                                                                                border-radius: 999px;
-                                                                                                                                                                                                                                border: 1px solid rgba(148, 163, 184, 0.45);
-                                                                                                                                                                                                                                background: rgba(15, 23, 42, 0.95);
-                                                                                                                                                                                                                                color: #e5e7eb;
-                                                                                                                                                                                                                                white-space: nowrap;
-                                                                                                                                                                                                                              }
+    .meta-tag {
+      font-size: 0.74rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
 
-                                                                                                                                                                                                                              .avatar img {
-                                                                                                                                                                                                                                width: 100%;
-                                                                                                                                                                                                                                height: 100%;
-                                                                                                                                                                                                                                border-radius: 50%;
-                                                                                                                                                                                                                                object-fit: cover;
-                                                                                                                                                                                                                                display: block;
-                                                                                                                                                                                                                                box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.7);
-                                                                                                                                                                                                                              }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.7);
+    }
 
-                                                                                                                                                                                                                            
+
 
     .stack-grid {
       display: grid;
@@ -775,12 +798,13 @@
       margin-top: 18px;
       padding-top: 10px;
       border-top: 1px solid rgba(31, 41, 55, 0.9);
-                                                                                                                                                                                                                              }
+    }
 
-@media (min-width: 881px) {
-  .contact-footer {
-    display: none; /* webde en alttaki LinkedIn / E-posta butonlarını gizle */
-  }
+    @media (min-width: 881px) {
+      .contact-footer {
+        display: none;
+        /* webde en alttaki LinkedIn / E-posta butonlarını gizle */
+      }
     }
 
     .contact-text {
@@ -849,36 +873,37 @@
       }
     }
 
-                                                                                                                                                                                                                              .cv-card {
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
-                                                                                                                                                                                                                                position: relative;
-                                                                                                                                                                                                                              }
+    .cv-card {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
 
-.cv-scroll {
-  flex: 1;
-  overflow-y: auto;
-  margin-top: 6px;
-  padding-right: 2px;
-}
+    .cv-scroll {
+      flex: 1;
+      overflow-y: auto;
+      margin-top: 6px;
+      padding-right: 2px;
+    }
 
-@media (max-width: 880px) {
-  .cv-scroll {
-    padding-bottom: 96px; /* CV son satırı ve butonlar nav bar'dan yukarıda kalsın */
-  }
-}
+    @media (max-width: 880px) {
+      .cv-scroll {
+        padding-bottom: 96px;
+        /* CV son satırı ve butonlar nav bar'dan yukarıda kalsın */
+      }
+    }
 
-                                                                                                                                                                                                                              .cv-scroll::-webkit-scrollbar {
-                                                                                                                                                                                                                                width: 6px;
-                                                                                                                                                                                                                              }
+    .cv-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
 
-                                                                                                                                                                                                                              .cv-scroll::-webkit-scrollbar-thumb {
-                                                                                                                                                                                                                                background: rgba(148, 163, 184, 0.7);
-                                                                                                                                                                                                                                border-radius: 999px;
-                                                                                                                                                                                                                              }
+    .cv-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.7);
+      border-radius: 999px;
+    }
 
-                                                                                                                                                                                                                              .cv-scroll::-webkit-scrollbar-track {
-                                                                                                                                                                                                                                background: transparent;
+    .cv-scroll::-webkit-scrollbar-track {
+      background: transparent;
     }
 
     .chat-header-row {
@@ -890,7 +915,7 @@
     }
 
     .chat-title {
-                                                                                                                                                                                                                                font-size: 0.96rem;
+      font-size: 0.96rem;
       font-weight: 600;
       display: flex;
       flex-direction: column;
@@ -898,14 +923,14 @@
     }
 
 
-                                                                                                                                                                                                                              @media (min-width: 881px) {
-                                                                                                                                                                                                                                .mobile-expand-btn {
-                                                                                                                                                                                                                                  display: none;
-                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                              }
+    @media (min-width: 881px) {
+      .mobile-expand-btn {
+        display: none;
+      }
+    }
 
-                                                                                                                                                                                                                              .mobile-tabs {
-                                                                                                                                                                                                                                display: none;
+    .mobile-tabs {
+      display: none;
     }
 
     .chat-badge {
@@ -933,13 +958,23 @@
     .typing-dot:nth-child(2) {
       animation-delay: 0.15s;
     }
+
     .typing-dot:nth-child(3) {
       animation-delay: 0.3s;
     }
 
     @keyframes pulse {
-      0%, 100% { transform: translateY(0); opacity: 0.45; }
-      50% { transform: translateY(-3px); opacity: 1; }
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.45;
+      }
+
+      50% {
+        transform: translateY(-3px);
+        opacity: 1;
+      }
     }
 
     .chat-window {
@@ -967,36 +1002,39 @@
       min-height: 0;
     }
 
-@media (max-width: 880px) {
-  .chat-scroll {
-    padding-bottom: 180px; /* Son mesajlar ve input nav bar'ın üstünde kalsın */
-  }
+    @media (max-width: 880px) {
+      .chat-scroll {
+        padding-bottom: 180px;
+        /* Son mesajlar ve input nav bar'ın üstünde kalsın */
+      }
 
-  .chat-window {
-    flex: 1 1 auto;
-    min-height: 0;
-  }
+      .chat-window {
+        flex: 1 1 auto;
+        min-height: 0;
+      }
 
-  .chat-input-row {
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(15, 23, 42, 0.96);
-    padding: 10px 10px calc(16px + env(safe-area-inset-bottom, 0px));
-    margin-top: 6px;
-    border-radius: 14px;
-    z-index: 5;
-  }
+      .chat-input-row {
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(15, 23, 42, 0.96);
+        padding: 10px 10px calc(16px + env(safe-area-inset-bottom, 0px));
+        margin-top: 6px;
+        border-radius: 14px;
+        z-index: 5;
+      }
     }
 
     .chat-scroll::-webkit-scrollbar {
       width: 6px;
     }
+
     .chat-scroll::-webkit-scrollbar-thumb {
       background: rgba(148, 163, 184, 0.7);
       border-radius: 999px;
     }
+
     .chat-scroll::-webkit-scrollbar-track {
       background: transparent;
     }
@@ -1011,27 +1049,29 @@
     .msg-row.ai {
       justify-content: flex-start;
     }
+
     .msg-row.user {
       justify-content: flex-end;
-      padding-right: 24px; /* Sağdan padding - sağa yaslı olmasın */
+      padding-right: 24px;
+      /* Sağdan padding - sağa yaslı olmasın */
     }
 
     .msg-bubble {
       border-radius: 16px;
       padding: 8px 11px 9px;
-                                                                                                                                                                                                                                font-size: 0.9rem;
-                                                                                                                                                                                                                                line-height: 1.55;
+      font-size: 0.9rem;
+      line-height: 1.55;
       max-width: 82%;
       white-space: pre-line;
-                                                                                                                                                                                                                                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                                                                                                                                                                                                                                transition: transform 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
       text-align: left;
     }
 
     .msg-ai {
       background: rgba(15, 23, 42, 0.98);
       border: 1px solid rgba(148, 163, 184, 0.7);
-                                                                                                                                                                                                                                border-left: 4px solid var(--accent);
+      border-left: 4px solid var(--accent);
     }
 
     .msg-user {
@@ -1129,12 +1169,13 @@
       font-size: 0.82rem;
       line-height: 1.4;
       outline: none;
-                                                                                                                                                                                                                              }
+    }
 
-@media (max-width: 880px) {
-  .chat-input-row {
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); /* gesture bar altında kalmasın */
-  }
+    @media (max-width: 880px) {
+      .chat-input-row {
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+        /* gesture bar altında kalmasın */
+      }
     }
 
     .chat-input::placeholder {
@@ -1199,39 +1240,48 @@
       margin-top: 3px;
     }
 
-                                                                                                                                                                                                                              .cv-scroll-indicator {
-                                                                                                                                                                                                                                position: absolute;
-                                                                                                                                                                                                                                bottom: 10px;
-                                                                                                                                                                                                                                left: 50%;
-                                                                                                                                                                                                                                transform: translateX(-50%);
-                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                flex-direction: column;
-                                                                                                                                                                                                                                align-items: center;
-                                                                                                                                                                                                                                gap: 4px;
-                                                                                                                                                                                                                                pointer-events: none;
-                                                                                                                                                                                                                              }
+    .cv-scroll-indicator {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      pointer-events: none;
+    }
 
-                                                                                                                                                                                                                              .scroll-hint {
-                                                                                                                                                                                                                                display: inline-flex;
-                                                                                                                                                                                                                                align-items: center;
-                                                                                                                                                                                                                                gap: 6px;
-                                                                                                                                                                                                                                font-size: 0.8rem;
-                                                                                                                                                                                                                                font-weight: 600;
-                                                                                                                                                                                                                                letter-spacing: 0.04em;
-                                                                                                                                                                                                                                text-transform: uppercase;
-                                                                                                                                                                                                                                color: #e5e7eb;
-                                                                                                                                                                                                                                text-shadow: 0 0 10px rgba(15, 23, 42, 0.9);
-                                                                                                                                                                                                                              }
+    .scroll-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      text-shadow: 0 0 10px rgba(15, 23, 42, 0.9);
+    }
 
-                                                                                                                                                                                                                              .scroll-hint-arrow {
-                                                                                                                                                                                                                                font-size: 1.4rem;
-                                                                                                                                                                                                                                font-weight: 700;
-                                                                                                                                                                                                                                animation: bounce-down 1.2s infinite ease-in-out;
-                                                                                                                                                                                                                              }
+    .scroll-hint-arrow {
+      font-size: 1.4rem;
+      font-weight: 700;
+      animation: bounce-down 1.2s infinite ease-in-out;
+    }
 
-                                                                                                                                                                                                                              @keyframes bounce-down {
-                                                                                                                                                                                                                                0%, 100% { transform: translateY(0); opacity: 0.6; }
-                                                                                                                                                                                                                                50% { transform: translateY(4px); opacity: 1; }
+    @keyframes bounce-down {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: translateY(4px);
+        opacity: 1;
+      }
     }
 
     .pill-status {
@@ -1260,21 +1310,20 @@
     }
   </style>
 </head>
-<body>
+
+<body class="animate__animated animate__fadeIn animate__slow">
   <div class="lang-switch-global">
     <div class="lang-switch-wrap" aria-label="Dil seçici / Language selector">
       <div class="lang-switch">
         <span class="lang-switch-icon" aria-hidden="true">
           <!-- Basit globe ikonu (fa-globe benzeri) -->
           <svg viewBox="0 0 24 24" width="16" height="16">
-            <path
-              fill="currentColor"
+            <path fill="currentColor"
               d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
                  10-4.48 10-10S17.52 2 12 2zm6.93 9h-2.46a15.37 15.37 0 0 0-1.21-5.19
                  8.03 8.03 0 0 1 3.67 5.19zM12 4c.84 0 2.32 1.97 2.86 5H9.14C9.68 5.97 11.16 4 12 4zM8.74 5.81
                  A15.37 15.37 0 0 0 7.53 11H5.07a8.03 8.03 0 0 1 3.67-5.19zM5.07 13h2.46c.25 1.9.86 3.63 1.81 5.19A8.03 8.03 0 0 1 5.07 13zm3.07 0h7.72
-                 c-.54 3.03-2.02 5-2.86 5s-2.32-1.97-2.86-5zm5.99 5.19c.95-1.56 1.56-3.29 1.81-5.19h2.46a8.03 8.03 0 0 1-3.67 5.19z"
-            />
+                 c-.54 3.03-2.02 5-2.86 5s-2.32-1.97-2.86-5zm5.99 5.19c.95-1.56 1.56-3.29 1.81-5.19h2.46a8.03 8.03 0 0 1-3.67 5.19z" />
           </svg>
         </span>
         <button class="lang-btn active" type="button" data-lang="tr">TR</button>
@@ -1283,295 +1332,287 @@
     </div>
   </div>
   <main class="app-shell">
-                                                                                                                                                                                                                               <section class="card cv-card" id="cv-card">
-                                                                                                                                                                                                                                <div class="card-inner">
-      <header class="card-header">
-                                    <!-- Top Row: Avatar + Name + Badge (3-way alignment) -->
-                                    <div class="header-top-row">
-                                      <div class="avatar">
-                                        <img src="yigit-profile.jpeg" alt="Yiğit Emre Türkkan" onerror="this.style.display='none'; this.parentElement.textContent='YT';" />
+    <section class="card cv-card" id="cv-card">
+      <div class="card-inner">
+        <header class="card-header">
+          <!-- Top Row: Avatar + Name + Badge (3-way alignment) -->
+          <div class="header-top-row">
+            <div class="avatar">
+              <img src="yigit-profile.jpeg" alt="Yiğit Emre Türkkan"
+                onerror="this.style.display='none'; this.parentElement.textContent='YT';" />
+            </div>
+            <div class="header-name-badge">
+              <div class="name-row">
+                <span class="cv-name">Yiğit Emre Türkkan</span>
+                <span class="badge-role" id="badge-role">Cloud &amp; DevOps Engineer</span>
+              </div>
+              <p class="subheading" id="subheading">
+                Üretken yapay zeka meraklısı ve problem çözmeyi seven bir Cloud &amp; DevOps
+                Engineer.
+              </p>
+            </div>
           </div>
-                                      <div class="header-name-badge">
-                                        <div class="name-row">
-                                          <span class="cv-name">Yiğit Emre Türkkan</span>
-                                          <span class="badge-role" id="badge-role">Cloud &amp; DevOps Engineer</span>
-                                        </div>
-                                        <p class="subheading" id="subheading">
-                                          Üretken yapay zeka meraklısı ve problem çözmeyi seven bir Cloud &amp; DevOps
-                                          Engineer.
-                                        </p>
-                                      </div>
-                                    </div>
 
-                                    <!-- Bottom Row: Social Icons Only -->
-                                    <div class="cv-contact-row">
-                                      <a
-                                        class="btn-contact-icon btn-contact-linkedin"
-                                        href="https://linkedin.com/in/yigitemreturkkan"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        aria-label="LinkedIn"
-                                      >
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                          <path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                        </svg>
-                                      </a>
+          <!-- Bottom Row: Social Icons Only -->
+          <div class="cv-contact-row">
+            <a class="btn-contact-icon btn-contact-linkedin" href="https://linkedin.com/in/yigitemreturkkan"
+              target="_blank" rel="noreferrer" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor"
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+            </a>
 
-                                      <a
-                                        class="btn-contact-icon btn-contact-github"
-                                        href="https://github.com/YigitEmreTurkkan"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        aria-label="GitHub"
-                                      >
-                                        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                                          <path
-                                            fill="currentColor"
-                                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+            <a class="btn-contact-icon btn-contact-github" href="https://github.com/YigitEmreTurkkan" target="_blank"
+              rel="noreferrer" aria-label="GitHub">
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path fill="currentColor"
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
                                             0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
                                             0-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
                                             0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2
                                             .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65
-                                            3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
-                                          />
-                                        </svg>
-                                      </a>
+                                            3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+              </svg>
+            </a>
 
-                                      <a
-                                        class="btn-contact-icon btn-contact-email"
-                                        href="mailto:yigit.turkkan@gmail.com"
-                                        aria-label="E-posta"
-                                      >
-                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                          <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                                        </svg>
-                                      </a>
-        </div>
-      </header>
-
-                                                                                                                                                                                                                                  <button id="mobile-expand" class="mobile-expand-btn">
-                                                                                                                                                                                                                                    <span class="toggle-arrow">▼</span>
-                                                                                                                                                                                                                                   <span class="toggle-text" id="cv-toggle-text">Expand Full CV</span>
-                                                                                                                                                                                                                                  </button>
-
-                                                                                                                                                                                                                                <div id="cv-content" class="cv-content">
-                                                                                                                                                                                                                                  <div class="cv-scroll">
-      <div class="pill-row">
-        <div class="pill">
-          <span class="pill-dot"></span>
-          <span id="pill-active">Aktif olarak CloudFlex’te Jr. Cloud Engineer</span>
-        </div>
-        <div class="pill pill-ghost">
-                                                                                                                                                                                                                                        <span id="pill-remote">🌐 Remote &amp; Hybrid Capable</span>
-        </div>
-      </div>
-
-                                                                                                                                                                                                                                    <section class="cv-section">
-                                                                                                                                                                                                                                    <h2 class="section-title" id="title-summary">Özet</h2>
-                                                                                                                                                                                                                                    <p class="cv-text" id="summary-body">
-                                                                                                                                                                                                                                      Mühendislik altyapısına sahip, Cloud Engineer olarak profesyonel kariyerine devam eden bir teknoloji tutkunuyum. DevOps kültürü, bulut mimarileri ve yazılım geliştirme süreçlerinde deneyimliyim. Agile ortamlarda çalışmaya alışkın, hızlı öğrenen ve değişen teknolojilere kolayca uyum sağlayan bir takım oyuncusuyum. Ölçeklenebilir ve güvenilir sistemler inşa ederken sürekli gelişimi önceliklendiriyorum.
-                                                                                                                                                                                                                                    </p>
-                                                                                                                                                                                                                                  </section>
-
-                                                                                                                                                                                                                                  <section class="cv-section">
-                                                                                                                                                                                                                                    <h2 class="section-title" id="title-experience">Deneyim</h2>
-                                                                                                                                                                                                                                    <div class="timeline">
-                                                                                                                                                                                                                                      <article class="timeline-item">
-                                                                                                                                                                                                                                        <div class="timeline-item-header">
-                                                                                                                                                                                                                                          <h3 class="timeline-title" id="exp1-title">Jr. Cloud Engineer, CloudFlex</h3>
-                                                                                                                                                                                                                                          <p class="timeline-meta" id="exp1-meta">Ekim 2025 - Halen</p>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                        <ul>
-                                                                                                                                                                                                                                          <li id="exp1-li1">AWS ve Azure üzerinde bulut altyapılarının yönetimi ve optimizasyonu.</li>
-                                                                                                                                                                                                                                          <li id="exp1-li2">Konteyner tabanlı uygulamaların dağıtımı ve CI/CD süreçlerine aktif katkı.</li>
-                                                                                                                                                                                                                                          <li id="exp1-li3">Yedekleme, izleme ve güvenilirlik odaklı operasyonların yönetimi.</li>
-                                                                                                                                                                                                                                        </ul>
-                                                                                                                                                                                                                                        <div class="tech-pills">
-                                                                                                                                                                                                                                          <span class="tech-pill">AWS</span>
-                                                                                                                                                                                                                                          <span class="tech-pill">Azure</span>
-                                                                                                                                                                                                                                          <span class="tech-pill">Docker</span>
-                                                                                                                                                                                                                                          <span class="tech-pill">Kubernetes</span>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                      </article>
-
-                                                                                                                                                                                                                                      <article class="timeline-item">
-                                                                                                                                                                                                                                        <div class="timeline-item-header">
-                                                                                                                                                                                                                                          <h3 class="timeline-title" id="exp2-title">Intern DevOps &amp; Platform Mühendisi, Eteration</h3>
-                                                                                                                                                                                                                                          <p class="timeline-meta" id="exp2-meta">Ocak 2025 - Temmuz 2025</p>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                        <ul>
-                                                                                                                                                                                                                                          <li id="exp2-li1">GitLab CI kullanarak pipeline tasarımı, optimizasyonu ve bakımına katkı.</li>
-                                                                                                                                                                                                                                          <li id="exp2-li2">Docker ve Kubernetes ile konteynerizasyon ve orkestrasyon.</li>
-                                                                                                                                                                                                                                          <li id="exp2-li3">Kubernetes ekosistemi araçlarıyla altyapı operasyonlarının desteklenmesi.</li>
-                                                                                                                                                                                                                                        </ul>
-                                                                                                                                                                                                                                        <div class="tech-pills">
-                                                                                                                                                                                                                                          <span class="tech-pill">GitLab CI</span>
-                                                                                                                                                                                                                                          <span class="tech-pill">Docker</span>
-                                                                                                                                                                                                                                          <span class="tech-pill">Kubernetes</span>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                      </article>
-
-                                                                                                                                                                                                                                      <article class="timeline-item">
-                                                                                                                                                                                                                                        <div class="timeline-item-header">
-                                                                                                                                                                                                                                          <h3 class="timeline-title" id="exp3-title">Intern Java Developer, Hitit</h3>
-                                                                                                                                                                                                                                          <p class="timeline-meta" id="exp3-meta">Temmuz 2023 - Ağustos 2023</p>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                        <ul>
-                                                                                                                                                                                                                                          <li id="exp3-li1">Havacılık sektörü için geliştirilen Crane yazılım suite'i üzerinde çalışma.</li>
-                                                                                                                                                                                                                                          <li id="exp3-li2">Kurumsal Java projelerinde pratik deneyim kazanımı.</li>
-                                                                                                                                                                                                                                        </ul>
-                                                                                                                                                                                                                                      </article>
-
-                                                                                                                                                                                                                                      <article class="timeline-item">
-                                                                                                                                                                                                                                        <div class="timeline-item-header">
-                                                                                                                                                                                                                                          <h3 class="timeline-title" id="exp4-title">Intern Full Stack Developer, GET Yazılım</h3>
-                                                                                                                                                                                                                                          <p class="timeline-meta" id="exp4-meta">Aralık 2022 - Mayıs 2023</p>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                        <ul>
-                                                                                                                                                                                                                                          <li id="exp4-li1">Web ve mobil projelere full‑stack geliştirici olarak katkı.</li>
-                                                                                                                                                                                                                                          <li id="exp4-li2">React, Android ve backend teknolojileriyle tam yığın geliştirme.</li>
-                                                                                                                                                                                                                                        </ul>
-                                                                                                                                                                                                                                      </article>
-
-                                                                                                                                                                                                                                      <article class="timeline-item">
-                                                                                                                                                                                                                                        <div class="timeline-item-header">
-                                                                                                                                                                                                                                          <h3 class="timeline-title" id="exp5-title">IT Asistanı, Muğla Sıtkı Koçman Üniversitesi</h3>
-                                                                                                                                                                                                                                          <p class="timeline-meta" id="exp5-meta">Kasım 2021 - Haziran 2023</p>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                        <ul>
-                                                                                                                                                                                                                                          <li id="exp5-li1">Üniversite genelindeki bilgisayarların donanım ve yazılım sorunlarının giderilmesi.</li>
-                                                                                                                                                                                                                                          <li id="exp5-li2">Son kullanıcı destek süreçlerine ve altyapı operasyonlarına katkı.</li>
-                                                                                                                                                                                                                                        </ul>
-                                                                                                                                                                                                                                      </article>
-                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                  </section>
-
-                                                                                                                                                                                                                                  <section class="cv-section">
-                                                                                                                                                                                                                                    <h2 class="section-title" id="title-education">Eğitim &amp; Projeler</h2>
-                                                                                                                                                                                                                                    <div class="timeline">
-                                                                                                                                                                                                                                      <article class="timeline-item">
-                                                                                                                                                                                                                                        <div class="timeline-item-header">
-                                                                                                                                                                                                                                          <h3 class="timeline-title" id="edu1-title">Bilişim Sistemleri Mühendisliği, Muğla Sıtkı Koçman Üniversitesi</h3>
-                                                                                                                                                                                                                                          <p class="timeline-meta" id="edu1-meta">Eylül 2019 - Haziran 2025 · AGNO: 3.09 / 4.00</p>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                        <ul>
-                                                                                                                                                                                                                                          <li id="edu1-li1">Google Developer Student Clubs (GDSC) Co‑Lead, IEEE ve Siber Vatan topluluklarında aktif rol.</li>
-                                                                                                                                                                                                                                          <li id="edu1-li2">Bulut, yazılım geliştirme ve siber güvenlik odaklı projeler.</li>
-                                                                                                                                                                                                                                        </ul>
-                                                                                                                                                                                                                                      </article>
-
-                                                                                                                                                                                                                                      <article class="timeline-item">
-                                                                                                                                                                                                                                        <div class="timeline-item-header">
-                                                                                                                                                                                                                                          <h3 class="timeline-title" id="edu2-title">Akademik Bildiri – Kişiselleştirilmiş Seyahat Yönetimi</h3>
-                                                                                                                                                                                                                                          <p class="timeline-meta" id="edu2-meta">2. Uluslararası Geleceğin Mühendisleri Konferansı · 2025</p>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                        <ul>
-                                                                                                                                                                                                                                          <li id="edu2-li1">React, Android, Firebase ve Python tabanlı yapay zeka ile full‑stack seyahat öneri sistemi.</li>
-                                                                                                                                                                                                                                          <li id="edu2-li2">Kullanıcı tercihlerine göre kişiselleştirilmiş seyahat planları üreten öneri motoru.</li>
-                                                                                                                                                                                                                                        </ul>
-                                                                                                                                                                                                                                      </article>
-                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                  </section>
-
-                                                                                                                                                                                                                                  <section class="cv-section">
-                                                                                                                                                                                                                                    <h2 class="section-title" id="title-skills">Odak Alanları &amp; Beceriler</h2>
-      <div class="stack-grid">
-        <div>
-                                                                                                                                                                                                                                        <p class="stack-label">Cloud &amp; DevOps</p>
-          <div class="stack-chips">
-            <span class="chip">Kubernetes</span>
-            <span class="chip">Docker</span>
-            <span class="chip">AWS</span>
-            <span class="chip">Azure</span>
-            <span class="chip">GitLab CI/CD</span>
-            <span class="chip">ArgoCD</span>
+            <a class="btn-contact-icon btn-contact-email" href="mailto:yigit.turkkan@gmail.com" aria-label="E-posta">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor"
+                  d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+              </svg>
+            </a>
           </div>
-        </div>
-        <div>
-                                                                                                                                                                                                                                        <p class="stack-label">Development &amp; AI</p>
-          <div class="stack-chips">
-            <span class="chip">Java</span>
-            <span class="chip">Python</span>
-            <span class="chip">React</span>
-            <span class="chip">ASP.NET</span>
-            <span class="chip">Linux</span>
-            <span class="chip">LLM Optimization</span>
+        </header>
+
+        <button id="mobile-expand" class="mobile-expand-btn">
+          <span class="toggle-arrow">▼</span>
+          <span class="toggle-text" id="cv-toggle-text">Expand Full CV</span>
+        </button>
+
+        <div id="cv-content" class="cv-content">
+          <div class="cv-scroll">
+            <div class="pill-row">
+              <div class="pill">
+                <span class="pill-dot"></span>
+                <span id="pill-active">Aktif olarak CloudFlex’te Jr. Cloud Engineer</span>
+              </div>
+              <div class="pill pill-ghost">
+                <span id="pill-remote">🌐 Remote &amp; Hybrid Capable</span>
+              </div>
+            </div>
+
+            <section class="cv-section">
+              <h2 class="section-title" id="title-summary">Özet</h2>
+              <p class="cv-text" id="summary-body">
+                Mühendislik altyapısına sahip, Cloud Engineer olarak profesyonel kariyerine devam eden bir teknoloji
+                tutkunuyum. DevOps kültürü, bulut mimarileri ve yazılım geliştirme süreçlerinde deneyimliyim. Agile
+                ortamlarda çalışmaya alışkın, hızlı öğrenen ve değişen teknolojilere kolayca uyum sağlayan bir takım
+                oyuncusuyum. Ölçeklenebilir ve güvenilir sistemler inşa ederken sürekli gelişimi önceliklendiriyorum.
+              </p>
+            </section>
+
+            <section class="cv-section">
+              <h2 class="section-title" id="title-experience">Deneyim</h2>
+              <div class="timeline">
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="exp1-title">Jr. Cloud Engineer, CloudFlex</h3>
+                    <p class="timeline-meta" id="exp1-meta">Ekim 2025 - Halen</p>
+                  </div>
+                  <ul>
+                    <li id="exp1-li1">AWS ve Azure üzerinde bulut altyapılarının yönetimi ve optimizasyonu.</li>
+                    <li id="exp1-li2">Konteyner tabanlı uygulamaların dağıtımı ve CI/CD süreçlerine aktif katkı.</li>
+                    <li id="exp1-li3">Yedekleme, izleme ve güvenilirlik odaklı operasyonların yönetimi.</li>
+                  </ul>
+                  <div class="tech-pills">
+                    <span class="tech-pill">AWS</span>
+                    <span class="tech-pill">Azure</span>
+                    <span class="tech-pill">Docker</span>
+                    <span class="tech-pill">Kubernetes</span>
+                  </div>
+                </article>
+
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="exp2-title">Intern DevOps &amp; Platform Mühendisi, Eteration</h3>
+                    <p class="timeline-meta" id="exp2-meta">Ocak 2025 - Temmuz 2025</p>
+                  </div>
+                  <ul>
+                    <li id="exp2-li1">GitLab CI kullanarak pipeline tasarımı, optimizasyonu ve bakımına katkı.</li>
+                    <li id="exp2-li2">Docker ve Kubernetes ile konteynerizasyon ve orkestrasyon.</li>
+                    <li id="exp2-li3">Kubernetes ekosistemi araçlarıyla altyapı operasyonlarının desteklenmesi.</li>
+                  </ul>
+                  <div class="tech-pills">
+                    <span class="tech-pill">GitLab CI</span>
+                    <span class="tech-pill">Docker</span>
+                    <span class="tech-pill">Kubernetes</span>
+                  </div>
+                </article>
+
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="exp3-title">Intern Java Developer, Hitit</h3>
+                    <p class="timeline-meta" id="exp3-meta">Temmuz 2023 - Ağustos 2023</p>
+                  </div>
+                  <ul>
+                    <li id="exp3-li1">Havacılık sektörü için geliştirilen Crane yazılım suite'i üzerinde çalışma.</li>
+                    <li id="exp3-li2">Kurumsal Java projelerinde pratik deneyim kazanımı.</li>
+                  </ul>
+                </article>
+
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="exp4-title">Intern Full Stack Developer, GET Yazılım</h3>
+                    <p class="timeline-meta" id="exp4-meta">Aralık 2022 - Mayıs 2023</p>
+                  </div>
+                  <ul>
+                    <li id="exp4-li1">Web ve mobil projelere full‑stack geliştirici olarak katkı.</li>
+                    <li id="exp4-li2">React, Android ve backend teknolojileriyle tam yığın geliştirme.</li>
+                  </ul>
+                </article>
+
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="exp5-title">IT Asistanı, Muğla Sıtkı Koçman Üniversitesi</h3>
+                    <p class="timeline-meta" id="exp5-meta">Kasım 2021 - Haziran 2023</p>
+                  </div>
+                  <ul>
+                    <li id="exp5-li1">Üniversite genelindeki bilgisayarların donanım ve yazılım sorunlarının
+                      giderilmesi.</li>
+                    <li id="exp5-li2">Son kullanıcı destek süreçlerine ve altyapı operasyonlarına katkı.</li>
+                  </ul>
+                </article>
+              </div>
+            </section>
+
+            <section class="cv-section">
+              <h2 class="section-title" id="title-education">Eğitim &amp; Projeler</h2>
+              <div class="timeline">
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="edu1-title">Bilişim Sistemleri Mühendisliği, Muğla Sıtkı Koçman
+                      Üniversitesi</h3>
+                    <p class="timeline-meta" id="edu1-meta">Eylül 2019 - Haziran 2025 · AGNO: 3.09 / 4.00</p>
+                  </div>
+                  <ul>
+                    <li id="edu1-li1">Google Developer Student Clubs (GDSC) Co‑Lead, IEEE ve Siber Vatan topluluklarında
+                      aktif rol.</li>
+                    <li id="edu1-li2">Bulut, yazılım geliştirme ve siber güvenlik odaklı projeler.</li>
+                  </ul>
+                </article>
+
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="edu2-title">Akademik Bildiri – Kişiselleştirilmiş Seyahat Yönetimi
+                    </h3>
+                    <p class="timeline-meta" id="edu2-meta">2. Uluslararası Geleceğin Mühendisleri Konferansı · 2025</p>
+                  </div>
+                  <ul>
+                    <li id="edu2-li1">React, Android, Firebase ve Python tabanlı yapay zeka ile full‑stack seyahat öneri
+                      sistemi.</li>
+                    <li id="edu2-li2">Kullanıcı tercihlerine göre kişiselleştirilmiş seyahat planları üreten öneri
+                      motoru.</li>
+                  </ul>
+                </article>
+              </div>
+            </section>
+
+            <section class="cv-section">
+              <h2 class="section-title" id="title-skills">Odak Alanları &amp; Beceriler</h2>
+              <div class="stack-grid">
+                <div>
+                  <p class="stack-label">Cloud &amp; DevOps</p>
+                  <div class="stack-chips">
+                    <span class="chip">Kubernetes</span>
+                    <span class="chip">Docker</span>
+                    <span class="chip">AWS</span>
+                    <span class="chip">Azure</span>
+                    <span class="chip">GitLab CI/CD</span>
+                    <span class="chip">ArgoCD</span>
+                  </div>
+                </div>
+                <div>
+                  <p class="stack-label">Development &amp; AI</p>
+                  <div class="stack-chips">
+                    <span class="chip">Java</span>
+                    <span class="chip">Python</span>
+                    <span class="chip">React</span>
+                    <span class="chip">ASP.NET</span>
+                    <span class="chip">Linux</span>
+                    <span class="chip">LLM Optimization</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="meta-row">
+                <div class="meta-block">
+                  <p class="meta-label" id="label-languages">Diller</p>
+                  <div class="meta-tags">
+                    <span class="meta-tag" id="tag-lang-tr">Türkçe (Ana Dil)</span>
+                    <span class="meta-tag" id="tag-lang-en">English</span>
+                  </div>
+                </div>
+                <div class="meta-block">
+                  <p class="meta-label" id="label-certs">Sertifikalar</p>
+                  <div class="meta-tags">
+                    <span class="meta-tag" id="tag-cert-aws">AWS Cloud 101</span>
+                    <span class="meta-tag" id="tag-cert-ethical">Siber Vatan Etik Hacker</span>
+                    <span class="meta-tag" id="tag-cert-gitlab">GitLab CI Fundamentals</span>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
-        </div>
-                                                                                                                                                                                                                                    </div>
 
-                                                                                                                                                                                                                                    <div class="meta-row">
-                                                                                                                                                                                                                                      <div class="meta-block">
-                                                                                                                                                                                                                                        <p class="meta-label" id="label-languages">Diller</p>
-                                                                                                                                                                                                                                        <div class="meta-tags">
-                                                                                                                                                                                                                                          <span class="meta-tag" id="tag-lang-tr">Türkçe (Ana Dil)</span>
-                                                                                                                                                                                                                                          <span class="meta-tag" id="tag-lang-en">English</span>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                      <div class="meta-block">
-                                                                                                                                                                                                                                        <p class="meta-label" id="label-certs">Sertifikalar</p>
-                                                                                                                                                                                                                                        <div class="meta-tags">
-                                                                                                                                                                                                                                          <span class="meta-tag" id="tag-cert-aws">AWS Cloud 101</span>
-                                                                                                                                                                                                                                          <span class="meta-tag" id="tag-cert-ethical">Siber Vatan Etik Hacker</span>
-                                                                                                                                                                                                                                          <span class="meta-tag" id="tag-cert-gitlab">GitLab CI Fundamentals</span>
-                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                    </section>
-      </div>
-
-      <footer class="contact-footer">
-        <div class="cta-row">
-          <a class="btn btn-outline" href="https://linkedin.com/in/yigitemreturkkan" target="_blank" rel="noreferrer">
-            <span id="footer-linkedin">LinkedIn</span>
-          </a>
-          <a class="btn btn-primary" href="mailto:yigit.turkkan@gmail.com">
-            <span id="footer-email">E-posta ile iletişim</span>
-          </a>
+          <footer class="contact-footer">
+            <div class="cta-row">
+              <a class="btn btn-outline" href="https://linkedin.com/in/yigitemreturkkan" target="_blank"
+                rel="noreferrer">
+                <span id="footer-linkedin">LinkedIn</span>
+              </a>
+              <a class="btn btn-primary" href="mailto:yigit.turkkan@gmail.com">
+                <span id="footer-email">E-posta ile iletişim</span>
+              </a>
+            </div>
+          </footer>
         </div>
-      </footer>
-                                                                                                                                                                                                                                </div>
     </section>
 
-                                                                                                                                                                                                                              <section class="card chat-card" id="ai-card">
-                                                                                                                                                                                                                                <div class="card-inner">
-      <header class="chat-header-row">
-        <div>
-          <div class="chat-title">
-                                                                                                                                                                                                                                        <span id="chat-title">Yiğit Emre Türkkan'ın Dijital Asistanı</span>
+    <section class="card chat-card" id="ai-card">
+      <div class="card-inner">
+        <header class="chat-header-row">
+          <div>
+            <div class="chat-title">
+              <span id="chat-title">Yiğit Emre Türkkan'ın Dijital Asistanı</span>
+            </div>
           </div>
-        </div>
-        <div class="chat-badge">
-          <span>Persona: Yiğit</span>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        </div>
-      </header>
+          <div class="chat-badge">
+            <span>Persona: Yiğit</span>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </header>
 
-      <div class="chat-window">
-        <div id="chat-scroll" class="chat-scroll"></div>
-      </div>
-
-      <div class="chat-input-row">
-        <div class="chat-input-wrap">
-          <textarea
-            id="chat-input"
-            class="chat-input"
-            rows="1"
-                                                                                                                                                                                                                                        placeholder="Mesajınızı buraya yazın..."
-                                                                                                                                                                                                                                        data-i18n-placeholder="chat-placeholder"
-          ></textarea>
+        <div class="chat-window">
+          <div id="chat-scroll" class="chat-scroll"></div>
         </div>
-        <button id="send-btn" class="chat-send-btn" type="button" aria-label="Send message">
-          ➤
-        </button>
-                                                                                                                                                                                                                                  </div>
+
+        <div class="chat-input-row">
+          <div class="chat-input-wrap">
+            <textarea id="chat-input" class="chat-input" rows="1" placeholder="Mesajınızı buraya yazın..."
+              data-i18n-placeholder="chat-placeholder"></textarea>
+          </div>
+          <button id="send-btn" class="chat-send-btn" type="button" aria-label="Send message">
+            ➤
+          </button>
+        </div>
       </div>
     </section>
   </main>
 
-                                                                                                                                                                                                                            <script type="module">
+  <script type="module">
     // Mobile viewport fix: set --vh based on innerHeight to avoid nav/URL bar issues
     const setVh = () => {
       const vh = window.innerHeight * 0.01;
@@ -1580,16 +1621,16 @@
     setVh();
     window.addEventListener("resize", setVh);
     window.addEventListener("orientationchange", setVh);
-                                                                                                                                                                                                                              import { sendMessageToGemini } from "./gemini-chat-proxy.js?v=5555";
+    import { sendMessageToGemini } from "./gemini-chat-proxy.js?v=5555";
 
     (function () {
       const chatScroll = document.getElementById("chat-scroll");
       const chatInput = document.getElementById("chat-input");
       const sendBtn = document.getElementById("send-btn");
-                                                                                                                                                                                                                                const cvToggleBtn = document.getElementById("mobile-expand");
-                                                                                                                                                                                                                                const cvContent = document.getElementById("cv-content");
-                                                                                                                                                                                                                                const aiCard = document.getElementById("ai-card");
-                                                                                                                                                                                                                                const cvCard = document.getElementById("cv-card");
+      const cvToggleBtn = document.getElementById("mobile-expand");
+      const cvContent = document.getElementById("cv-content");
+      const aiCard = document.getElementById("ai-card");
+      const cvCard = document.getElementById("cv-card");
       const cvScroll = document.querySelector(".cv-scroll");
       const langButtons = document.querySelectorAll(".lang-btn");
 
@@ -1745,11 +1786,11 @@
 
       let uiLang = "tr"; // UI language, independent of detected message language
       let isBusy = false;
-                                                                                                                                                                                                                                let isFirstMessage = true;
+      let isFirstMessage = true;
 
       function detectMessageLanguage(text) {
         const hasTrChars = /[çğıöşüÇĞİÖŞÜ]/.test(text);
-                                                                                                                                                                                                                                  const hasEnWords = /\b(what|how|why|cloud|devops|experience|team)\b/i.test(text);
+        const hasEnWords = /\b(what|how|why|cloud|devops|experience|team)\b/i.test(text);
         if (hasTrChars && !hasEnWords) return "tr";
         if (hasEnWords && !hasTrChars) return "en";
         return uiLang;
@@ -1799,7 +1840,7 @@
         });
       }
 
-                                                                                                                                                                                                                                const userEmojis = ["🙂", "👋", "💬", "🧑‍💻"];
+      const userEmojis = ["🙂", "👋", "💬", "🧑‍💻"];
 
       function createMessageEl(role, text, meta) {
         const row = document.createElement("div");
@@ -1807,12 +1848,12 @@
 
         const avatar = document.createElement("div");
         avatar.className = "msg-avatar " + role;
-                                                                                                                                                                                                                                  if (role === "ai") {
-                                                                                                                                                                                                                                    avatar.textContent = "YT";
-                                                                                                                                                                                                                                  } else {
-                                                                                                                                                                                                                                    const idx = Math.floor(Math.random() * userEmojis.length);
-                                                                                                                                                                                                                                    avatar.textContent = userEmojis[idx];
-                                                                                                                                                                                                                                  }
+        if (role === "ai") {
+          avatar.textContent = "YT";
+        } else {
+          const idx = Math.floor(Math.random() * userEmojis.length);
+          avatar.textContent = userEmojis[idx];
+        }
 
         const bubble = document.createElement("div");
         bubble.className = "msg-bubble " + (role === "ai" ? "msg-ai" : "msg-user");
@@ -1843,12 +1884,12 @@
       function addMessage(role, text, meta) {
         const el = createMessageEl(role, text, meta);
         chatScroll.appendChild(el);
-                                                                                                                                                                                                                                  if (isFirstMessage && role === "ai") {
-                                                                                                                                                                                                                                    // İlk karşılama mesajında en üste sabit kalsın
-                                                                                                                                                                                                                                    chatScroll.scrollTop = 0;
-                                                                                                                                                                                                                                    isFirstMessage = false;
-                                                                                                                                                                                                                                  } else {
-        scrollToBottom();
+        if (isFirstMessage && role === "ai") {
+          // İlk karşılama mesajında en üste sabit kalsın
+          chatScroll.scrollTop = 0;
+          isFirstMessage = false;
+        } else {
+          scrollToBottom();
         }
       }
 
@@ -1883,16 +1924,16 @@
         chatScroll.appendChild(typingRow);
         scrollToBottom();
 
-                                                                                                                                                                                                                                  let answer;
-                                                                                                                                                                                                                                  try {
-                                                                                                                                                                                                                                    answer = await sendMessageToGemini(text);
-                                                                                                                                                                                                                                  } catch (e) {
-                                                                                                                                                                                                                                    console.error("Gemini error", e);
-                                                                                                                                                                                                                                    answer =
-                                                                                                                                                                                                                                      msgLang === "tr"
-                                                                                                                                                                                                                                        ? "Üzgünüm, şu anda yanıt üretemiyorum. Lütfen daha sonra tekrar dener misin veya LinkedIn üzerinden iletişime geçer misin?"
-                                                                                                                                                                                                                                        : "Sorry, I can’t generate a reply right now. Please try again later or reach out via LinkedIn.";
-                                                                                                                                                                                                                                  }
+        let answer;
+        try {
+          answer = await sendMessageToGemini(text);
+        } catch (e) {
+          console.error("Gemini error", e);
+          answer =
+            msgLang === "tr"
+              ? "Üzgünüm, şu anda yanıt üretemiyorum. Lütfen daha sonra tekrar dener misin veya LinkedIn üzerinden iletişime geçer misin?"
+              : "Sorry, I can’t generate a reply right now. Please try again later or reach out via LinkedIn.";
+        }
 
         typingRow.remove();
         const meta =
@@ -1919,77 +1960,76 @@
         }
       });
 
-                                                                                                                                                                                                                                function applyMobileCvState() {
-                                                                                                                                                                                                                                  const isMobile = window.matchMedia("(max-width: 880px)").matches;
-                                                                                                                                                                                                                                  const expanded = document.body.classList.contains("is-cv-expanded");
+      function applyMobileCvState() {
+        const isMobile = window.matchMedia("(max-width: 880px)").matches;
+        const expanded = document.body.classList.contains("is-cv-expanded");
 
-                                                                                                                                                                                                                                  if (!isMobile) {
-                                                                                                                                                                                                                                    document.body.classList.remove("is-cv-expanded");
-                                                                                                                                                                                                                                    if (cvContent) cvContent.style.display = "";
-                                                                                                                                                                                                                                    if (aiCard) aiCard.style.display = "";
-                                                                                                                                                                                                                                  if (cvScroll) cvScroll.classList.remove("is-collapsed");
-                                                                                                                                                                                                                                    return;
-                                                                                                                                                                                                                                  }
+        if (!isMobile) {
+          document.body.classList.remove("is-cv-expanded");
+          if (cvContent) cvContent.style.display = "";
+          if (aiCard) aiCard.style.display = "";
+          if (cvScroll) cvScroll.classList.remove("is-collapsed");
+          return;
+        }
 
-                                                                                                                                                                                                                                  if (cvContent) cvContent.style.display = expanded ? "" : "none";
-                                                                                                                                                                                                                                  if (aiCard) aiCard.style.display = expanded ? "none" : "";
-                                                                                                                                                                                                                                  if (cvScroll) {
-                                                                                                                                                                                                                                    cvScroll.classList.toggle("is-collapsed", !expanded);
-                                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                                }
+        if (cvContent) cvContent.style.display = expanded ? "" : "none";
+        if (aiCard) aiCard.style.display = expanded ? "none" : "";
+        if (cvScroll) {
+          cvScroll.classList.toggle("is-collapsed", !expanded);
+        }
+      }
 
-                                                                                                                                                                                                                                function updateCvToggleLabel() {
-                                                                                                                                                                                                                                  if (!cvToggleBtn) return;
-                                                                                                                                                                                                                                  const expanded = document.body.classList.contains("is-cv-expanded");
-                                                                                                                                                                                                                                  const arrow = cvToggleBtn.querySelector(".toggle-arrow");
-                                                                                                                                                                                                                                  const label = cvToggleBtn.querySelector(".toggle-text");
-                                                                                                                                                                                                                                  if (arrow) arrow.textContent = expanded ? "▲" : "▼";
-                                                                                                                                                                                                                                 if (label)
-                                                                                                                                                                                                                                   label.textContent = expanded
-                                                                                                                                                                                                                                     ? toggleLabels.collapse[uiLang]
-                                                                                                                                                                                                                                     : toggleLabels.expand[uiLang];
-                                                                                                                                                                                                                                }
+      function updateCvToggleLabel() {
+        if (!cvToggleBtn) return;
+        const expanded = document.body.classList.contains("is-cv-expanded");
+        const arrow = cvToggleBtn.querySelector(".toggle-arrow");
+        const label = cvToggleBtn.querySelector(".toggle-text");
+        if (arrow) arrow.textContent = expanded ? "▲" : "▼";
+        if (label)
+          label.textContent = expanded
+            ? toggleLabels.collapse[uiLang]
+            : toggleLabels.expand[uiLang];
+      }
 
-                                                                                                                                                                                                                                if (cvToggleBtn) {
-                                                                                                                                                                                                                                  cvToggleBtn.addEventListener("click", () => {
-                                                                                                                                                                                                                                    const expanded = document.body.classList.contains("is-cv-expanded");
-                                                                                                                                                                                                                                    if (expanded) {
-                                                                                                                                                                                                                                      document.body.classList.remove("is-cv-expanded");
-                                                                                                                                                                                                                                      if (cvCard) {
-                                                                                                                                                                                                                                        cvCard.scrollIntoView({ behavior: "smooth", block: "start" });
-                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                    } else {
-                                                                                                                                                                                                                                      document.body.classList.add("is-cv-expanded");
-                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                    applyMobileCvState();
-                                                                                                                                                                                                                                    updateCvToggleLabel();
-                                                                                                                                                                                                                                  });
-                                                                                                                                                                                                                                }
+      if (cvToggleBtn) {
+        cvToggleBtn.addEventListener("click", () => {
+          const expanded = document.body.classList.contains("is-cv-expanded");
+          if (expanded) {
+            document.body.classList.remove("is-cv-expanded");
+            if (cvCard) {
+              cvCard.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          } else {
+            document.body.classList.add("is-cv-expanded");
+          }
+          applyMobileCvState();
+          updateCvToggleLabel();
+        });
+      }
 
-                                                                                                                                                                                                                                window.addEventListener("resize", () => {
-                                                                                                                                                                                                                                  applyMobileCvState();
-                                                                                                                                                                                                                                  updateCvToggleLabel();
+      window.addEventListener("resize", () => {
+        applyMobileCvState();
+        updateCvToggleLabel();
       });
 
       window.addEventListener("load", () => {
-                                                                                                                                                                                                                                  // Mobil varsayılan: CV kapalı, chat açık
-                                                                                                                                                                                                                                  if (window.matchMedia("(max-width: 880px)").matches) {
-                                                                                                                                                                                                                                    document.body.classList.remove("is-cv-expanded");
-                                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                                  applyMobileCvState();
-                                                                                                                                                                                                                                  updateCvToggleLabel();
+        // Mobil varsayılan: CV kapalı, chat açık
+        if (window.matchMedia("(max-width: 880px)").matches) {
+          document.body.classList.remove("is-cv-expanded");
+        }
+        applyMobileCvState();
+        updateCvToggleLabel();
 
-                                  // 1 sn sonra ilk karşılama mesajını göster
-                                  setTimeout(() => {
-                                    const intro = introTexts[uiLang] || introTexts.tr;
-                                    addMessage("ai", intro, introMeta[uiLang] || introMeta.tr);
-                                  }, 1000);
-                                                                                                                                                                                                                                });
+        // 1 sn sonra ilk karşılama mesajını göster
+        setTimeout(() => {
+          const intro = introTexts[uiLang] || introTexts.tr;
+          addMessage("ai", intro, introMeta[uiLang] || introMeta.tr);
+        }, 1000);
+      });
 
-                                                                                                                                                                                                                                // Mobil / masaüstü için özel görünüm geçişi yok; kart görünümü CSS ile yönetiliyor.
+      // Mobil / masaüstü için özel görünüm geçişi yok; kart görünümü CSS ile yönetiliyor.
     })();
   </script>
 </body>
+
 </html>
-
-

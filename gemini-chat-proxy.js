@@ -1,10 +1,5 @@
-/**
- * Frontend proxy client for Gemini API via Cloudflare Worker
- * Replace PROXY_URL with your deployed Worker URL
- */
-
-// Cloudflare Worker URL
-const PROXY_URL = "https://yigit-gemini-proxy.yigit-turkkan.workers.dev";
+// Cloudflare Pages Function URL
+const PROXY_URL = "/api/chat";
 
 // Chat history for context
 let chatHistory = [];
