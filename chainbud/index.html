@@ -7,17 +7,36 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="lang-tr">
   <header>
     <div class="container header-wrapper">
       <div class="logo-wrapper">
         <div class="logo-text">Chain<span>Bud</span></div>
       </div>
       <ul class="nav-links">
-        <li><a href="#features">Özellikler / Features</a></li>
-        <li><a href="#buddies">Dostlarımız / Buddies</a></li>
-        <li><a href="privacy.html">Gizlilik / Privacy</a></li>
+        <li>
+          <a href="#features">
+            <span class="lang-tr">Özellikler</span>
+            <span class="lang-en">Features</span>
+          </a>
+        </li>
+        <li>
+          <a href="#buddies">
+            <span class="lang-tr">Dostlarımız</span>
+            <span class="lang-en">Buddies</span>
+          </a>
+        </li>
+        <li>
+          <a href="privacy.html">
+            <span class="lang-tr">Gizlilik</span>
+            <span class="lang-en">Privacy</span>
+          </a>
+        </li>
       </ul>
+      <div class="lang-switcher-header">
+        <button class="lang-toggle-btn active" data-lang="tr" onclick="setLang('tr')">TR</button>
+        <button class="lang-toggle-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
     </div>
   </header>
 
@@ -27,22 +46,37 @@
     <div class="hero-glow-2"></div>
     <div class="container hero-wrapper">
       <div class="hero-content">
-        <div class="tagline"><i class="fa-solid fa-sparkles"></i> Arkadaşlık Zincirini Koparma!</div>
-        <h1 class="hero-title">Alışkanlıklarınızı <span>Dostlarınızla</span> Büyütün</h1>
-        <p class="hero-desc">ChainBud ile hedeflerinizi eğlenceli ve motive edici bir maceraya dönüştürün. Günlük görevlerinizi tamamladıkça sevimli dostlarınızı besleyin, büyütün ve efsanevi seviyelere ulaştırın!</p>
+        <div class="tagline">
+          <span class="lang-tr"><i class="fa-solid fa-sparkles"></i> Arkadaşlık Zincirini Koparma!</span>
+          <span class="lang-en"><i class="fa-solid fa-sparkles"></i> Don't Break the Chain of Friendship!</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="lang-tr">Alışkanlıklarınızı <span>Dostlarınızla</span> Büyütün</span>
+          <span class="lang-en">Grow Your Habits with Your <span>Buddies</span></span>
+        </h1>
+        <p class="hero-desc">
+          <span class="lang-tr">ChainBud ile hedeflerinizi eğlenceli ve motive edici bir maceraya dönüştürün. Günlük görevlerinizi tamamladıkça sevimli dostlarınızı besleyin, büyütün ve efsanevi seviyelere ulaştırın!</span>
+          <span class="lang-en">Turn your goals into a fun and motivating adventure with ChainBud. Feed, grow, and evolve your cute buddies to legendary levels as you complete your daily tasks!</span>
+        </p>
         <div class="store-buttons">
-          <a href="#" class="store-btn">
+          <a href="https://play.google.com/store/apps/details?id=com.yigitemreturkkan.chainbud" class="store-btn" target="_blank">
             <i class="fa-brands fa-google-play btn-icon"></i>
             <div>
               <div class="btn-text-small">Google Play</div>
-              <div class="btn-text-large">İNDİRİN</div>
+              <div class="btn-text-large">
+                <span class="lang-tr">İNDİRİN</span>
+                <span class="lang-en">DOWNLOAD</span>
+              </div>
             </div>
           </a>
           <a href="#" class="store-btn">
             <i class="fa-brands fa-apple btn-icon"></i>
             <div>
               <div class="btn-text-small">App Store</div>
-              <div class="btn-text-large">İNDİRİN</div>
+              <div class="btn-text-large">
+                <span class="lang-tr">İNDİRİN</span>
+                <span class="lang-en">DOWNLOAD</span>
+              </div>
             </div>
           </a>
         </div>
@@ -57,71 +91,119 @@
   <section id="features" class="features">
     <div class="container">
       <div class="section-header">
-        <div class="section-subtitle">Neden ChainBud?</div>
-        <h2 class="section-title">Alışkanlık Kazanmanın En Eğlenceli Yolu</h2>
+        <div class="section-subtitle">
+          <span class="lang-tr">Neden ChainBud?</span>
+          <span class="lang-en">Why ChainBud?</span>
+        </div>
+        <h2 class="section-title">
+          <span class="lang-tr">Alışkanlık Kazanmanın En Eğlenceli Yolu</span>
+          <span class="lang-en">The Most Entertaining Way to Build Habits</span>
+        </h2>
       </div>
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon-wrapper">
             <i class="fa-solid fa-link feature-icon"></i>
           </div>
-          <h3>Zinciri Koparma</h3>
-          <p>Her gün hedefinizi tamamlayarak zincirinize yeni bir halka ekleyin. Alışkanlıklarınızı aksatmadan serinizi sürdürün.</p>
+          <h3>
+            <span class="lang-tr">Zinciri Koparma</span>
+            <span class="lang-en">Don't Break the Chain</span>
+          </h3>
+          <p>
+            <span class="lang-tr">Her gün hedefinizi tamamlayarak zincirinize yeni bir halka ekleyin. Alışkanlıklarınızı aksatmadan serinizi sürdürün.</span>
+            <span class="lang-en">Add a new link to your chain by completing your goal every day. Maintain your streak without missing a day.</span>
+          </p>
         </div>
         <div class="feature-card">
           <div class="feature-icon-wrapper">
             <i class="fa-solid fa-wand-magic-sparkles feature-icon"></i>
           </div>
-          <h3>Karakter Evrimi</h3>
-          <p>Dostlarınız siz istikrarlı kaldıkça gelişir! 1. Seviyeden başlayarak haftalık hedeflerle 8. Seviye Efsanevi Şampiyona dönüşürler.</p>
+          <h3>
+            <span class="lang-tr">Karakter Evrimi</span>
+            <span class="lang-en">Character Evolution</span>
+          </h3>
+          <p>
+            <span class="lang-tr">Dostlarınız siz istikrarlı kaldıkça gelişir! 1. Seviyeden başlayarak haftalık hedeflerle 8. Seviye Efsanevi Şampiyona dönüşürler.</span>
+            <span class="lang-en">Your buddies evolve as you stay consistent! Starting from Level 1, they transform into Level 8 Legendary Champions through weekly goals.</span>
+          </p>
         </div>
         <div class="feature-card">
           <div class="feature-icon-wrapper">
             <i class="fa-solid fa-shield-halved feature-icon"></i>
           </div>
-          <h3>Kalkan Koruması</h3>
-          <p>İstikrarınızı korumak için kalkanlar kullanın. Kaçırdığınız günlerde serinizi korumak ve dünü kurtarmak için kalkanlar yardımınıza koşar.</p>
+          <h3>
+            <span class="lang-tr">Kalkan Koruması</span>
+            <span class="lang-en">Shield Protection</span>
+          </h3>
+          <p>
+            <span class="lang-tr">İstikrarınızı korumak için kalkanlar kullanın. Kaçırdığınız günlerde serinizi korumak ve dünü kurtarmak için kalkanlar yardımınıza koşar.</span>
+            <span class="lang-en">Use shields to protect your consistency. Shields help you rescue yesterday and maintain your streak on missed days.</span>
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Buddies Showcase -->
+  <!-- Buddies Showcase Section -->
   <section id="buddies" class="buddies-showcase">
     <div class="container">
       <div class="section-header">
-        <div class="section-subtitle">Dostlarımızı Tanıyın</div>
-        <h2 class="section-title">Yol Arkadaşınızı Seçin</h2>
+        <div class="section-subtitle">
+          <span class="lang-tr">Yol Arkadaşınızı Seçin</span>
+          <span class="lang-en">Choose Your Companion</span>
+        </div>
+        <h2 class="section-title">
+          <span class="lang-tr">6 Farklı Kadim Dost, 8 Aşamalı Evrim</span>
+          <span class="lang-en">6 Sacred Buddies, 8 Evolution Stages</span>
+        </h2>
       </div>
-      <div class="buddies-grid">
-        <div class="buddy-show-card bunny">
-          <div class="buddy-img-bg">
-            <span class="buddy-avatar-emoji">🐰</span>
-          </div>
-          <div class="buddy-info">
-            <div class="buddy-badge">Tavşan / Bun-Bun</div>
-            <h3>Bun-Bun</h3>
-            <p>Lavanta renkli, sevimli ve enerjik. Hedeflerinize neşeyle eşlik edecek tatlı bir dost.</p>
-          </div>
+      
+      <div class="showcase-container">
+        <!-- Left panel: Selector List -->
+        <div class="buddy-selector-list" id="buddySelectorList">
+          <!-- Populated by JavaScript -->
         </div>
-        <div class="buddy-show-card lion">
-          <div class="buddy-img-bg">
-            <span class="buddy-avatar-emoji">🦁</span>
+        
+        <!-- Right panel: Showcase Card -->
+        <div class="buddy-display-card" id="buddyDisplayCard">
+          <div class="showcase-left">
+            <div class="showcase-image-wrapper">
+              <img id="showcaseImg" src="" alt="Mascot Evolution" class="showcase-img">
+            </div>
           </div>
-          <div class="buddy-info">
-            <div class="buddy-badge">Aslan / Leo</div>
-            <h3>Leo</h3>
-            <p>Cesur ve güçlü. Yavru bir aslandan görkemli bir krala dönüşen kararlı lideriniz.</p>
-          </div>
-        </div>
-        <div class="buddy-show-card panda">
-          <div class="buddy-img-bg">
-            <span class="buddy-avatar-emoji">🐼</span>
-          </div>
-          <div class="buddy-info">
-            <div class="buddy-badge">Panda / Bambu</div>
-            <h3>Bambu</h3>
-            <p>Huzurlu ve dengeli. Doğanın dinginliğini ve ruhsal dengenizi koruyacak bilge bir dost.</p>
+          <div class="showcase-right">
+            <div class="showcase-header">
+              <div class="showcase-title-row">
+                <span class="showcase-name" id="showcaseName"></span>
+                <span class="showcase-habit-tag" id="showcaseHabitTag"></span>
+              </div>
+              <p class="showcase-desc" id="showcaseDesc"></p>
+            </div>
+            
+            <!-- Level Selector -->
+            <div class="showcase-levels-tab">
+              <button class="level-tab-btn active" data-level="1" onclick="setSelectedLevel(1)">
+                <span class="lang-tr">Seviye 1 (Yavru)</span>
+                <span class="lang-en">Level 1 (Baby)</span>
+              </button>
+              <button class="level-tab-btn" data-level="4" onclick="setSelectedLevel(4)">
+                <span class="lang-tr">Seviye 4 (Gelişen)</span>
+                <span class="lang-en">Level 4 (Young)</span>
+              </button>
+              <button class="level-tab-btn" data-level="8" onclick="setSelectedLevel(8)">
+                <span class="lang-tr">Seviye 8 (Efsanevi)</span>
+                <span class="lang-en">Level 8 (Legendary)</span>
+              </button>
+            </div>
+            
+            <!-- Custom Level Title display -->
+            <div class="showcase-level-name-card">
+              <span class="showcase-level-label">
+                <span class="lang-tr">Dostunun Seviye Formu</span>
+                <span class="lang-en">Buddy Level Form</span>
+              </span>
+              <span class="showcase-level-title" id="showcaseLevelTitle"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -132,21 +214,33 @@
   <section class="cta-section">
     <div class="cta-glow"></div>
     <div class="container cta-wrapper">
-      <h2 class="cta-title">Hemen Bugün Başlayın</h2>
-      <p class="cta-desc">Ücretsiz indirin, hedefinizi belirleyin ve dostunuzla birlikte zinciri büyütmeye başlayın!</p>
+      <h2 class="cta-title">
+        <span class="lang-tr">Hemen Bugün Başlayın</span>
+        <span class="lang-en">Start Journey Today</span>
+      </h2>
+      <p class="cta-desc">
+        <span class="lang-tr">Ücretsiz indirin, hedefinizi belirleyin ve dostunuzla birlikte zinciri büyütmeye başlayın!</span>
+        <span class="lang-en">Download for free, set your goal, and start growing your chain together with your buddy!</span>
+      </p>
       <div class="store-buttons">
-        <a href="#" class="store-btn">
+        <a href="https://play.google.com/store/apps/details?id=com.yigitemreturkkan.chainbud" class="store-btn" target="_blank">
           <i class="fa-brands fa-google-play btn-icon"></i>
           <div>
             <div class="btn-text-small">Google Play</div>
-            <div class="btn-text-large">İNDİRİN</div>
+            <div class="btn-text-large">
+              <span class="lang-tr">İNDİRİN</span>
+              <span class="lang-en">DOWNLOAD</span>
+            </div>
           </div>
         </a>
         <a href="#" class="store-btn">
           <i class="fa-brands fa-apple btn-icon"></i>
           <div>
             <div class="btn-text-small">App Store</div>
-            <div class="btn-text-large">İNDİRİN</div>
+            <div class="btn-text-large">
+              <span class="lang-tr">İNDİRİN</span>
+              <span class="lang-en">DOWNLOAD</span>
+            </div>
           </div>
         </a>
       </div>
@@ -155,13 +249,252 @@
 
   <footer>
     <div class="container footer-wrapper">
-      <div class="copyright">&copy; 2026 ChainBud. Tüm hakları saklıdır. / All rights reserved.</div>
+      <div class="copyright">
+        <span class="lang-tr">&copy; 2026 ChainBud. Tüm hakları saklıdır.</span>
+        <span class="lang-en">&copy; 2026 ChainBud. All rights reserved.</span>
+      </div>
       <ul class="footer-links">
-        <li><a href="#features">Features</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li>
+          <a href="#features">
+            <span class="lang-tr">Özellikler</span>
+            <span class="lang-en">Features</span>
+          </a>
+        </li>
+        <li>
+          <a href="privacy.html">
+            <span class="lang-tr">Gizlilik Politikası</span>
+            <span class="lang-en">Privacy Policy</span>
+          </a>
+        </li>
         <li><a href="/app-ads.txt">app-ads.txt</a></li>
       </ul>
     </div>
   </footer>
+
+  <script>
+    const buddiesData = {
+      bunny: {
+        name: { tr: "Bun-Bun", en: "Bun-Bun" },
+        icon: "🐰",
+        description: {
+          tr: "Lavanta rengi tüyler, yumuşacık ve neşeli. Alışkanlıklarınızı stressiz bir şekilde tamamlamanıza yardımcı olan sevimli bir peluş dost.",
+          en: "Lavender fur, fluffy and cheerful. A cute plush friend that helps you build daily routines in a fun, stress-free way."
+        },
+        habit: { tr: "Günlük İşler & Hobi", en: "Daily Routines & Hobby" },
+        theme: {
+          glow: "rgba(155, 142, 196, 0.15)",
+          border: "#9B8EC4",
+          bg: "rgba(155, 142, 196, 0.1)",
+          text: "#9B8EC4"
+        },
+        levels: {
+          1: { tr: "Acemi Tavşan", en: "Beginner Bunny" },
+          4: { tr: "Savaşçı Tavşan", en: "Strong Warrior Bunny" },
+          8: { tr: "Efsanevi Tavşan Şövalye", en: "Legendary Bunny Knight" }
+        }
+      },
+      lion: {
+        name: { tr: "Leo", en: "Leo" },
+        icon: "🦁",
+        description: {
+          tr: "Cesur ve güçlü. Spor, iş ve yüksek odaklanma gerektiren alışkanlıklarınızda liderlik edecek, yavruluktan görkemli bir krala dönüşen gururlu dostunuz.",
+          en: "Brave and strong. A proud friend who grows from a cub to a king, perfect for leading your fitness, business, and high-focus habits."
+        },
+        habit: { tr: "Egzersiz & Spor / Odak", en: "Fitness & Focus" },
+        theme: {
+          glow: "rgba(212, 140, 85, 0.15)",
+          border: "#E5A475",
+          bg: "rgba(212, 140, 85, 0.1)",
+          text: "#E5A475"
+        },
+        levels: {
+          1: { tr: "Cesur Yavru", en: "Brave Cub" },
+          4: { tr: "Altın Yele", en: "Golden Mane" },
+          8: { tr: "Göklerin Zirvesi", en: "Celestial Apex" }
+        }
+      },
+      panda: {
+        name: { tr: "Bambu", en: "Bambu" },
+        icon: "🐼",
+        description: {
+          tr: "Huzurlu ve dengeli. Meditasyon, yoga, su içme ve zihinsel sakinlik alışkanlıklarında doğanın dinginliğini ve ruhsal dengenizi korumanıza yardımcı bilge bir yol arkadaşı.",
+          en: "Peaceful and balanced. A wise companion who helps you protect nature's calm and your spiritual balance in mindfulness, yoga, and self-care habits."
+        },
+        habit: { tr: "Zen / Meditasyon", en: "Mindfulness & Zen" },
+        theme: {
+          glow: "rgba(91, 140, 150, 0.15)",
+          border: "#8EC2CC",
+          bg: "rgba(91, 140, 150, 0.1)",
+          text: "#8EC2CC"
+        },
+        levels: {
+          1: { tr: "Sakin Yavru", en: "Calm Cub" },
+          4: { tr: "Denge Arayıcısı", en: "Balance Seeker" },
+          8: { tr: "Efsanevi Bambu İmparatoru", en: "Legendary Bamboo Emperor" }
+        }
+      },
+      fox: {
+        name: { tr: "Kitsune", en: "Kitsune" },
+        icon: "🦊",
+        description: {
+          tr: "Kurnaz ve zeki. Rutinler, sabah erken kalkma ve zeka gerektiren işlerde efsanevi mistik yetenekleriyle size hız ve enerji katacak gizemli bir kılavuz.",
+          en: "Cunning and smart. A mysterious guide who brings speed and energy with mythical abilities to self-care, early rising, and smart routines."
+        },
+        habit: { tr: "Erken Kalkma & Rutin", en: "Early Rising & Routines" },
+        theme: {
+          glow: "rgba(249, 115, 22, 0.15)",
+          border: "#F97316",
+          bg: "rgba(249, 115, 22, 0.1)",
+          text: "#F97316"
+        },
+        levels: {
+          1: { tr: "Kurnaz Yavru", en: "Sly Kit" },
+          4: { tr: "Zeki Dümenci", en: "Clever Trickster" },
+          8: { tr: "Gölgelerin Hükümdarı", en: "Sovereign of Shadows" }
+        }
+      },
+      owl: {
+        name: { tr: "Hootie", en: "Hootie" },
+        icon: "🦉",
+        description: {
+          tr: "Bilge ve gizemli. Ders çalışma, kitap okuma, yazılım geliştirme gibi zihinsel disiplin gerektiren gece veya gündüz aktivitelerinizde gecenin en zeki gözlemcisi.",
+          en: "Wise and mysterious. The smartest observer of the night, perfect for study, reading, coding, or any habit requiring high mental discipline."
+        },
+        habit: { tr: "Ders & Kodlama", en: "Study & Coding" },
+        theme: {
+          glow: "rgba(59, 130, 246, 0.15)",
+          border: "#60A5FA",
+          bg: "rgba(59, 130, 246, 0.1)",
+          text: "#60A5FA"
+        },
+        levels: {
+          1: { tr: "Acemi Gözlemci", en: "Novice Observer" },
+          4: { tr: "Astral Kahin", en: "Astral Seer" },
+          8: { tr: "Ebedi Bilgelik Hükümdarı", en: "Sovereign of Wisdom" }
+        }
+      },
+      bear: {
+        name: { tr: "Barnaby", en: "Barnaby" },
+        icon: "🐻",
+        description: {
+          tr: "Güçlü, koruyucu ve dayanıklı. Sizi zorlayan, sabır gerektiren en ağır alışkanlıklarınızda kadim ruhuyla yanınızda duran sarsılmaz bir kale.",
+          en: "Strong, protective, and durable. An unshakable fortress standing with you with an ancient spirit for your hardest, patience-demanding habits."
+        },
+        habit: { tr: "Disiplin & İrade", en: "Disipline & Willpower" },
+        theme: {
+          glow: "rgba(163, 113, 85, 0.15)",
+          border: "#B45309",
+          bg: "rgba(163, 113, 85, 0.1)",
+          text: "#B57A55"
+        },
+        levels: {
+          1: { tr: "Nazik Yavru", en: "Gentle Cub" },
+          4: { tr: "Dağ Koruyucusu", en: "Mountain Warden" },
+          8: { tr: "Ebedi Toprak Lordu", en: "Eternal Earthlord" }
+        }
+      }
+    };
+
+    let currentLang = localStorage.getItem('chainbud_lang') || 'tr';
+    let selectedBuddy = 'lion';
+    let selectedLevel = 1;
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.body.className = 'lang-' + lang;
+      localStorage.setItem('chainbud_lang', lang);
+      
+      // Update active button state in header
+      document.querySelectorAll('.lang-toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      
+      // Update selector list item labels
+      document.querySelectorAll('.buddy-select-item').forEach((item, idx) => {
+        const key = Object.keys(buddiesData)[idx];
+        const buddy = buddiesData[key];
+        item.querySelector('.details h4').innerText = buddy.name[currentLang];
+        item.querySelector('.details span').innerText = buddy.habit[currentLang];
+      });
+      
+      updateBuddiesDisplay();
+    }
+
+    function initBuddiesShowcase() {
+      const listContainer = document.getElementById('buddySelectorList');
+      listContainer.innerHTML = '';
+      
+      Object.entries(buddiesData).forEach(([key, value]) => {
+        const item = document.createElement('button');
+        item.className = 'buddy-select-item' + (key === selectedBuddy ? ' active' : '');
+        item.setAttribute('onclick', `selectBuddy('${key}')`);
+        item.style.setProperty('--theme-border', value.theme.border);
+        item.style.setProperty('--theme-glow', value.theme.glow);
+        item.style.setProperty('--theme-bg', value.theme.bg);
+        
+        item.innerHTML = `
+          <div class="icon-box">${value.icon}</div>
+          <div class="details">
+            <h4>${value.name[currentLang]}</h4>
+            <span>${value.habit[currentLang]}</span>
+          </div>
+        `;
+        listContainer.appendChild(item);
+      });
+      
+      updateBuddiesDisplay();
+    }
+
+    function selectBuddy(key) {
+      selectedBuddy = key;
+      document.querySelectorAll('.buddy-select-item').forEach((item, idx) => {
+        const itemKey = Object.keys(buddiesData)[idx];
+        item.classList.toggle('active', itemKey === selectedBuddy);
+      });
+      updateBuddiesDisplay();
+    }
+
+    function setSelectedLevel(lvl) {
+      selectedLevel = lvl;
+      document.querySelectorAll('.level-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.level) === selectedLevel);
+      });
+      updateBuddiesDisplay();
+    }
+
+    function updateBuddiesDisplay() {
+      const buddy = buddiesData[selectedBuddy];
+      
+      // Update theme colors on display card
+      const card = document.getElementById('buddyDisplayCard');
+      card.style.setProperty('--showcase-glow', buddy.theme.glow);
+      card.style.setProperty('--showcase-bg', buddy.theme.bg);
+      card.style.setProperty('--showcase-border', buddy.theme.border);
+      card.style.setProperty('--showcase-text', buddy.theme.text);
+      
+      // Update texts
+      document.getElementById('showcaseName').innerText = buddy.name[currentLang];
+      document.getElementById('showcaseHabitTag').innerText = buddy.habit[currentLang];
+      document.getElementById('showcaseDesc').innerText = buddy.description[currentLang];
+      document.getElementById('showcaseLevelTitle').innerText = buddy.levels[selectedLevel][currentLang];
+      
+      // Update image with smooth crossfade
+      const img = document.getElementById('showcaseImg');
+      img.style.opacity = 0;
+      img.style.transform = 'scale(0.95)';
+      
+      setTimeout(() => {
+        img.src = `images/${selectedBuddy}_${selectedLevel}.png`;
+        img.style.opacity = 1;
+        img.style.transform = 'scale(1)';
+      }, 150);
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      setLang(currentLang);
+      initBuddiesShowcase();
+    });
+  </script>
 </body>
 </html>
