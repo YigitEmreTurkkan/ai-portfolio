@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChainBud - Gizlilik Politikası & Privacy Policy</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container header-wrapper">
+      <div class="logo-wrapper">
+        <div class="logo-text">Chain<span>Bud</span></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Ana Sayfa / Home</a></li>
+        <li><a href="privacy.html">Gizlilik / Privacy</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="privacy-page container">
+    <div class="privacy-content">
+      <div class="tab-container">
+        <button class="tab-btn active" onclick="switchLang('tr')">Türkçe</button>
+        <button class="tab-btn" onclick="switchLang('en')">English</button>
+      </div>
+
+      <!-- Türkçe İçerik -->
+      <div id="content-tr" class="lang-content active">
+        <h1>Gizlilik Politikası</h1>
+        <div class="privacy-date">Son Güncelleme: 12 Haziran 2026</div>
+        
+        <div class="privacy-section">
+          <h2>Giriş</h2>
+          <p>ChainBud mobil uygulaması olarak kişisel gizliliğinize son derece önem veriyoruz. Bu politika, uygulamamızı kullandığınızda verilerinizin nasıl toplandığı, saklandığı ve kullanıldığı hakkında sizi bilgilendirmek amacıyla hazırlanmıştır.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>1. Veri Depolama</h2>
+          <p>Alışkanlık hedefleriniz, serileriniz, karakter seçimleriniz ve gelişim verileriniz varsayılan olarak yerel cihazınızda (Hive veritabanı) saklanır. Bu veriler tamamen sizin kontrolünüzdedir.</p>
+          <p>Eğer profil ekranından isteğe bağlı olarak Google veya Apple hesabınızı bağlarsanız, verileriniz cihaz değiştirdiğinizde kaybolmaması amacıyla güvenli bir şekilde bulut sunucumuzda (Firebase Firestore) saklanır ve senkronize edilir.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>2. Reklamlar</h2>
+          <p>Uygulama içinde ücretsiz özellikleri sunmaya devam edebilmek amacıyla Google AdMob SDK'sı kullanılmaktadır. Reklamların performansını ölçmek ve ilgi alanlarınıza göre kişiselleştirmek amacıyla cihaz kimlikleri ve reklam izleme kodları AdMob ve Google politikaları çerçevesinde kullanılabilir.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>3. Verileri Silme Hakkı</h2>
+          <p>Uygulama üzerindeki tüm kişisel ve senkronize edilmiş verilerinizi, profil sayfasının en altında yer alan "Verileri Sıfırla" butonuyla anında ve kalıcı olarak hem cihazınızdan hem de bulut sunucularından silebilirsiniz.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>4. İletişim</h2>
+          <p>Gizlilik politikamız veya uygulamamızla ilgili her türlü soru, geri bildirim ve talepleriniz için bizimle iletişime geçebilirsiniz:</p>
+          <p><strong>E-posta:</strong> yigitemreturkkan@gmail.com</p>
+        </div>
+      </div>
+
+      <!-- English Content -->
+      <div id="content-en" class="lang-content">
+        <h1>Privacy Policy</h1>
+        <div class="privacy-date">Last Updated: June 12, 2026</div>
+
+        <div class="privacy-section">
+          <h2>Introduction</h2>
+          <p>At ChainBud, we take your personal privacy very seriously. This policy is prepared to inform you about how your data is collected, stored, and used when you use our mobile application.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>1. Data Storage</h2>
+          <p>Your habit goals, streaks, character selections, and progress data are stored locally on your device (Hive database) by default. This data is entirely under your control.</p>
+          <p>If you optionally link your Google or Apple account on the profile screen, your data is securely stored and synchronized in our cloud server (Firebase Firestore) so you do not lose it when changing devices.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>2. Advertisements</h2>
+          <p>We use the Google AdMob SDK to serve ads within the app to keep offering our features for free. Device identifiers and ad tracking codes may be used under AdMob and Google policies to measure ad performance and personalize ads based on your interests.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>3. Right to Delete Data</h2>
+          <p>You can instantly and permanently delete all your personal and synchronized data from both your device and cloud servers at any time using the "Reset Data" button located at the bottom of the profile screen.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>4. Contact Us</h2>
+          <p>For any questions, feedback, or requests regarding our privacy policy or application, please feel free to contact us:</p>
+          <p><strong>Email:</strong> yigitemreturkkan@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-wrapper">
+      <div class="copyright">&copy; 2026 ChainBud. Tüm hakları saklıdır. / All rights reserved.</div>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="/app-ads.txt">app-ads.txt</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    function switchLang(lang) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.lang-content').forEach(content => content.classList.remove('active'));
+      
+      if (lang === 'tr') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('content-tr').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('content-en').classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
