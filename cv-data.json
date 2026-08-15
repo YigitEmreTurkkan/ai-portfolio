@@ -1,50 +1,87 @@
 {
   "profile": {
     "name": "Yiğit Emre Türkkan",
-    "title": "Cloud & DevOps Engineer",
+    "title": "DevOps & Platform Engineer",
     "location": "Remote / Hybrid / Global",
     "education": "Muğla Sıtkı Koçman Üniversitesi, AGNO: 3.09",
     "summary": "Mühendislik altyapısına sahip, Cloud & DevOps odaklı, ölçeklenebilir ve güvenilir sistemler inşa eden teknoloji tutkunu."
   },
   "experience": [
     {
-      "role": "Jr. Cloud Engineer",
+      "role": "Devops & Platform Engineer",
+      "company": "Produstra Turkiye",
+      "date": "Mart 2026 - Halen",
+      "highlights": [
+        "AWS ve Firebase üzerinde serverless web uygulaması mimarisi tasarımı",
+        "Docker ile mikroservislerin konteynerizasyonu ve CI/CD otomasyonu"
+      ]
+    },
+    {
+      "role": "Cloud Engineer",
       "company": "CloudFlex",
-      "date": "Eylül 2025 - Halen",
+      "date": "Eylül 2025 - Mart 2026",
       "highlights": [
-        "AWS ve Azure üzerinde bulut altyapılarının yönetimi ve optimizasyonu",
-        "Konteyner tabanlı uygulamaların dağıtımı ve CI/CD süreçlerine katkı",
-        "İzleme, yedekleme ve güvenilirlik odaklı operasyonlar"
+        "AWS üzerinde Helm, Kubeapps ve ArgoCD ile Kubernetes iş yüklerinin yönetimi",
+        "Grafana, Prometheus ve ELK Stack ile full-stack izlenebilirlik (observability)",
+        "HashiCorp Vault ile kimlik bilgilerinin güvenliği ve Python ile altyapı otomasyonu"
       ]
     },
     {
-      "role": "Jr. DevOps & Platform Mühendisi",
+      "role": "Intern Devops & Platform Engineer",
       "company": "Eteration",
-      "date": "Ocak 2025 - Temmuz 2025",
+      "date": "Ocak 2025 - Haziran 2025",
       "highlights": [
-        "GitLab CI ile pipeline tasarımı ve optimizasyonu",
-        "Docker ve Kubernetes ile konteynerleşme ve orkestrasyon"
+        "Docker ve Kubernetes ile konteynerize edilmiş uygulama ortamları tasarımı",
+        "GitLab CI/CD ile otomatik derleme ve dağıtım süreçleri yapılandırması"
       ]
     },
     {
-      "role": "Intern Java Developer",
-      "company": "Hitit",
-      "date": "Temmuz 2023 - Ağustos 2023"
+      "role": "Intern Software Engineer",
+      "company": "Hitit Airline & Travel IT Solutions",
+      "date": "Temmuz 2023 - Ağustos 2023",
+      "highlights": [
+        "Nesne yönelimli programlama (OOP) ve birim testi prensipleriyle Java backend modülleri geliştirilmesi"
+      ]
+    },
+    {
+      "role": "Full-Stack Developer Intern",
+      "company": "Get Software",
+      "date": "Kasım 2022 - Haziran 2023",
+      "highlights": [
+        "React ve Flutter kullanarak çapraz platform mobil ve web arayüzleri geliştirilmesi",
+        "RESTful API entegrasyonu ve UI bileşen performansı optimizasyonu"
+      ]
+    },
+    {
+      "role": "IT Asistanı",
+      "company": "Muğla Sıtkı Koçman University IT Department",
+      "date": "Kasım 2021 - Haziran 2023",
+      "highlights": [
+        "Kampüs içi IT altyapısı, donanım teşhisi ve yazılım sorun giderme yönetimi",
+        "Yerel ağ ortamları konfigürasyonu ve teknik destek taleplerinin çözülmesi"
+      ]
     }
   ],
   "skills": [
-    "Kubernetes",
-    "Docker",
     "AWS",
     "Azure",
-    "GitLab CI/CD",
-    "Terraform",
+    "Firebase",
+    "Docker",
+    "Kubernetes",
+    "Helm",
     "ArgoCD",
-    "Python",
+    "Kubeapps",
+    "GitLab CI/CD",
+    "GitHub Actions",
+    "Prometheus",
+    "Grafana",
+    "ELK Stack",
     "Java",
+    "Python",
+    "Dart (Flutter)",
+    "JavaScript/TypeScript",
     "React",
-    "Linux"
+    "Linux",
+    "Bash"
   ]
 }
-
-
