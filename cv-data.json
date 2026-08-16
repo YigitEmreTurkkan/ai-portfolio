@@ -83,5 +83,18 @@
     "React",
     "Linux",
     "Bash"
+  ],
+  "projects": [
+    {
+      "title": "ChainBud – Gamified Habit Tracker Mobile App",
+      "date": "2024",
+      "tech": [
+        "Flutter",
+        "Firebase",
+        "App Store",
+        "Play Store"
+      ],
+      "description": "Designed and published a cross-platform mobile app using the \"Don't Break the Chain\" methodology, incorporating gamified pet mechanics and cloud synchronization."
+    }
   ]
 }

@@ -1308,7 +1308,58 @@
       background: #f97373;
       box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.35);
     }
+
+    /* Premium UI/UX Max Overrides */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.3);
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 102, 241, 0.6);
+    }
+    
+    .tech-pill {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .tech-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+      border-color: rgba(56, 189, 248, 0.6);
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+    }
+    
+    .timeline-item {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .timeline-item:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    
+    .btn-contact-icon {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-contact-icon:hover {
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+    }
+    
+    /* Better Typing Dot Wave */
+    .typing-dot {
+      background: #818cf8;
+      box-shadow: 0 0 8px rgba(129, 140, 248, 0.5);
+    }
   </style>
+
 </head>
 
 <body class="animate__animated animate__fadeIn animate__slow">
@@ -1536,6 +1587,22 @@
                     <li id="edu2-li2">Kullanıcı tercihlerine göre kişiselleştirilmiş seyahat planları üreten öneri
                       motoru.</li>
                   </ul>
+                </article>
+
+                <article class="timeline-item">
+                  <div class="timeline-item-header">
+                    <h3 class="timeline-title" id="edu3-title">ChainBud – Gamified Habit Tracker Mobile App</h3>
+                    <p class="timeline-meta" id="edu3-meta">2024 · App Store &amp; Play Store</p>
+                  </div>
+                  <ul>
+                    <li id="edu3-li1">"Don't Break the Chain" metodolojisini oyunlaştırılmış evcil hayvan mekanikleriyle birleştiren mobil uygulama.</li>
+                    <li id="edu3-li2">Flutter ve Firebase altyapısı ile çapraz platform destekli ve bulut senkronizasyonlu sistem.</li>
+                  </ul>
+                  <div class="tech-pills">
+                    <span class="tech-pill">Flutter</span>
+                    <span class="tech-pill">Firebase</span>
+                    <span class="tech-pill">Dart</span>
+                  </div>
                 </article>
               </div>
             </section>
