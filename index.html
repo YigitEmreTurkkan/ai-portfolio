@@ -1358,6 +1358,26 @@
       background: #818cf8;
       box-shadow: 0 0 8px rgba(129, 140, 248, 0.5);
     }
+
+    .btn-contact-cv-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 14px;
+      height: 44px;
+      border-radius: 22px;
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-contact-cv-text:hover {
+      background: rgba(34, 197, 94, 0.15);
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+    }
   </style>
 
 </head>
@@ -1427,8 +1447,9 @@
               </svg>
             </a>
 
-            <a class="btn-contact-icon btn-contact-cv" href="CV Yiğit Emre TÜRKKAN (Türkçe) 2026 _251209_103456.pdf" target="_blank" aria-label="CV İndir" style="background: rgba(15, 23, 42, 0.94); border-color: rgba(34, 197, 94, 0.7); color: #bbf7d0;">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            <a class="btn-contact-cv-text" href="CV Yiğit Emre TÜRKKAN (Türkçe) 2026 _251209_103456.pdf" download="Yigit_Emre_Turkkan_CV.pdf" aria-label="CV İndir">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="width:16px;height:16px;"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+              <span id="header-cv-text">CV İndir</span>
             </a>
           </div>
         </header>
@@ -1660,7 +1681,7 @@
               <a class="btn btn-primary" href="mailto:yigit.turkkan@gmail.com">
                 <span id="footer-email">E-posta ile iletişim</span>
               </a>
-              <a class="btn btn-outline" href="CV Yiğit Emre TÜRKKAN (Türkçe) 2026 _251209_103456.pdf" target="_blank" style="border-color: rgba(34, 197, 94, 0.5); color: #bbf7d0;">
+              <a class="btn btn-outline" href="CV Yiğit Emre TÜRKKAN (Türkçe) 2026 _251209_103456.pdf" download="Yigit_Emre_Turkkan_CV.pdf" style="border-color: rgba(34, 197, 94, 0.5); color: #bbf7d0;">
                 <span id="footer-cv">CV İndir (PDF)</span>
               </a>
             </div>
@@ -1876,6 +1897,7 @@
         "prompt-projects": { tr: "Projelerin neler?", en: "What are your projects?" },
         "prompt-devops": { tr: "DevOps yaklaşımın nedir?", en: "What is your DevOps approach?" },
         "footer-cv": { tr: "CV İndir (PDF)", en: "Download CV (PDF)" },
+        "header-cv-text": { tr: "CV İndir", en: "Download CV" },
       };
 
       const attrTranslations = {
