@@ -1978,7 +1978,7 @@
           const lang = btn.dataset.lang || "tr";
           if (lang === storedLang) return;
           window.localStorage.setItem("uiLang", lang);
-          setUiLang(lang);
+          window.location.reload();
         });
       });
 
