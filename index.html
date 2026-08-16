@@ -16,7 +16,7 @@
       --accent-soft: rgba(79, 70, 229, 0.18);
       --accent-strong: rgba(129, 140, 248, 0.2);
       --text: #f9fafb;
-      --muted: #9ca3af;
+      --muted: #cbd5e1;
       --border-subtle: #1f2933;
       --danger: #f97373;
       --radius-lg: 18px;
@@ -980,7 +980,7 @@
     .chat-window {
       flex: 1;
       border-radius: 18px;
-      background: radial-gradient(circle at top right, rgba(15, 118, 110, 0.18), rgba(15, 23, 42, 0.96));
+      background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.15), rgba(15, 23, 42, 0.96));
       border: 1px solid rgba(30, 64, 175, 0.65);
       padding: 10px 10px 12px;
       display: flex;
@@ -1427,11 +1427,8 @@
               </svg>
             </a>
 
-            <a class="btn-contact-icon btn-contact-email" href="mailto:yigit.turkkan@gmail.com" aria-label="E-posta">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path fill="currentColor"
-                  d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-              </svg>
+            <a class="btn-contact-icon btn-contact-cv" href="CV Yiğit Emre TÜRKKAN (Türkçe) 2026 _251209_103456.pdf" target="_blank" aria-label="CV İndir" style="background: rgba(15, 23, 42, 0.94); border-color: rgba(34, 197, 94, 0.7); color: #bbf7d0;">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
             </a>
           </div>
         </header>
@@ -1579,7 +1576,7 @@
                   <div class="timeline-item-header">
                     <h3 class="timeline-title" id="edu2-title">Akademik Bildiri – Kişiselleştirilmiş Seyahat Yönetimi
                     </h3>
-                    <p class="timeline-meta" id="edu2-meta">2. Uluslararası Geleceğin Mühendisleri Konferansı · 2025</p>
+                    <p class="timeline-meta" id="edu2-meta"><a href="#" style="text-decoration: underline; color: #bae6fd;">2. Uluslararası Geleceğin Mühendisleri Konferansı</a> · 2025</p>
                   </div>
                   <ul>
                     <li id="edu2-li1">React, Android, Firebase ve Python tabanlı yapay zeka ile full‑stack seyahat öneri
@@ -1592,7 +1589,7 @@
                 <article class="timeline-item">
                   <div class="timeline-item-header">
                     <h3 class="timeline-title" id="edu3-title">ChainBud – Gamified Habit Tracker Mobile App</h3>
-                    <p class="timeline-meta" id="edu3-meta">2024 · App Store &amp; Play Store</p>
+                    <p class="timeline-meta" id="edu3-meta">2024 · <a href="#" style="text-decoration: underline; color: #bae6fd;">App Store</a> &amp; <a href="#" style="text-decoration: underline; color: #bae6fd;">Play Store</a></p>
                   </div>
                   <ul>
                     <li id="edu3-li1">"Don't Break the Chain" metodolojisini oyunlaştırılmış evcil hayvan mekanikleriyle birleştiren mobil uygulama.</li>
@@ -1663,6 +1660,9 @@
               <a class="btn btn-primary" href="mailto:yigit.turkkan@gmail.com">
                 <span id="footer-email">E-posta ile iletişim</span>
               </a>
+              <a class="btn btn-outline" href="CV Yiğit Emre TÜRKKAN (Türkçe) 2026 _251209_103456.pdf" target="_blank" style="border-color: rgba(34, 197, 94, 0.5); color: #bbf7d0;">
+                <span id="footer-cv">CV İndir (PDF)</span>
+              </a>
             </div>
           </footer>
         </div>
@@ -1688,6 +1688,11 @@
           <div id="chat-scroll" class="chat-scroll"></div>
         </div>
 
+        <div class="quick-prompts" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; padding: 0 4px;">
+          <button class="quick-chip" type="button" data-prompt="prompt-tech"><span id="prompt-tech">Hangi teknolojileri biliyorsun?</span></button>
+          <button class="quick-chip" type="button" data-prompt="prompt-projects"><span id="prompt-projects">Projelerin neler?</span></button>
+          <button class="quick-chip" type="button" data-prompt="prompt-devops"><span id="prompt-devops">DevOps yaklaşımın nedir?</span></button>
+        </div>
         <div class="chat-input-row">
           <div class="chat-input-wrap">
             <textarea id="chat-input" class="chat-input" rows="1" placeholder="Mesajınızı buraya yazın..."
@@ -1715,7 +1720,18 @@
     (function () {
       const chatScroll = document.getElementById("chat-scroll");
       const chatInput = document.getElementById("chat-input");
+      
+      document.querySelectorAll(".quick-chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const actualText = btn.querySelector("span").innerText;
+          chatInput.value = actualText;
+          handleUserMessage(actualText);
+          chatInput.value = "";
+        });
+      });
+      
       const sendBtn = document.getElementById("send-btn");
+
       const cvToggleBtn = document.getElementById("mobile-expand");
       const cvContent = document.getElementById("cv-content");
       const aiCard = document.getElementById("ai-card");
@@ -1856,6 +1872,10 @@
         "chat-title": { tr: "Yiğit Emre Türkkan'ın Dijital Asistanı", en: "Yiğit Emre Turkkan's Digital Assistant" },
         "footer-linkedin": { tr: "LinkedIn", en: "LinkedIn" },
         "footer-email": { tr: "E-posta ile iletişim", en: "Contact via email" },
+        "prompt-tech": { tr: "Hangi teknolojileri biliyorsun?", en: "What technologies do you know?" },
+        "prompt-projects": { tr: "Projelerin neler?", en: "What are your projects?" },
+        "prompt-devops": { tr: "DevOps yaklaşımın nedir?", en: "What is your DevOps approach?" },
+        "footer-cv": { tr: "CV İndir (PDF)", en: "Download CV (PDF)" },
       };
 
       const attrTranslations = {
@@ -1928,7 +1948,7 @@
           const lang = btn.dataset.lang || "tr";
           if (lang === storedLang) return;
           window.localStorage.setItem("uiLang", lang);
-          window.location.reload();
+          setUiLang(lang);
         });
       });
 
