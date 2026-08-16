@@ -1378,6 +1378,14 @@
       background: rgba(34, 197, 94, 0.15);
       box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
     }
+
+    .quick-prompts::-webkit-scrollbar {
+      display: none;
+    }
+    .quick-prompts {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 
 </head>
@@ -1709,7 +1717,7 @@
           <div id="chat-scroll" class="chat-scroll"></div>
         </div>
 
-        <div class="quick-prompts" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; padding: 0 4px;">
+        <div class="quick-prompts" style="display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 12px; padding: 0 4px; padding-bottom: 4px;">
           <button class="quick-chip" type="button" data-prompt="prompt-tech"><span id="prompt-tech">Hangi teknolojileri biliyorsun?</span></button>
           <button class="quick-chip" type="button" data-prompt="prompt-projects"><span id="prompt-projects">Projelerin neler?</span></button>
           <button class="quick-chip" type="button" data-prompt="prompt-devops"><span id="prompt-devops">DevOps yaklaşımın nedir?</span></button>
