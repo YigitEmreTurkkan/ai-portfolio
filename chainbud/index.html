@@ -177,7 +177,6 @@
             <div class="showcase-header">
               <div class="showcase-title-row">
                 <span class="showcase-name" id="showcaseName"></span>
-                <span class="showcase-habit-tag" id="showcaseHabitTag"></span>
               </div>
               <p class="showcase-desc" id="showcaseDesc"></p>
             </div>
@@ -278,10 +277,9 @@
         name: { tr: "Bun-Bun", en: "Bun-Bun" },
         icon: "🐰",
         description: {
-          tr: "Lavanta rengi tüyler, yumuşacık ve neşeli. Alışkanlıklarınızı stressiz bir şekilde tamamlamanıza yardımcı olan sevimli bir peluş dost.",
-          en: "Lavender fur, fluffy and cheerful. A cute plush friend that helps you build daily routines in a fun, stress-free way."
+          tr: "Lavanta rengi tüyler, yumuşacık ve neşeli. Her gün seninle birlikte büyüyen sevimli bir peluş dost.",
+          en: "Lavender fur, soft and cheerful. A cute plush friend who grows with you every day."
         },
-        habit: { tr: "Günlük İşler & Hobi", en: "Daily Routines & Hobby" },
         theme: {
           glow: "rgba(155, 142, 196, 0.15)",
           border: "#9B8EC4",
@@ -298,10 +296,9 @@
         name: { tr: "Leo", en: "Leo" },
         icon: "🦁",
         description: {
-          tr: "Cesur ve güçlü. Spor, iş ve yüksek odaklanma gerektiren alışkanlıklarınızda liderlik edecek, yavruluktan görkemli bir krala dönüşen gururlu dostunuz.",
-          en: "Brave and strong. A proud friend who grows from a cub to a king, perfect for leading your fitness, business, and high-focus habits."
+          tr: "Cesur ve güçlü. Yavruluktan görkemli bir krala dönüşen gururlu dostun.",
+          en: "Brave and strong. A proud friend who grows from a cub into a majestic king."
         },
-        habit: { tr: "Egzersiz & Spor / Odak", en: "Fitness & Focus" },
         theme: {
           glow: "rgba(212, 140, 85, 0.15)",
           border: "#E5A475",
@@ -318,10 +315,9 @@
         name: { tr: "Bambu", en: "Bambu" },
         icon: "🐼",
         description: {
-          tr: "Huzurlu ve dengeli. Meditasyon, yoga, su içme ve zihinsel sakinlik alışkanlıklarında doğanın dinginliğini ve ruhsal dengenizi korumanıza yardımcı bilge bir yol arkadaşı.",
-          en: "Peaceful and balanced. A wise companion who helps you protect nature's calm and your spiritual balance in mindfulness, yoga, and self-care habits."
+          tr: "Huzurlu ve dengeli. Sakinliğiyle sana eşlik eden bilge bir yol arkadaşı.",
+          en: "Peaceful and balanced. A wise companion who keeps you company with its calm."
         },
-        habit: { tr: "Zen / Meditasyon", en: "Mindfulness & Zen" },
         theme: {
           glow: "rgba(91, 140, 150, 0.15)",
           border: "#8EC2CC",
@@ -338,10 +334,9 @@
         name: { tr: "Kitsune", en: "Kitsune" },
         icon: "🦊",
         description: {
-          tr: "Kurnaz ve zeki. Rutinler, sabah erken kalkma ve zeka gerektiren işlerde efsanevi mistik yetenekleriyle size hız ve enerji katacak gizemli bir kılavuz.",
-          en: "Cunning and smart. A mysterious guide who brings speed and energy with mythical abilities to self-care, early rising, and smart routines."
+          tr: "Kurnaz ve zeki. Mistik yetenekleriyle sana hız ve enerji katan gizemli bir kılavuz.",
+          en: "Cunning and smart. A mysterious guide who brings speed and energy with mystical abilities."
         },
-        habit: { tr: "Erken Kalkma & Rutin", en: "Early Rising & Routines" },
         theme: {
           glow: "rgba(249, 115, 22, 0.15)",
           border: "#F97316",
@@ -358,10 +353,9 @@
         name: { tr: "Hootie", en: "Hootie" },
         icon: "🦉",
         description: {
-          tr: "Bilge ve gizemli. Ders çalışma, kitap okuma, yazılım geliştirme gibi zihinsel disiplin gerektiren gece veya gündüz aktivitelerinizde gecenin en zeki gözlemcisi.",
-          en: "Wise and mysterious. The smartest observer of the night, perfect for study, reading, coding, or any habit requiring high mental discipline."
+          tr: "Bilge ve gizemli. Gecenin en zeki gözlemcisi.",
+          en: "Wise and mysterious. The smartest observer of the night."
         },
-        habit: { tr: "Ders & Kodlama", en: "Study & Coding" },
         theme: {
           glow: "rgba(59, 130, 246, 0.15)",
           border: "#60A5FA",
@@ -378,10 +372,9 @@
         name: { tr: "Barnaby", en: "Barnaby" },
         icon: "🐻",
         description: {
-          tr: "Güçlü, koruyucu ve dayanıklı. Sizi zorlayan, sabır gerektiren en ağır alışkanlıklarınızda kadim ruhuyla yanınızda duran sarsılmaz bir kale.",
-          en: "Strong, protective, and durable. An unshakable fortress standing with you with an ancient spirit for your hardest, patience-demanding habits."
+          tr: "Güçlü, koruyucu ve dayanıklı. Kadim ruhuyla yanında duran sarsılmaz bir kale.",
+          en: "Strong, protective, and durable. An unshakable fortress standing by you with an ancient spirit."
         },
-        habit: { tr: "Disiplin & İrade", en: "Disipline & Willpower" },
         theme: {
           glow: "rgba(163, 113, 85, 0.15)",
           border: "#B45309",
@@ -415,7 +408,6 @@
         const key = Object.keys(buddiesData)[idx];
         const buddy = buddiesData[key];
         item.querySelector('.details h4').innerText = buddy.name[currentLang];
-        item.querySelector('.details span').innerText = buddy.habit[currentLang];
       });
       
       updateBuddiesDisplay();
@@ -437,7 +429,6 @@
           <div class="icon-box">${value.icon}</div>
           <div class="details">
             <h4>${value.name[currentLang]}</h4>
-            <span>${value.habit[currentLang]}</span>
           </div>
         `;
         listContainer.appendChild(item);
@@ -475,7 +466,6 @@
       
       // Update texts
       document.getElementById('showcaseName').innerText = buddy.name[currentLang];
-      document.getElementById('showcaseHabitTag').innerText = buddy.habit[currentLang];
       document.getElementById('showcaseDesc').innerText = buddy.description[currentLang];
       document.getElementById('showcaseLevelTitle').innerText = buddy.levels[selectedLevel][currentLang];
       
