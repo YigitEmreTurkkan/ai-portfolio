@@ -111,21 +111,26 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 48px;
+      height: 64px;
     }
 
     .who {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 18px;
+      letter-spacing: -0.01em;
     }
 
+    .who { min-width: 0; }
+    .who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .who img { flex: none; }
+
     .who img {
-      width: 36px;
-      height: 36px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       object-fit: cover;
       background: var(--line);
@@ -479,7 +484,7 @@
   <div class="page">
     <header class="topbar">
       <a class="who" href="/" aria-label="Yiğit Emre Türkkan">
-        <img src="yigit-profile.jpeg" alt="" width="36" height="36" />
+        <img src="yigit-profile.jpeg" alt="" width="48" height="48" />
         <span>Yiğit Emre Türkkan</span>
       </a>
       <div class="lang" role="group" aria-label="Dil / Language">

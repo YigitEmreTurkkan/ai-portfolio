@@ -28,7 +28,7 @@
       --bubble-me: #2F5BFF;
       --focus: #2F5BFF;
       --gutter: 16px;
-      --top: 60px;
+      --top: 64px;
       --font: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
       --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
       color-scheme: light;
@@ -119,14 +119,19 @@
       min-height: 44px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 17px;
+      letter-spacing: -0.01em;
     }
 
     .back svg { width: 20px; height: 20px; color: var(--muted); }
 
+    .back { min-width: 0; }
+    .back span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .back img { flex: none; }
+
     .back img {
-      width: 32px;
-      height: 32px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       object-fit: cover;
       background: var(--line);
@@ -579,7 +584,7 @@
     <div class="topbar-in">
       <a class="back" href="/" aria-label="Ana sayfa" data-i18n-aria="home">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.8 5.3 4.1 12l6.7 6.7 1.4-1.4L7.9 13H20v-2H7.9l4.3-4.3z"/></svg>
-        <img src="yigit-profile.jpeg" alt="" width="32" height="32" />
+        <img src="yigit-profile.jpeg" alt="" width="42" height="42" />
         <span>Yiğit Emre Türkkan</span>
       </a>
       <div class="lang" role="group" aria-label="Dil / Language">
