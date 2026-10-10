@@ -270,12 +270,22 @@ header {
   position: relative;
 }
 
-.hero-mockup {
+/* The mockup PNG has a baked-in checkerboard; the frame crops to the phone body only */
+.hero-phone {
   width: 100%;
-  max-width: 320px;
-  border-radius: 40px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  max-width: 280px;
+  aspect-ratio: 442 / 876;
+  overflow: hidden;
+  border-radius: 13.6% / 6.8%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), var(--shadow-glow);
   animation: float 6s ease-in-out infinite;
+}
+
+.hero-mockup {
+  display: block;
+  width: 231.7%;
+  max-width: none;
+  margin: -17.4% 0 0 -66.3%;
 }
 
 @keyframes float {
@@ -790,8 +800,8 @@ footer {
   }
 }
 
-/* Language Swapping Utility */
-.lang-tr, .lang-en {
+/* Language Swapping Utility (scoped under body so <body class="lang-xx"> itself stays visible) */
+body .lang-tr, body .lang-en {
   display: none;
 }
 body.lang-tr .lang-tr {
@@ -1057,4 +1067,45 @@ body.lang-en flex.lang-en {
   font-weight: 800;
   font-family: var(--font-display);
   color: var(--text-primary);
+}
+
+/* Mobile showcase overrides must come after the base showcase rules above */
+@media (max-width: 992px) {
+  /* Decorative glows must not widen the page */
+  .hero { overflow: hidden; }
+
+  .showcase-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .buddy-selector-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 8px 4px;
+    gap: 10px;
+  }
+
+  .buddy-select-item {
+    flex: 0 0 auto;
+    padding: 12px 18px;
+  }
+
+  .buddy-display-card {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 32px;
+    min-height: auto;
+  }
+
+  .buddy-display-card::before {
+    left: 50%;
+    top: 25%;
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-phone { animation: none; }
 }

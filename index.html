@@ -22,8 +22,10 @@
       --line: #D3DBE6;
       --signal: #2F5BFF;
       --ok: #0F9D63;
-      --sun: #FFB238;
-      --sun-ink: #3B2400;
+      --cb: #0B0F17;
+      --cb-ink: #F8FAFC;
+      --cb-dim: #94A3B8;
+      --cb-green: #10B981;
       --term: #0E1B33;
       --term-ink: #D6E2FF;
       --term-dim: #7F93BD;
@@ -288,14 +290,17 @@
     /* ChainBud tile */
     .t-cb {
       grid-column: 1 / -1;
-      background: var(--sun);
-      color: var(--sun-ink);
+      background:
+        radial-gradient(120% 90% at 85% 100%, rgba(16, 185, 129, 0.28), transparent 60%),
+        var(--cb);
+      color: var(--cb-ink);
       min-height: 250px;
       border-radius: 34px;
       padding-right: 46%;
     }
 
-    .t-cb p { color: color-mix(in srgb, var(--sun-ink) 78%, transparent); }
+    .t-cb p { color: var(--cb-dim); }
+    .t-cb h2 span { color: var(--cb-green); }
 
     .t-cb .pets {
       position: absolute;
@@ -311,7 +316,7 @@
       position: absolute;
       width: 72%;
       height: auto;
-      filter: drop-shadow(0 10px 18px rgba(59, 36, 0, 0.25));
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
     }
 
     .t-cb .pets img:first-child { right: 30%; bottom: 4%; transform: rotate(-8deg); }
@@ -324,7 +329,8 @@
       font-weight: 500;
       padding: 6px 12px;
       border-radius: 999px;
-      background: rgba(59, 36, 0, 0.1);
+      background: rgba(16, 185, 129, 0.16);
+      color: #6EE7B7;
     }
 
     /* GitHub tile */
@@ -516,7 +522,7 @@
         </a>
 
         <a class="tile t-cb" href="/chainbud/">
-          <h2>ChainBud</h2>
+          <h2>Chain<span>Bud</span></h2>
           <p data-i18n="cb-desc">App Store ve Google Play'de yayında olan, oyunlaştırılmış alışkanlık takip uygulamam.</p>
           <span class="badge" data-i18n="cb-badge">iOS ve Android</span>
           <div class="pets" aria-hidden="true">
