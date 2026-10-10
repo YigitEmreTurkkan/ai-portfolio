@@ -4,7 +4,12 @@
     "title": "DevOps & Cloud Engineer",
     "location": "İstanbul, Türkiye (Remote / Hybrid uyumlu)",
     "education": "Muğla Sıtkı Koçman Üniversitesi, AGNO: 3.09",
-    "summary": "Mühendislik altyapısına sahip, Cloud & DevOps odaklı, ölçeklenebilir ve güvenilir sistemler inşa eden teknoloji tutkunu."
+    "summary": "Mühendislik altyapısına sahip, Cloud & DevOps odaklı, ölçeklenebilir ve güvenilir sistemler inşa eden teknoloji tutkunu.",
+    "contact": {
+      "email": "hi@yigitemreturkkan.com",
+      "linkedin": "https://www.linkedin.com/in/yigitemreturkkan",
+      "github": "https://github.com/YigitEmreTurkkan"
+    }
   },
   "experience": [
     {
@@ -12,9 +17,9 @@
       "company": "i2i Systems",
       "date": "Eylül 2026 - Halen",
       "highlights": [
-        "Kubernetes ve konteyner tabanlı platformların kurulumu, işletimi ve ölçeklendirilmesi",
-        "CI/CD pipeline'larının geliştirilmesi ve dağıtım süreçlerinin uçtan uca otomasyonu",
-        "Altyapı otomasyonu (IaC), izlenebilirlik ve sistem güvenilirliği iyileştirmeleri"
+        "Bare metal sunucular üzerinde Kubernetes cluster'larının kurulumu, işletimi ve ölçeklendirilmesi",
+        "Sunucu provizyonlama ve konfigürasyon yönetiminin otomasyonu (IaC)",
+        "CI/CD pipeline'ları, izlenebilirlik ve on-premise altyapının güvenilirliği"
       ]
     },
     {
@@ -91,6 +96,7 @@
     }
   ],
   "skills": [
+    "Bare Metal / On-Premise",
     "AWS",
     "Azure",
     "Firebase",
@@ -117,15 +123,42 @@
   ],
   "projects": [
     {
+      "title": "Hızlı Sözleşme (hizlisozlesme.com)",
+      "date": "Yayında",
+      "tech": [
+        "AI",
+        "SaaS",
+        "Web",
+        "Lemon Squeezy"
+      ],
+      "description": "İşletmeler için yapay zekâ destekli yasal belge üreticisi. Kısa bir formla satış sözleşmesi, KVKK aydınlatma metni, gizlilik sözleşmesi (NDA), kullanım koşulları, iade ve çerez politikası gibi işletmeye özel belgeler üretir; PDF ve düzenlenebilir Word olarak anında teslim eder. GDPR/CCPA için İngilizce belgeler de sunar."
+    },
+    {
       "title": "ChainBud – Gamified Habit Tracker Mobile App",
-      "date": "2024",
+      "date": "2024 – Halen",
       "tech": [
         "Flutter",
         "Firebase",
         "App Store",
-        "Play Store"
+        "Google Play"
       ],
-      "description": "Designed and published a cross-platform mobile app using the \"Don't Break the Chain\" methodology, incorporating gamified pet mechanics and cloud synchronization."
+      "description": "\"Don't Break the Chain\" yöntemini oyunlaştırılmış evcil hayvan mekanikleriyle birleştiren, bulut senkronizasyonlu alışkanlık takip uygulaması. Hem App Store (iOS) hem Google Play (Android) üzerinde yayında.",
+      "links": {
+        "app_store": "https://apps.apple.com/tr/app/chainbud-habit-tracker-buddy/id6789577079",
+        "google_play": "https://play.google.com/store/apps/details?id=com.yigitemreturkkan.chainbud"
+      }
+    },
+    {
+      "title": "Akademik Bildiri – Kişiselleştirilmiş Seyahat Yönetimi",
+      "date": "2025",
+      "tech": [
+        "React",
+        "Android",
+        "Firebase",
+        "Python",
+        "AI"
+      ],
+      "description": "2. Uluslararası Geleceğin Mühendisleri Konferansı'nda sunuldu. Kullanıcı tercihlerine göre kişiselleştirilmiş seyahat planı üreten öneri sistemi."
     }
   ],
   "certifications": [

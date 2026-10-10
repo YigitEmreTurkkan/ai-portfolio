@@ -193,52 +193,6 @@
       max-width: 38ch;
     }
 
-    /* Uptime: the one memorable element */
-    .uptime {
-      margin-top: 28px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      align-items: end;
-      column-gap: 14px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-    }
-
-    .uptime-num {
-      font-family: var(--mono);
-      font-weight: 500;
-      font-size: clamp(44px, 13vw, 72px);
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .uptime-text {
-      font-size: 14px;
-      line-height: 1.35;
-      color: var(--muted);
-      padding-bottom: 4px;
-      max-width: 22ch;
-    }
-
-    .uptime-bar {
-      grid-column: 1 / -1;
-      margin-top: 14px;
-      height: 22px;
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: 1fr;
-      gap: 3px;
-    }
-
-    .uptime-bar i {
-      border-radius: 2px;
-      background: var(--ok);
-      opacity: 0.85;
-    }
-
-    .uptime-bar i.lvl { opacity: 0.45; }
-
     /* Tiles */
     .tiles {
       display: grid;
@@ -409,6 +363,53 @@
     .t-gh h2, .t-li h2 { font-size: 22px; }
     .t-gh p, .t-li p { font-size: 14px; }
 
+    /* Hızlı Sözleşme tile */
+    .t-hs {
+      grid-column: 1 / -1;
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding-right: 42%;
+      min-height: 220px;
+    }
+
+    .t-hs p { color: var(--muted); }
+    .t-hs .go { color: var(--signal); }
+
+    .sheet {
+      position: absolute;
+      right: 18px;
+      top: 22px;
+      bottom: -24px;
+      width: 34%;
+      max-width: 170px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 16px 14px;
+      transform: rotate(4deg);
+    }
+
+    .sheet i {
+      display: block;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--line);
+      margin-bottom: 9px;
+    }
+
+    .sheet i:first-child { width: 60%; height: 9px; background: var(--ink); opacity: 0.8; margin-bottom: 14px; }
+    .sheet i:nth-child(4) { width: 80%; }
+    .sheet i:nth-child(6) { width: 55%; }
+
+    .sheet svg {
+      width: 70%;
+      height: auto;
+      margin-top: 10px;
+      color: var(--signal);
+    }
+
     /* Mail tile */
     .t-mail {
       grid-column: 1 / -1;
@@ -450,20 +451,7 @@
     @media (min-width: 820px) {
       :root { --gutter: 32px; }
 
-      .hero {
-        display: grid;
-        grid-template-columns: 1.4fr 1fr;
-        column-gap: 48px;
-        align-items: end;
-        padding: 64px 0 40px;
-      }
-
-      .hero-main { grid-column: 1; }
-
-      .uptime {
-        grid-column: 2;
-        margin-top: 0;
-      }
+      .hero { padding: 72px 0 44px; }
 
       .tiles {
         grid-template-columns: repeat(6, 1fr);
@@ -474,8 +462,11 @@
       .t-cv h2 { font-size: 34px; }
       .t-cb { grid-column: span 2; grid-row: span 2; padding-right: 22px; }
       .t-cb .pets { position: relative; right: auto; bottom: auto; width: 100%; max-width: none; margin-top: 8px; margin-bottom: -40px; }
+      .t-hs { grid-column: span 2; padding-right: 22px; min-height: 260px; }
+      .t-hs .sheet { position: relative; right: auto; top: auto; bottom: auto; width: 62%; margin: 18px 0 -60px auto; }
       .t-gh, .t-li { grid-column: span 2; }
-      .t-mail { grid-column: span 2; }
+      .t-gh .grid-dots, .t-li .mark { margin-bottom: auto; }
+      .t-mail { grid-column: 1 / -1; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -501,56 +492,60 @@
       <section class="hero">
         <div class="hero-main">
           <p class="status"><span class="dot" aria-hidden="true"></span><span data-i18n="status">Şu an i2i Systems'te DevOps &amp; Cloud Engineer</span></p>
-          <h1 data-i18n="headline">Altyapıyı kurarım, uygulamayı yayınlarım.</h1>
-          <p class="lede" data-i18n="lede">İstanbul'da Kubernetes, CI/CD ve bulut üzerine çalışıyorum. Boş zamanlarımda mobil uygulama geliştiriyorum.</p>
-        </div>
-
-        <div class="uptime" aria-label="Kariyer süresi">
-          <span class="uptime-num" id="uptime-days">1.800+</span>
-          <span class="uptime-text" data-i18n="uptime">gündür sahadayım. İlk IT görevim Kasım 2021'de başladı.</span>
-          <div class="uptime-bar" id="uptime-bar" aria-hidden="true"></div>
+          <h1 data-i18n="headline">Güvenilir altyapı, kesintisiz teslimat.</h1>
+          <p class="lede" data-i18n="lede">Bare metal ve bulut ortamlarında Kubernetes platformları, CI/CD süreçleri ve altyapı otomasyonu tasarlıyor ve işletiyorum.</p>
         </div>
       </section>
 
       <nav class="tiles" aria-label="Projeler">
         <a class="tile t-cv" href="cv.html">
           <h2 data-i18n="cv-title">CV ve AI asistan</h2>
-          <p data-i18n="cv-desc">Deneyimlerimi oku ya da dijital asistanıma doğrudan sor.</p>
+          <p data-i18n="cv-desc">Deneyimlerimi inceleyin ya da sorularınızı dijital asistanıma yöneltin.</p>
           <div class="term" aria-hidden="true">
             <div class="q" id="term-q"></div>
             <div class="a" id="term-a"></div>
           </div>
-          <span class="go"><span data-i18n="cv-go">CV'yi aç</span>
+          <span class="go"><span data-i18n="cv-go">CV'yi görüntüle</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.2 5.3 19.9 12l-6.7 6.7-1.4-1.4 4.3-4.3H4v-2h12.1l-4.3-4.3z"/></svg>
           </span>
         </a>
 
         <a class="tile t-cb" href="/chainbud/">
           <h2>ChainBud</h2>
-          <p data-i18n="cb-desc">Zinciri kırma. Alışkanlıklarını sevimli bir dostla takip et.</p>
-          <span class="badge" data-i18n="cb-badge">Google Play'de</span>
+          <p data-i18n="cb-desc">App Store ve Google Play'de yayında olan, oyunlaştırılmış alışkanlık takip uygulamam.</p>
+          <span class="badge" data-i18n="cb-badge">iOS ve Android</span>
           <div class="pets" aria-hidden="true">
             <img src="chainbud/images/fox_1.png" alt="" loading="lazy" decoding="async" width="200" height="200" />
             <img src="chainbud/images/bear_1.png" alt="" loading="lazy" decoding="async" width="200" height="200" />
           </div>
         </a>
 
+        <a class="tile t-hs" href="https://hizlisozlesme.com" target="_blank" rel="noopener">
+          <h2>Hızlı Sözleşme</h2>
+          <p data-i18n="hs-desc">İşletmeniz için yasal belgeler, dakikalar içinde. Yapay zekâ destekli sözleşme ve politika üreticisi.</p>
+          <span class="go">hizlisozlesme.com</span>
+          <div class="sheet" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+            <svg viewBox="0 0 120 40"><path d="M4 30c10-18 18-24 22-18s-6 18 0 16 12-22 18-20-2 18 4 18 10-14 16-14 4 10 10 10 14-8 22-10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+        </a>
+
         <a class="tile t-gh" href="https://github.com/YigitEmreTurkkan" target="_blank" rel="noopener">
           <div class="grid-dots" id="gh-dots" aria-hidden="true"></div>
           <h2>GitHub</h2>
-          <p data-i18n="gh-desc">Kodlar ve deneyler</p>
+          <p data-i18n="gh-desc">Açık kaynak çalışmalar</p>
         </a>
 
         <a class="tile t-li" href="https://www.linkedin.com/in/yigitemreturkkan" target="_blank" rel="noopener">
           <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
           <h2>LinkedIn</h2>
-          <p data-i18n="li-desc">Kariyer ve paylaşımlar</p>
+          <p data-i18n="li-desc">Profesyonel profil</p>
         </a>
 
-        <a class="tile t-mail" href="mailto:yigit.turkkan@gmail.com">
-          <h2 data-i18n="mail-title">Bir fikrin mi var?</h2>
-          <p data-i18n="mail-desc">Bana e-posta ile ulaş.</p>
-          <span class="addr">yigit.turkkan@gmail.com</span>
+        <a class="tile t-mail" href="mailto:hi@yigitemreturkkan.com">
+          <h2 data-i18n="mail-title">İletişim</h2>
+          <p data-i18n="mail-desc">İş birliği ve proje görüşmeleri için e-posta gönderebilirsiniz.</p>
+          <span class="addr">hi@yigitemreturkkan.com</span>
         </a>
       </nav>
     </main>
@@ -566,39 +561,39 @@
       var dict = {
         tr: {
           status: "Şu an i2i Systems'te DevOps & Cloud Engineer",
-          headline: "Altyapıyı kurarım, uygulamayı yayınlarım.",
-          lede: "İstanbul'da Kubernetes, CI/CD ve bulut üzerine çalışıyorum. Boş zamanlarımda mobil uygulama geliştiriyorum.",
-          uptime: "gündür sahadayım. İlk IT görevim Kasım 2021'de başladı.",
+          headline: "Güvenilir altyapı, kesintisiz teslimat.",
+          lede: "Bare metal ve bulut ortamlarında Kubernetes platformları, CI/CD süreçleri ve altyapı otomasyonu tasarlıyor ve işletiyorum.",
           "cv-title": "CV ve AI asistan",
-          "cv-desc": "Deneyimlerimi oku ya da dijital asistanıma doğrudan sor.",
-          "cv-go": "CV'yi aç",
-          "cb-desc": "Zinciri kırma. Alışkanlıklarını sevimli bir dostla takip et.",
-          "cb-badge": "Google Play'de",
-          "gh-desc": "Kodlar ve deneyler",
-          "li-desc": "Kariyer ve paylaşımlar",
-          "mail-title": "Bir fikrin mi var?",
-          "mail-desc": "Bana e-posta ile ulaş.",
+          "cv-desc": "Deneyimlerimi inceleyin ya da sorularınızı dijital asistanıma yöneltin.",
+          "cv-go": "CV'yi görüntüle",
+          "cb-desc": "App Store ve Google Play'de yayında olan, oyunlaştırılmış alışkanlık takip uygulamam.",
+          "cb-badge": "iOS ve Android",
+          "hs-desc": "İşletmeniz için yasal belgeler, dakikalar içinde. Yapay zekâ destekli sözleşme ve politika üreticisi.",
+          "gh-desc": "Açık kaynak çalışmalar",
+          "li-desc": "Profesyonel profil",
+          "mail-title": "İletişim",
+          "mail-desc": "İş birliği ve proje görüşmeleri için e-posta gönderebilirsiniz.",
           privacy: "ChainBud gizlilik politikası",
-          q: "Hangi teknolojilerle çalışıyorsun?",
-          a: "Kubernetes, AWS, ArgoCD, GitLab CI, Grafana ve Firebase. Bir de mobil tarafta Flutter."
+          q: "Hangi teknolojilerle çalışıyorsunuz?",
+          a: "Bare metal Kubernetes, AWS, ArgoCD, GitLab CI, Prometheus ve Grafana."
         },
         en: {
           status: "Currently DevOps & Cloud Engineer at i2i Systems",
-          headline: "I build the infrastructure and ship the apps.",
-          lede: "Based in Istanbul, working on Kubernetes, CI/CD, and cloud. In my spare time I build mobile apps.",
-          uptime: "days in the field. My first IT role started in November 2021.",
+          headline: "Reliable infrastructure, continuous delivery.",
+          lede: "I design and operate Kubernetes platforms, CI/CD pipelines, and infrastructure automation across bare metal and cloud environments.",
           "cv-title": "CV and AI assistant",
-          "cv-desc": "Read through my experience, or ask my digital assistant directly.",
-          "cv-go": "Open CV",
-          "cb-desc": "Don't break the chain. Track your habits with a cute companion.",
-          "cb-badge": "On Google Play",
-          "gh-desc": "Code and experiments",
-          "li-desc": "Career and posts",
-          "mail-title": "Got an idea?",
-          "mail-desc": "Reach me by email.",
+          "cv-desc": "Review my experience, or direct your questions to my digital assistant.",
+          "cv-go": "View CV",
+          "cb-desc": "My gamified habit-tracking app, live on the App Store and Google Play.",
+          "cb-badge": "iOS and Android",
+          "hs-desc": "Legal documents for your business, ready in minutes. An AI-powered contract and policy generator.",
+          "gh-desc": "Open-source work",
+          "li-desc": "Professional profile",
+          "mail-title": "Contact",
+          "mail-desc": "For collaboration and project inquiries, please reach out by email.",
           privacy: "ChainBud privacy policy",
-          q: "What technologies do you work with?",
-          a: "Kubernetes, AWS, ArgoCD, GitLab CI, Grafana, and Firebase. Plus Flutter on the mobile side."
+          q: "Which technologies do you work with?",
+          a: "Bare metal Kubernetes, AWS, ArgoCD, GitLab CI, Prometheus, and Grafana."
         }
       };
 
@@ -607,24 +602,6 @@
 
       var lang = read() === "en" ? "en" : "tr";
       var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      // Career uptime since first IT role (Nov 2021)
-      var start = new Date(2021, 10, 1);
-      var days = Math.floor((Date.now() - start.getTime()) / 864e5);
-      var daysEl = document.getElementById("uptime-days");
-
-      function renderDays() {
-        daysEl.textContent = days.toLocaleString(lang === "tr" ? "tr-TR" : "en-US");
-      }
-
-      // One cell per quarter of career; the current quarter is still in progress
-      var bar = document.getElementById("uptime-bar");
-      var quarters = Math.max(1, Math.ceil(days / 91.3));
-      for (var i = 0; i < quarters; i++) {
-        var cell = document.createElement("i");
-        if (i === quarters - 1) cell.className = "lvl";
-        bar.appendChild(cell);
-      }
 
       // GitHub-ish contribution dots, deterministic pattern
       var dots = document.getElementById("gh-dots");
@@ -673,7 +650,6 @@
         document.querySelectorAll("[data-set-lang]").forEach(function (b) {
           b.setAttribute("aria-pressed", String(b.getAttribute("data-set-lang") === lang));
         });
-        renderDays();
         typeTerm();
       }
 
