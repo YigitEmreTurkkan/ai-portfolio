@@ -1,19 +1,31 @@
 {
   "profile": {
     "name": "Yiğit Emre Türkkan",
-    "title": "DevOps & Platform Engineer",
-    "location": "Remote / Hybrid / Global",
+    "title": "DevOps & Cloud Engineer",
+    "location": "İstanbul, Türkiye (Remote / Hybrid uyumlu)",
     "education": "Muğla Sıtkı Koçman Üniversitesi, AGNO: 3.09",
     "summary": "Mühendislik altyapısına sahip, Cloud & DevOps odaklı, ölçeklenebilir ve güvenilir sistemler inşa eden teknoloji tutkunu."
   },
   "experience": [
     {
-      "role": "Devops & Platform Engineer",
-      "company": "Produstra Turkiye",
-      "date": "Mart 2026 - Halen",
+      "role": "DevOps & Cloud Engineer",
+      "company": "i2i Systems",
+      "date": "Eylül 2026 - Halen",
       "highlights": [
-        "AWS ve Firebase üzerinde serverless web uygulaması mimarisi tasarımı",
-        "Docker ile mikroservislerin konteynerizasyonu ve CI/CD otomasyonu"
+        "Kubernetes ve konteyner tabanlı platformların kurulumu, işletimi ve ölçeklendirilmesi",
+        "CI/CD pipeline'larının geliştirilmesi ve dağıtım süreçlerinin uçtan uca otomasyonu",
+        "Altyapı otomasyonu (IaC), izlenebilirlik ve sistem güvenilirliği iyileştirmeleri"
+      ]
+    },
+    {
+      "role": "DevOps & Platform Engineer",
+      "company": "Produstra Türkiye (Freelance)",
+      "date": "Mart 2026 - Ağustos 2026",
+      "highlights": [
+        "Firebase ekosistemi üzerinde yüksek erişilebilirlikli, serverless altyapı mimarilerinin tasarımı ve yönetimi",
+        "Cloud Functions ile backend iş akışları ve olay tabanlı görevlerin otomasyonu",
+        "Firestore / Realtime Database NoSQL veri modelleri, Firebase Security Rules ve RBAC ile erişim kontrolü",
+        "Firebase Authentication ve IAM entegrasyonu, Firebase Hosting ile sürekli teslimat"
       ]
     },
     {
@@ -29,10 +41,18 @@
     {
       "role": "Intern Devops & Platform Engineer",
       "company": "Eteration",
-      "date": "Ocak 2025 - Haziran 2025",
+      "date": "Ocak 2025 - Temmuz 2025",
       "highlights": [
         "Docker ve Kubernetes ile konteynerize edilmiş uygulama ortamları tasarımı",
         "GitLab CI/CD ile otomatik derleme ve dağıtım süreçleri yapılandırması"
+      ]
+    },
+    {
+      "role": "Work and Travel Katılımcısı",
+      "company": "Work and Travel - USA",
+      "date": "Haziran 2024 - Eylül 2024",
+      "highlights": [
+        "New Hampshire, ABD'de 4 ay; farklı kültürlere uyum, iletişim ve takım çalışması becerilerinin gelişimi"
       ]
     },
     {
@@ -53,12 +73,20 @@
       ]
     },
     {
-      "role": "IT Asistanı",
+      "role": "IT Asistanı / IT Teknisyeni",
       "company": "Muğla Sıtkı Koçman University IT Department",
       "date": "Kasım 2021 - Haziran 2023",
       "highlights": [
         "Kampüs içi IT altyapısı, donanım teşhisi ve yazılım sorun giderme yönetimi",
         "Yerel ağ ortamları konfigürasyonu ve teknik destek taleplerinin çözülmesi"
+      ]
+    },
+    {
+      "role": "Siber Güvenlik Eğitimi Katılımcısı",
+      "company": "Siber Vatan (T.C. Sanayi ve Teknoloji Bakanlığı)",
+      "date": "Şubat 2023 - Mayıs 2023",
+      "highlights": [
+        "Ağ güvenliği, etik hackerlık, tehdit analizi ve güvenli yazılım geliştirme eğitimleri"
       ]
     }
   ],
@@ -82,7 +110,10 @@
     "JavaScript/TypeScript",
     "React",
     "Linux",
-    "Bash"
+    "Bash",
+    "Firestore",
+    "Cloud Functions",
+    "HashiCorp Vault"
   ],
   "projects": [
     {
@@ -96,5 +127,14 @@
       ],
       "description": "Designed and published a cross-platform mobile app using the \"Don't Break the Chain\" methodology, incorporating gamified pet mechanics and cloud synchronization."
     }
+  ],
+  "certifications": [
+    "AWS Educate Getting Started with Storage (2025)",
+    "AWS Educate Introduction to Cloud 101 (2025)",
+    "GitLab CI Fundamentals (2025)",
+    "Certified Ethical Hacker (CEH) and Linux – Siber Vatan (2024)",
+    "First App Android – GDSC (2024)",
+    "Versiyon Kontrolleri: Git ve GitHub – BTK Akademi (2023)",
+    "Machine Learning 101 – GDSC (2022)"
   ]
 }
