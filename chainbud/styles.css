@@ -1,16 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 :root {
-  --bg-color: #0B0F17;
-  --surface-color: #151C2C;
-  --surface-color-low: #0E1320;
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
+  /* Palette taken from the ChainBud app */
+  --bg-color: #17161C;
+  --surface-color: #222029;
+  --surface-color-low: #1C1B22;
+  --text-primary: #F4F2F7;
+  --text-secondary: #A29EAD;
   
-  --primary-color: #10B981; /* Emerald Primary */
-  --primary-glow: rgba(16, 185, 129, 0.15);
-  --accent-orange: #F97316; /* Orange Accent */
-  --accent-orange-glow: rgba(249, 115, 22, 0.2);
+  --primary-color: #9B6BFA; /* App purple */
+  --primary-glow: rgba(155, 107, 250, 0.18);
+  --accent-orange: #FF7A45; /* "Complete chain" gradient start */
+  --accent-pink: #FF4E7A; /* "Complete chain" gradient end */
+  --cta-gradient: linear-gradient(90deg, #FF8A3D 0%, #FF4E7A 100%);
+  --accent-orange-glow: rgba(255, 94, 110, 0.16);
   --accent-yellow: #F59E0B; /* Amber/Yellow for shields/stars */
   
   --radius-sm: 8px;
@@ -20,7 +23,7 @@
   --radius-full: 9999px;
   
   --font-body: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
   
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
@@ -114,7 +117,7 @@ header {
 }
 
 .logo-text span {
-  color: var(--primary-color);
+  color: inherit;
 }
 
 .nav-links {
@@ -147,7 +150,7 @@ header {
   left: -10%;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, var(--primary-glow) 0%, rgba(11, 15, 23, 0) 70%);
+  background: radial-gradient(circle, var(--primary-glow) 0%, rgba(23, 22, 28, 0) 70%);
   z-index: -1;
   pointer-events: none;
 }
@@ -158,7 +161,7 @@ header {
   right: -10%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, var(--accent-orange-glow) 0%, rgba(11, 15, 23, 0) 70%);
+  background: radial-gradient(circle, var(--accent-orange-glow) 0%, rgba(23, 22, 28, 0) 70%);
   z-index: -1;
   pointer-events: none;
 }
@@ -180,8 +183,8 @@ header {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(155, 107, 250, 0.1);
+  border: 1px solid rgba(155, 107, 250, 0.2);
   color: var(--primary-color);
   padding: 6px 16px;
   border-radius: var(--radius-full);
@@ -199,7 +202,7 @@ header {
 }
 
 .hero-title span {
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-orange));
+  background: var(--cta-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -231,10 +234,10 @@ header {
 }
 
 .store-btn:hover {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
+  background: var(--cta-gradient);
+  border-color: transparent;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 8px 20px rgba(155, 107, 250, 0.3);
 }
 
 .store-btn:hover .btn-icon {
@@ -270,22 +273,35 @@ header {
   position: relative;
 }
 
-/* The mockup PNG has a baked-in checkerboard; the frame crops to the phone body only */
-.hero-phone {
-  width: 100%;
-  max-width: 280px;
-  aspect-ratio: 442 / 876;
-  overflow: hidden;
-  border-radius: 13.6% / 6.8%;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), var(--shadow-glow);
+/* Hero visual: the app icon's segmented purple ring around Bun-Bun */
+.hero-icon {
+  position: relative;
+  width: min(300px, 78vw);
+  aspect-ratio: 1;
+  border-radius: 26%;
+  background: radial-gradient(circle at 50% 40%, #A47BFF 0%, #7C3AED 55%, #4C1D95 100%);
+  box-shadow: 0 30px 60px -20px rgba(76, 29, 149, 0.7), 0 0 80px rgba(155, 107, 250, 0.25);
+  display: grid;
+  place-items: center;
   animation: float 6s ease-in-out infinite;
 }
 
-.hero-mockup {
-  display: block;
-  width: 231.7%;
-  max-width: none;
-  margin: -17.4% 0 0 -66.3%;
+.hero-icon::before {
+  content: "";
+  position: absolute;
+  inset: 11%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from -7deg, rgba(255, 255, 255, 0.9) 0 23deg, transparent 23deg 30deg);
+  -webkit-mask: radial-gradient(circle, transparent 62%, #000 63%, #000 77%, transparent 78%);
+  mask: radial-gradient(circle, transparent 62%, #000 63%, #000 77%, transparent 78%);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.55));
+}
+
+.hero-icon img {
+  position: relative;
+  width: 52%;
+  height: auto;
+  filter: drop-shadow(0 8px 16px rgba(30, 10, 60, 0.45));
 }
 
 @keyframes float {
@@ -345,15 +361,15 @@ header {
 
 .feature-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(155, 107, 250, 0.2);
   box-shadow: var(--shadow-md);
 }
 
 .feature-icon-wrapper {
   width: 48px;
   height: 48px;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(155, 107, 250, 0.1);
+  border: 1px solid rgba(155, 107, 250, 0.2);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -448,7 +464,7 @@ header {
 
 /* Call to Action */
 .cta-section {
-  background: linear-gradient(135deg, #090D14 0%, #151A24 100%);
+  background: linear-gradient(135deg, #141319 0%, #1F1D26 100%);
   padding: 100px 0;
   text-align: center;
   position: relative;
@@ -463,7 +479,7 @@ header {
   transform: translate(-50%, -50%);
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(11, 15, 23, 0) 70%);
+  background: radial-gradient(circle, rgba(155, 107, 250, 0.08) 0%, rgba(23, 22, 28, 0) 70%);
   pointer-events: none;
 }
 
@@ -882,7 +898,7 @@ body.lang-en flex.lang-en {
 .buddy-select-item.active {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
   border-color: var(--theme-border, var(--primary-color));
-  box-shadow: 0 8px 32px var(--theme-glow, rgba(16, 185, 129, 0.1));
+  box-shadow: 0 8px 32px var(--theme-glow, rgba(155, 107, 250, 0.1));
 }
 
 .buddy-select-item .icon-box {
@@ -899,7 +915,7 @@ body.lang-en flex.lang-en {
 
 .buddy-select-item.active .icon-box {
   transform: scale(1.1) rotate(5deg);
-  background: var(--theme-bg, rgba(16, 185, 129, 0.1));
+  background: var(--theme-bg, rgba(155, 107, 250, 0.1));
 }
 
 .buddy-select-item .details h4 {
@@ -939,7 +955,7 @@ body.lang-en flex.lang-en {
   transform: translate(-50%, -50%);
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, var(--showcase-glow, rgba(16, 185, 129, 0.15)) 0%, rgba(0,0,0,0) 70%);
+  background: radial-gradient(circle, var(--showcase-glow, rgba(155, 107, 250, 0.15)) 0%, rgba(0,0,0,0) 70%);
   z-index: 1;
   pointer-events: none;
   border-radius: 50%;
@@ -1000,8 +1016,8 @@ body.lang-en flex.lang-en {
 }
 
 .showcase-habit-tag {
-  background: var(--showcase-bg, rgba(16, 185, 129, 0.1));
-  border: 1px solid var(--showcase-border, rgba(16, 185, 129, 0.2));
+  background: var(--showcase-bg, rgba(155, 107, 250, 0.1));
+  border: 1px solid var(--showcase-border, rgba(155, 107, 250, 0.2));
   color: var(--showcase-text, var(--primary-color));
   font-size: 11px;
   font-weight: 700;
@@ -1107,5 +1123,5 @@ body.lang-en flex.lang-en {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-phone { animation: none; }
+  .hero-icon { animation: none; }
 }
