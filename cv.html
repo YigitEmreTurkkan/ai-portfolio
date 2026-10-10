@@ -201,7 +201,12 @@
     #panel-chat { margin-bottom: calc(-24px - env(safe-area-inset-bottom)); }
 
     /* CV column */
-    .intro { padding: 18px 0 8px; }
+    .intro { padding: 10px 0 8px; }
+
+    /* The page title already shows the name; keep the bar compact on phones */
+    @media (max-width: 479px) {
+      .back span { display: none; }
+    }
 
     .status {
       display: inline-flex;
