@@ -153,6 +153,16 @@ async function chainbud(env) {
   };
 }
 
+async function hq(env) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY) return { error: 'Supabase tanımlı değil' };
+  const r = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/hq_snapshot?id=eq.1&select=data', {
+    headers: { apikey: env.SUPABASE_SERVICE_KEY, Authorization: 'Bearer ' + env.SUPABASE_SERVICE_KEY },
+  });
+  if (!r.ok) return { error: 'hq_snapshot ' + r.status };
+  const rows = await r.json();
+  return rows[0] ? rows[0].data : {};
+}
+
 async function safe(fn) {
   try {
     return await fn();
@@ -202,8 +212,8 @@ export async function onRequest({ request, env }) {
   }
 
   if (path === '/dashboard/api/data') {
-    const [sites, tr, pol, cb] = await Promise.all([safe(health), safe(() => traffic(env)), safe(() => policemai(env)), safe(() => chainbud(env))]);
-    return json({ at: new Date().toISOString(), sites, traffic: tr, policemai: pol, chainbud: cb });
+    const [sites, tr, pol, cb, hqd] = await Promise.all([safe(health), safe(() => traffic(env)), safe(() => policemai(env)), safe(() => chainbud(env)), safe(() => hq(env))]);
+    return json({ at: new Date().toISOString(), sites, traffic: tr, policemai: pol, chainbud: cb, hq: hqd });
   }
 
   if (path === '/dashboard') return html(dashboardPage());
@@ -222,58 +232,108 @@ button{background:#6366f1;border:0;font-weight:700;cursor:pointer}.m{color:#f871
 }
 
 function dashboardPage() {
-  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Kontrol paneli</title>
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="theme-color" content="#07080c"><title>T4 HQ · Kontrol paneli</title>
+<link rel="icon" href="/t4-logo.png">
 <style>
-:root{--bg:#0f1115;--card:#181b22;--tx:#e8e8ea;--mu:#8b8f9a;--ok:#34d399;--bad:#f87171;--ac:#818cf8}
-*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx);margin:0;padding:20px;max-width:1100px;margin-inline:auto}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px;flex-wrap:wrap}
-h1{font-size:22px;margin:0}h2{font-size:14px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin:26px 0 10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-.card{background:var(--card);border-radius:14px;padding:16px}
-.k{color:var(--mu);font-size:13px}.v{font-size:26px;font-weight:800;margin-top:2px}
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;background:var(--bad)}.dot.ok{background:var(--ok)}
-a{color:var(--ac);text-decoration:none}.err{color:var(--bad);font-size:13px}.mu{color:var(--mu);font-size:12px}
-button,.btn{background:var(--card);color:var(--tx);border:1px solid #2a2e38;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:14px}
-</style></head><body>
-<header><h1>Kontrol paneli</h1><div><span class="mu" id="at"></span> <button onclick="load()">Yenile</button> <a class="btn" href="/dashboard/logout">Çıkış</a></div></header>
+:root{--bg:#07080c;--card:rgba(255,255,255,.045);--line:rgba(255,255,255,.09);--tx:#eef0f6;--mu:#8e93a6;--ok:#34d399;--bad:#f87171;--warn:#fbbf24;--ac:#818cf8;--ac2:#c084fc}
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--tx);margin:0;padding:22px 18px 60px;min-height:100vh;
+background:radial-gradient(900px 500px at 8% -10%,rgba(129,140,248,.22),transparent 60%),radial-gradient(800px 480px at 100% 0%,rgba(192,132,252,.16),transparent 55%),var(--bg)}
+.wrap{max-width:1180px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand img{height:54px;width:54px;object-fit:contain;filter:invert(1) drop-shadow(0 0 14px rgba(129,140,248,.7))}
+.brand b{font-size:22px;letter-spacing:.04em;display:block}
+.brand span{color:var(--mu);font-size:13px}
+.tools{display:flex;gap:8px;align-items:center;color:var(--mu);font-size:12px;flex-wrap:wrap}
+button,.btn{background:var(--card);color:var(--tx);border:1px solid var(--line);padding:8px 14px;border-radius:10px;cursor:pointer;font-size:13px;backdrop-filter:blur(8px)}
+button:hover{border-color:var(--ac)}
+h2{font-size:12px;color:var(--mu);text-transform:uppercase;letter-spacing:.14em;margin:30px 0 12px;display:flex;align-items:center;gap:10px}
+h2:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--line),transparent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;backdrop-filter:blur(10px)}
+.kpi{position:relative;overflow:hidden}
+.kpi:before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.k{color:var(--mu);font-size:12px}.v{font-size:30px;font-weight:800;margin-top:4px;background:linear-gradient(120deg,#fff,#c7c9ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mu{color:var(--mu);font-size:12px;margin-top:4px}.err{color:var(--bad);font-size:13px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;background:var(--bad);box-shadow:0 0 10px var(--bad)}.dot.ok{background:var(--ok);box-shadow:0 0 10px var(--ok)}
+a{color:var(--ac);text-decoration:none}
+.bar{height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.bar.g i{background:linear-gradient(90deg,#10b981,#34d399)}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-top:8px}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--mu);margin-left:6px}
+.pill.w{color:var(--warn);border-color:rgba(251,191,36,.4)}.pill.b{color:var(--ac);border-color:rgba(129,140,248,.4)}
+details summary{cursor:pointer;color:var(--mu);font-size:12px;margin-top:10px}
+details li{font-size:12.5px;margin:6px 0;color:#cfd2e0;list-style:none}
+details ul{padding:0;margin:8px 0 0}
+.tag{font-size:10px;padding:1px 6px;border-radius:6px;margin-right:6px}.tag.w{background:rgba(251,191,36,.15);color:var(--warn)}.tag.t{background:rgba(129,140,248,.15);color:var(--ac)}
+.ev{display:flex;flex-wrap:wrap;gap:8px}
+.ev span{font-size:12.5px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:99px;padding:5px 11px}.ev b{margin-left:5px;color:#fff}
+footer{margin-top:40px;color:var(--mu);font-size:11px;text-align:center}
+</style></head><body><div class="wrap">
+<header><div class="brand"><img src="/t4-logo.png" alt="T4"><div><b>T4 HQ</b><span>Komuta merkezi · yigitemreturkkan.com</span></div></div>
+<div class="tools"><span id="at"></span><button onclick="load()">Yenile</button></div></header>
+<div class="kpis" id="kpis"></div>
 <h2>Siteler</h2><div class="grid" id="sites"></div>
-<h2>Ziyaret (son 7 gün, Cloudflare Web Analytics)</h2><div class="grid" id="traffic"></div>
-<h2>Poliçem AI (Supabase, yalnızca sayılar)</h2><div class="grid" id="pol"></div>
-<h2>ChainBud uygulaması (Firebase Analytics)</h2><div class="grid" id="cb"></div>
-<div class="grid" id="cbev" style="margin-top:12px"></div>
+<h2>Ziyaret · son 7 gün</h2><div class="grid" id="traffic"></div>
+<h2>ChainBud uygulaması</h2><div class="grid" id="cb"></div><div class="card" id="cbev" style="margin-top:12px"></div>
+<h2>Poliçem AI</h2><div class="grid" id="pol"></div>
+<h2>Satış hattı · Poliçem AI acenteleri</h2><div class="grid" id="sales"></div>
+<h2>Görevler</h2><div class="grid" id="tasks"></div>
+<h2>Projeler · git durumu</h2><div class="grid" id="projects"></div>
+<footer>T4 Group · veriler Cloudflare, Supabase ve Google Analytics'ten canlı çekilir</footer>
 <script>
 const $=(i)=>document.getElementById(i);
 const esc=(s)=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const card=(k,v,extra='')=>'<div class="card"><div class="k">'+esc(k)+'</div><div class="v">'+v+'</div>'+extra+'</div>';
+const card=(k,v,extra)=>'<div class="card"><div class="k">'+esc(k)+'</div><div class="v">'+v+'</div>'+(extra||'')+'</div>';
+const kpi=(k,v,extra)=>'<div class="card kpi"><div class="k">'+esc(k)+'</div><div class="v">'+v+'</div>'+(extra?'<div class="mu">'+extra+'</div>':'')+'</div>';
+const pct=(a,b)=>b?Math.round(a*100/b):0;
+const ago=(iso)=>{const m=Math.round((Date.now()-new Date(iso))/60000);return m<60?m+' dk önce':m<1440?Math.round(m/60)+' sa önce':Math.round(m/1440)+' gün önce'};
 async function load(){
   $('at').textContent='yükleniyor…';
   const r=await fetch('/dashboard/api/data',{cache:'no-store'});
   if(r.status===401){location.reload();return}
   const d=await r.json();
-  $('at').textContent=new Date(d.at).toLocaleString('tr-TR');
-  $('sites').innerHTML=d.sites.error?'<div class="err">'+esc(d.sites.error)+'</div>':d.sites.map(s=>
-    '<div class="card"><div class="k"><span class="dot '+(s.ok?'ok':'')+'"></span><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.name)+'</a></div>'+
-    '<div class="v">'+(s.ok?s.ms+' ms':'KAPALI')+'</div><div class="mu">HTTP '+s.status+(s.error?' · '+esc(s.error):'')+'</div></div>').join('');
-  const t=d.traffic;
-  $('traffic').innerHTML=t.error?'<div class="err">'+esc(t.error)+'</div>':Object.entries(t.byHost).sort((a,b)=>b[1].views-a[1].views).map(([h,x])=>
-    card(h,x.views,'<div class="mu">'+x.visits+' ziyaret</div>')).join('')||'<div class="mu">Veri yok</div>';
-  const p=d.policemai;
+  $('at').textContent='Güncellendi: '+new Date(d.at).toLocaleTimeString('tr-TR');
+  const sites=Array.isArray(d.sites)?d.sites:[],up=sites.filter(s=>s.ok).length;
+  const t=d.traffic,c=d.chainbud,p=d.policemai,h=d.hq||{};
+  const visits=t&&t.byHost?Object.values(t.byHost).reduce((a,x)=>a+x.visits,0):0;
+  const open=(h.tasks||[]).reduce((a,s)=>a+s.wait+s.todo,0),done=(h.tasks||[]).reduce((a,s)=>a+s.done,0);
+  const sent=h.sales?(h.sales.counts['mesaj atıldı']||0):0;
+  $('kpis').innerHTML=
+    kpi('Siteler ayakta',up+' / '+sites.length,up===sites.length?'hepsi sağlıklı':'kontrol et')+
+    kpi('Site ziyareti (7 gün)',visits)+
+    kpi('ChainBud aktif (7 gün)',c&&!c.error?c.active7:'-',c&&!c.error?c.new7+' yeni kullanıcı':'')+
+    kpi('Poliçem AI acente',p&&!p.error?p.agencies_total:'-',p&&!p.error?p.policies_total+' poliçe':'')+
+    kpi('Gönderilen mesaj',sent,h.sales?h.sales.total+' acente listede':'')+
+    kpi('Açık iş',open,done+' tamamlandı');
+  $('sites').innerHTML=sites.map(s=>'<div class="card"><div class="k"><span class="dot '+(s.ok?'ok':'')+'"></span><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.name)+'</a></div><div class="v">'+(s.ok?s.ms+' ms':'KAPALI')+'</div><div class="mu">HTTP '+s.status+'</div></div>').join('');
+  if(t.error){$('traffic').innerHTML='<div class="err">'+esc(t.error)+'</div>'}else{
+    const ent=Object.entries(t.byHost).sort((a,b)=>b[1].views-a[1].views),mx=ent.length?ent[0][1].views:1;
+    $('traffic').innerHTML=ent.map(([k,x])=>'<div class="card"><div class="k">'+esc(k)+'</div><div class="v">'+x.views+'</div><div class="bar"><i style="width:'+pct(x.views,mx)+'%"></i></div><div class="mu">'+x.visits+' ziyaret</div></div>').join('')||'<div class="mu">Veri yok</div>';
+  }
+  if(c.error){$('cb').innerHTML='<div class="err">'+esc(c.error)+'</div>';$('cbev').style.display='none'}else{
+    $('cb').innerHTML=card('Aktif kullanıcı (7 gün)',c.active7,'<div class="mu">30 gün: '+c.active30+'</div>')+card('Yeni kullanıcı (7 gün)',c.new7,'<div class="mu">30 gün: '+c.new30+'</div>')+card('Oturum (7 gün)',c.sessions7,'<div class="mu">30 gün: '+c.sessions30+'</div>')+
+      card('Ülkeler (30 gün)','<span style="font-size:15px;font-weight:600;line-height:1.7">'+(c.countries.filter(x=>x.name).map(x=>esc(x.name)+' <b>'+x.n+'</b>').join('<br>')||'-')+'</span>');
+    $('cbev').style.display='';
+    $('cbev').innerHTML='<div class="k" style="margin-bottom:10px">Olaylar · son 30 gün</div><div class="ev">'+c.events.map(x=>'<span>'+esc(x.name)+'<b>'+x.n+'</b></span>').join('')+'</div>';
+  }
   $('pol').innerHTML=p.error?'<div class="err">'+esc(p.error)+'</div>':
     card('Acente',p.agencies_total,'<div class="mu">'+p.agencies_approved+' onaylı · '+p.agencies_pending+' bekleyen</div>')+
-    card('Son 7 gün kayıt',p.signups_7d,'<div class="mu">Son: '+(p.last_signup?new Date(p.last_signup).toLocaleDateString('tr-TR'):'-')+'</div>')+
-    card('Poliçe',p.policies_total,'<div class="mu">Son 7 gün: '+p.policies_7d+'</div>')+
-    card('Müşteri kaydı',p.customers_total);
-  const c=d.chainbud;
-  if(c.error){$('cb').innerHTML='<div class="err">'+esc(c.error)+'</div>';$('cbev').innerHTML=''}
-  else{
-    $('cb').innerHTML=
-      card('Aktif kullanıcı (7 gün)',c.active7,'<div class="mu">30 gün: '+c.active30+'</div>')+
-      card('Yeni kullanıcı (7 gün)',c.new7,'<div class="mu">30 gün: '+c.new30+'</div>')+
-      card('Oturum (7 gün)',c.sessions7,'<div class="mu">30 gün: '+c.sessions30+'</div>')+
-      card('Ülkeler (30 gün)','<span style="font-size:16px">'+(c.countries.map(x=>esc(x.name)+' '+x.n).join(' · ')||'-')+'</span>');
-    $('cbev').innerHTML=c.events.length?card('Olaylar (30 gün)','<span style="font-size:14px;font-weight:600;line-height:1.7">'+c.events.map(x=>esc(x.name)+' <b>'+x.n+'</b>').join(' · ')+'</span>'):'';
+    card('Son 7 gün kayıt',p.signups_7d,'<div class="mu">Son kayıt: '+(p.last_signup?new Date(p.last_signup).toLocaleDateString('tr-TR'):'-')+'</div>')+
+    card('Poliçe',p.policies_total,'<div class="mu">Son 7 gün: '+p.policies_7d+'</div>')+card('Müşteri kaydı',p.customers_total);
+  if(!h.sales){$('sales').innerHTML='<div class="mu">Anlık görüntü yok (hq-snapshot çalıştır)</div>'}else{
+    const tot=h.sales.total||1;
+    $('sales').innerHTML=Object.entries(h.sales.counts).sort((a,b)=>b[1]-a[1]).map(([k,n])=>'<div class="card"><div class="k">'+esc(k)+'</div><div class="v">'+n+'</div><div class="bar"><i style="width:'+pct(n,tot)+'%"></i></div><div class="mu">%'+pct(n,tot)+'</div></div>').join('');
   }
+  $('tasks').innerHTML=(h.tasks||[]).map(s=>{
+    const tot=s.done+s.wait+s.todo,list=s.open.map(o=>'<li><span class="tag '+(o.s==='wait'?'w':'t')+'">'+(o.s==='wait'?'bekliyor':'sırada')+'</span>'+esc(o.t)+'</li>').join('');
+    return '<div class="card"><div class="k">'+esc(s.name)+'</div><div class="row"><span><b>'+s.done+'</b> / '+tot+' tamam</span><span>'+(s.wait?'<span class="pill w">'+s.wait+' bekliyor</span>':'')+(s.todo?'<span class="pill b">'+s.todo+' sırada</span>':'')+'</span></div><div class="bar g"><i style="width:'+pct(s.done,tot)+'%"></i></div>'+(list?'<details><summary>Açık işler ('+(s.wait+s.todo)+')</summary><ul>'+list+'</ul></details>':'')+'</div>';
+  }).join('')||'<div class="mu">Anlık görüntü yok</div>';
+  $('projects').innerHTML=(h.projects||[]).map(x=>'<div class="card"><div class="k">'+esc(x.name)+'<span class="pill">'+esc(x.branch||'?')+'</span></div><div class="row"><span>'+(x.dirty?'<span class="pill w">'+x.dirty+' değişiklik</span>':'<span class="pill">temiz</span>')+(x.ahead?'<span class="pill b">'+x.ahead+' push bekliyor</span>':'')+'</span></div><div class="mu">'+esc(x.lastMsg)+'</div><div class="mu">'+ago(x.lastAt)+'</div></div>').join('')||'<div class="mu">Anlık görüntü yok</div>';
 }
 load();setInterval(load,120000);
-</script></body></html>`;
+</script></div></body></html>`;
 }
