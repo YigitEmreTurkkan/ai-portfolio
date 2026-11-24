@@ -3,7 +3,7 @@
 // Output: ../keys/dash-secrets.json  (outside git). Then add the API values to the same file and upload:
 //   npx wrangler pages secret bulk ../keys/dash-secrets.json --project-name <pages-project>
 import { createHmac, randomBytes } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import readline from 'node:readline';
@@ -19,10 +19,21 @@ function askHidden(q) {
   });
 }
 
-const p1 = await askHidden('Yeni dashboard şifresi (en az 12 karakter): ');
+// Etkileşimli terminal yoksa (ör. Claude Code'da "!" ile) şifre keys/dash-pass.txt dosyasından okunur ve dosya silinir.
+const passFile = resolve(here, '../../keys/dash-pass.txt');
+let p1;
+if (existsSync(passFile)) {
+  p1 = readFileSync(passFile, 'utf8').replace(/^﻿/, '').replace(/[\r\n]+$/, '').replace(/ +$/, '');
+  unlinkSync(passFile);
+} else if (!process.stdin.isTTY) {
+  console.error('Etkileşimli terminal yok. Şifreyi şu dosyaya yaz: keys/dash-pass.txt  (örn:  ! echo SIFREN> keys/dash-pass.txt  ), sonra scripti tekrar çalıştır.');
+  process.exit(1);
+} else {
+  p1 = await askHidden('Yeni dashboard şifresi (en az 12 karakter): ');
+  const p2 = await askHidden('Tekrar: ');
+  if (p1 !== p2) { console.error('Şifreler uyuşmuyor.'); process.exit(1); }
+}
 if (p1.length < 12) { console.error('En az 12 karakter olmalı.'); process.exit(1); }
-const p2 = await askHidden('Tekrar: ');
-if (p1 !== p2) { console.error('Şifreler uyuşmuyor.'); process.exit(1); }
 
 const salt = randomBytes(24).toString('hex');
 const secrets = existsSync(out) ? JSON.parse(readFileSync(out, 'utf8')) : {};

@@ -115,6 +115,9 @@ async function safe(fn) {
 
 // ---------- routes ----------
 
+// TEMPORARY: panel is open without a password (owner choice, 24 Nov 2026). Set to false to require the login again.
+const OPEN = true;
+
 export async function onRequest({ request, env }) {
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, '') || '/';
@@ -146,7 +149,7 @@ export async function onRequest({ request, env }) {
     return new Response(null, { status: 303, headers: { ...baseHeaders, Location: '/dashboard', 'Set-Cookie': `${COOKIE}=; Path=/dashboard; Max-Age=0; HttpOnly; Secure; SameSite=Strict` } });
   }
 
-  if (!(await authed(request, env))) {
+  if (!OPEN && !(await authed(request, env))) {
     return path === '/dashboard/api/data' ? json({ error: 'unauthorized' }, 401) : html(loginPage(''));
   }
 
