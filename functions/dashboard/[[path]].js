@@ -115,25 +115,36 @@ async function googleToken(env) {
   const der = Uint8Array.from(atob(pem), (c) => c.charCodeAt(0));
   const key = await crypto.subtle.importKey('pkcs8', der, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
   const sig = b64u(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, enc.encode(head + '.' + body)));
-  const r = await fetch('https://oauth2.googleapis.com/token', {
+  const { d, r } = await gjson('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: 'grant_type=' + encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') + '&assertion=' + head + '.' + body + '.' + sig,
   });
-  const d = await r.json();
   if (!d.access_token) throw new Error('Google token: ' + (d.error_description || d.error || r.status));
+  gTok = { t: d.access_token, exp: Date.now() + 50 * 60 * 1000 };
   return d.access_token;
+}
+// Google's edge sometimes answers with an HTML error page: retry a few times before giving up.
+let gTok = { t: '', exp: 0 };
+async function gjson(url, init) {
+  let last = '';
+  for (let i = 0; i < 4; i++) {
+    const r = await fetch(url, init);
+    const txt = await r.text();
+    try { return { d: JSON.parse(txt), r }; } catch { last = 'HTTP ' + r.status; }
+    await sleep(500 * (i + 1));
+  }
+  throw new Error('Google yanıtı okunamadı (' + last + ')');
 }
 async function chainbud(env) {
   if (!env.GA4_PROPERTY_ID || !env.GA4_SA_EMAIL || !env.GA4_SA_PRIVATE_KEY) return { error: 'GA4_* tanımlı değil' };
-  const token = await googleToken(env);
+  const token = gTok.t && gTok.exp > Date.now() ? gTok.t : await googleToken(env);
   const run = async (b) => {
-    const r = await fetch('https://analyticsdata.googleapis.com/v1beta/properties/' + env.GA4_PROPERTY_ID + ':runReport', {
+    const { d, r } = await gjson('https://analyticsdata.googleapis.com/v1beta/properties/' + env.GA4_PROPERTY_ID + ':runReport', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(b),
     });
-    const d = await r.json();
     if (!r.ok) throw new Error('GA4 ' + r.status + ': ' + (d.error?.message || '').slice(0, 160));
     return d.rows || [];
   };
@@ -242,7 +253,7 @@ background:radial-gradient(900px 500px at 8% -10%,rgba(129,140,248,.22),transpar
 .wrap{max-width:1180px;margin:0 auto}
 header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
 .brand{display:flex;align-items:center;gap:14px}
-.brand img{height:54px;width:54px;object-fit:contain;filter:invert(1) drop-shadow(0 0 14px rgba(129,140,248,.7))}
+.brand img{height:54px;width:54px;object-fit:contain;filter:invert(1);mix-blend-mode:screen}.brand{position:relative}.brand:before{content:"";position:absolute;left:-14px;top:-14px;width:82px;height:82px;background:radial-gradient(circle,rgba(129,140,248,.45),transparent 68%);z-index:-1}
 .brand b{font-size:22px;letter-spacing:.04em;display:block}
 .brand span{color:var(--mu);font-size:13px}
 .tools{display:flex;gap:8px;align-items:center;color:var(--mu);font-size:12px;flex-wrap:wrap}
