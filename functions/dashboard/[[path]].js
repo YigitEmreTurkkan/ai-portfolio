@@ -105,6 +105,54 @@ async function policemai(env) {
   return r.json();
 }
 
+// ---- ChainBud: Google Analytics 4 Data API (read-only service account) ----
+const b64u = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '');
+async function googleToken(env) {
+  const now = Math.floor(Date.now() / 1000);
+  const head = b64u(enc.encode(JSON.stringify({ alg: 'RS256', typ: 'JWT' })));
+  const body = b64u(enc.encode(JSON.stringify({ iss: env.GA4_SA_EMAIL, scope: 'https://www.googleapis.com/auth/analytics.readonly', aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600 })));
+  const pem = env.GA4_SA_PRIVATE_KEY.replaceAll('\\n', '\n').replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
+  const der = Uint8Array.from(atob(pem), (c) => c.charCodeAt(0));
+  const key = await crypto.subtle.importKey('pkcs8', der, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+  const sig = b64u(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, enc.encode(head + '.' + body)));
+  const r = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'grant_type=' + encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') + '&assertion=' + head + '.' + body + '.' + sig,
+  });
+  const d = await r.json();
+  if (!d.access_token) throw new Error('Google token: ' + (d.error_description || d.error || r.status));
+  return d.access_token;
+}
+async function chainbud(env) {
+  if (!env.GA4_PROPERTY_ID || !env.GA4_SA_EMAIL || !env.GA4_SA_PRIVATE_KEY) return { error: 'GA4_* tanımlı değil' };
+  const token = await googleToken(env);
+  const run = async (b) => {
+    const r = await fetch('https://analyticsdata.googleapis.com/v1beta/properties/' + env.GA4_PROPERTY_ID + ':runReport', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(b),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error('GA4 ' + r.status + ': ' + (d.error?.message || '').slice(0, 160));
+    return d.rows || [];
+  };
+  const [users, events, countries] = await Promise.all([
+    run({ dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }, { startDate: '30daysAgo', endDate: 'today' }], metrics: [{ name: 'activeUsers' }, { name: 'newUsers' }, { name: 'sessions' }] }),
+    run({ dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }], dimensions: [{ name: 'eventName' }], metrics: [{ name: 'eventCount' }], orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }], limit: 25 }),
+    run({ dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }], dimensions: [{ name: 'country' }], metrics: [{ name: 'activeUsers' }], orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }], limit: 5 }),
+  ]);
+  const u7 = users.find((x) => x.dimensionValues?.[0]?.value === 'date_range_0');
+  const u30 = users.find((x) => x.dimensionValues?.[0]?.value === 'date_range_1');
+  const mv = (x, i) => Number(x?.metricValues?.[i]?.value || 0);
+  return {
+    active7: mv(u7, 0), new7: mv(u7, 1), sessions7: mv(u7, 2),
+    active30: mv(u30, 0), new30: mv(u30, 1), sessions30: mv(u30, 2),
+    events: events.map((x) => ({ name: x.dimensionValues[0].value, n: Number(x.metricValues[0].value) })),
+    countries: countries.map((x) => ({ name: x.dimensionValues[0].value, n: Number(x.metricValues[0].value) })),
+  };
+}
+
 async function safe(fn) {
   try {
     return await fn();
@@ -154,8 +202,8 @@ export async function onRequest({ request, env }) {
   }
 
   if (path === '/dashboard/api/data') {
-    const [sites, tr, pol] = await Promise.all([safe(health), safe(() => traffic(env)), safe(() => policemai(env))]);
-    return json({ at: new Date().toISOString(), sites, traffic: tr, policemai: pol });
+    const [sites, tr, pol, cb] = await Promise.all([safe(health), safe(() => traffic(env)), safe(() => policemai(env)), safe(() => chainbud(env))]);
+    return json({ at: new Date().toISOString(), sites, traffic: tr, policemai: pol, chainbud: cb });
   }
 
   if (path === '/dashboard') return html(dashboardPage());
@@ -191,6 +239,8 @@ button,.btn{background:var(--card);color:var(--tx);border:1px solid #2a2e38;padd
 <h2>Siteler</h2><div class="grid" id="sites"></div>
 <h2>Ziyaret (son 7 gün, Cloudflare Web Analytics)</h2><div class="grid" id="traffic"></div>
 <h2>Poliçem AI (Supabase, yalnızca sayılar)</h2><div class="grid" id="pol"></div>
+<h2>ChainBud uygulaması (Firebase Analytics)</h2><div class="grid" id="cb"></div>
+<div class="grid" id="cbev" style="margin-top:12px"></div>
 <script>
 const $=(i)=>document.getElementById(i);
 const esc=(s)=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -213,6 +263,16 @@ async function load(){
     card('Son 7 gün kayıt',p.signups_7d,'<div class="mu">Son: '+(p.last_signup?new Date(p.last_signup).toLocaleDateString('tr-TR'):'-')+'</div>')+
     card('Poliçe',p.policies_total,'<div class="mu">Son 7 gün: '+p.policies_7d+'</div>')+
     card('Müşteri kaydı',p.customers_total);
+  const c=d.chainbud;
+  if(c.error){$('cb').innerHTML='<div class="err">'+esc(c.error)+'</div>';$('cbev').innerHTML=''}
+  else{
+    $('cb').innerHTML=
+      card('Aktif kullanıcı (7 gün)',c.active7,'<div class="mu">30 gün: '+c.active30+'</div>')+
+      card('Yeni kullanıcı (7 gün)',c.new7,'<div class="mu">30 gün: '+c.new30+'</div>')+
+      card('Oturum (7 gün)',c.sessions7,'<div class="mu">30 gün: '+c.sessions30+'</div>')+
+      card('Ülkeler (30 gün)','<span style="font-size:16px">'+(c.countries.map(x=>esc(x.name)+' '+x.n).join(' · ')||'-')+'</span>');
+    $('cbev').innerHTML=c.events.length?card('Olaylar (30 gün)','<span style="font-size:14px;font-weight:600;line-height:1.7">'+c.events.map(x=>esc(x.name)+' <b>'+x.n+'</b>').join(' · ')+'</span>'):'';
+  }
 }
 load();setInterval(load,120000);
 </script></body></html>`;
