@@ -212,7 +212,7 @@ async function ledgerGet(env) {
   if (!r.ok) throw new Error('ledger ' + r.status);
   const rows = await r.json();
   const d = (rows[0] && rows[0].data) || {};
-  return { costs: d.costs || {}, entries: d.entries || [], settings: { shopierPct: 6.235, komKdvPct: 20, stopajPct: 1, kdvPct: 20, kdvPaid: false, ...(d.settings || {}) } };
+  return { costs: d.costs || {}, entries: d.entries || [], settings: { shopierPct: 5.99, komFixed: 0.49, komKdvPct: 20, stopajPct: 1, kdvPct: 20, kdvPaid: false, ...(d.settings || {}) } };
 }
 async function ledgerSave(env, data) {
   const r = await fetch(sbUrl(env, 'hq_snapshot?on_conflict=id'), {
@@ -221,6 +221,13 @@ async function ledgerSave(env, data) {
     body: JSON.stringify({ id: LEDGER_ID, data, updated_at: new Date().toISOString() }),
   });
   if (!r.ok) throw new Error('ledger save ' + r.status);
+}
+
+async function shopierGet(env, path) {
+  if (!env.SHOPIER_PAT) throw new Error('SHOPIER_PAT tanımlı değil');
+  const r = await fetch('https://api.shopier.com/v1/' + path, { headers: { Authorization: 'Bearer ' + env.SHOPIER_PAT, Accept: 'application/json' } });
+  if (!r.ok) throw new Error('Shopier ' + r.status);
+  return r.json();
 }
 
 async function shopierOrders(env) {
@@ -258,8 +265,12 @@ async function produstraApi(request, env, url, path) {
   if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY) return json({ error: 'Supabase tanımlı değil' }, 503);
   const sub = path.slice('/dashboard/api/produstra'.length);
   if (request.method === 'GET' && sub === '') {
-    const [orders, ledger] = await Promise.all([safe(() => shopierOrders(env)), ledgerGet(env)]);
-    return json({ orders: Array.isArray(orders) ? orders : [], ordersError: Array.isArray(orders) ? null : orders.error, ledger });
+    const [orders, ledger, bal, pay] = await Promise.all([safe(() => shopierOrders(env)), ledgerGet(env), safe(() => shopierGet(env, 'balance')), safe(() => shopierGet(env, 'payouts'))]);
+    return json({
+      orders: Array.isArray(orders) ? orders : [], ordersError: Array.isArray(orders) ? null : orders.error, ledger,
+      balance: Array.isArray(bal) && bal[0] ? Number(bal[0].amount) : null,
+      payouts: Array.isArray(pay) ? pay.map((x) => ({ date: String(x.dateCreated).slice(0, 10), amount: Number(x.amount), status: x.status })).sort((a, b) => (b.date < a.date ? -1 : 1)) : [],
+    });
   }
   if (request.method !== 'POST') return json({ error: 'method' }, 405);
   if (!sameOrigin(request, url)) return json({ error: 'origin' }, 403);
@@ -282,9 +293,9 @@ async function produstraApi(request, env, url, path) {
   } else if (sub === '/entry/delete') {
     L.entries = L.entries.filter((e) => e.id !== String(b.id));
   } else if (sub === '/settings') {
-    const sp = num(b.shopierPct), kk = num(b.komKdvPct), st = num(b.stopajPct), kp = num(b.kdvPct);
-    if (![sp, kk, st, kp].every((v) => v >= 0 && v <= 50)) return json({ error: 'invalid' }, 400);
-    L.settings = { shopierPct: sp, komKdvPct: kk, stopajPct: st, kdvPct: kp, kdvPaid: !!b.kdvPaid };
+    const sp = num(b.shopierPct), kk = num(b.komKdvPct), st = num(b.stopajPct), kp = num(b.kdvPct), fx = num(b.komFixed);
+    if (![sp, kk, st, kp, fx].every((v) => v >= 0 && v <= 50)) return json({ error: 'invalid' }, 400);
+    L.settings = { shopierPct: sp, komFixed: fx, komKdvPct: kk, stopajPct: st, kdvPct: kp, kdvPaid: !!b.kdvPaid };
   } else return json({ error: 'not found' }, 404);
   await ledgerSave(env, L);
   return json({ ledger: L });
@@ -518,15 +529,16 @@ function addEntry(){
 }
 function delEntry(id,b){if(b.dataset.s!==\'1\'){b.dataset.s=\'1\';b.textContent=\'Emin misin?\';return}proPost(\'entry/delete\',{id:id})}
 function saveSet(){
-  proPost(\'settings\',{shopierPct:Number(String($(\'s-fee\').value).replace(\',\',\'.\')),komKdvPct:Number(String($(\'s-kk\').value).replace(\',\',\'.\')),stopajPct:Number(String($(\'s-st\').value).replace(\',\',\'.\')),kdvPct:Number(String($(\'s-kdv\').value).replace(\',\',\'.\')),kdvPaid:$(\'s-paid\').checked});
+  proPost(\'settings\',{shopierPct:Number(String($(\'s-fee\').value).replace(\',\',\'.\')),komKdvPct:Number(String($(\'s-kk\').value).replace(\',\',\'.\')),stopajPct:Number(String($(\'s-st\').value).replace(\',\',\'.\')),komFixed:Number(String($(\'s-fx\').value).replace(\',\',\'.\')),kdvPct:Number(String($(\'s-kdv\').value).replace(\',\',\'.\')),kdvPaid:$(\'s-paid\').checked});
 }
 function setPer(p){PER=p;renderPro()}
 function calc(o,L){
   const s=L.settings,c=L.costs[o.id]||{};
   const valid=o.pay===\'paid\'&&!o.refunded&&o.status!==\'cancelled\';
-  const kom=o.subtotal*s.shopierPct/100;
+  const tot=o.subtotal+o.shipping;
+  const kom=tot*s.shopierPct/100+(s.komFixed||0);
   const komKdv=kom*(s.komKdvPct||0)/100;
-  const stopaj=o.subtotal/(1+s.kdvPct/100)*(s.stopajPct||0)/100;
+  const stopaj=tot/(1+s.kdvPct/100)*(s.stopajPct||0)/100;
   const fee=kom+komKdv+stopaj;
   const kdv=o.subtotal*s.kdvPct/(100+s.kdvPct);
   const ship=c.ship==null?(o.shipCost||0):Number(c.ship);
@@ -589,6 +601,8 @@ function renderPro(){
     K(\'Ürün maliyeti\',money(cost))+
     K(\'KDV \'+(s.kdvPaid?\'(ödeniyor)\':\'(şimdilik ödenmiyor)\'),money(kdv),s.kdvPaid?\'kârdan düşüldü\':\'ödense net kâr: \'+money(netKdv))+
     K(\'Diğer gelir\',money(oin))+K(\'Diğer gider\',money(oout))+\'</div>\';
+  const bal=P.balance,pays=P.payouts||[];
+  h+=\'<div class="kpis" style="margin-top:12px">\'+K(\'Shopier bakiyesi\',bal==null?\'-\':money(bal),\'henüz gönderilmemiş tahsilat\')+K(\'Gönderilen toplam\',money(pays.reduce((a,x)=>a+x.amount,0)),pays.length+\' para gönderimi\')+K(\'Son gönderim\',pays[0]?money(pays[0].amount):\'-\',pays[0]?pays[0].date.split(\'-\').reverse().join(\'.\'):\'\')+\'</div>\';
   // charts
   const months={};
   all.filter(x=>x.c.valid).forEach(x=>{const k=x.d.slice(0,7);(months[k]=months[k]||{a:0,b:0}).a+=x.o.subtotal;months[k].b+=x.c.net});
@@ -611,15 +625,15 @@ function renderPro(){
       \'<td class="r">\'+money(c.kom)+\'</td><td class="r">\'+money(c.komKdv)+\'</td><td class="r">\'+money(c.stopaj)+\'</td><td class="r">\'+money(c.kdv)+\'</td><td class="r \'+(c.valid?(c.net>=0?\'pos\':\'neg\'):\'\')+\'">\'+(c.valid?money(c.net)+(c.miss?\'<span class="pill w">tahmini</span>\':\'\'):\'-\')+\'</td>\'+
       \'<td><input type="text" maxlength="200" placeholder="not" value="\'+esc(cs.note||\'\')+\'" onchange="setNote(\\'\'+o.id+\'\\',this.value)"></td></tr>\'}).join(\'\')+
     (ords.length?\'\':\'<tr><td colspan="12" class="mu">Bu dönemde sipariş yok</td></tr>\')+\'</table></div>\'+
-    \'<div class="note" style="margin-top:8px">Net kâr = ürün tutarı + müşteriden alınan kargo − Shopier kargo kesintisi − maliyet − komisyon − komisyon KDV − stopaj\'+(s.kdvPaid?\' − satış KDV\':\'\')+\'. Kargo kesintisi Shopier API den otomatik gelir; panelde farklıysa kalem simgesiyle düzelt. Not sütunu siparişe özel hatırlatma içindir.</div>\';
+    \'<div class="note" style="margin-top:8px">Net kâr = ürün tutarı + müşteriden alınan kargo − Shopier kargo kesintisi − maliyet − hizmet bedeli − KDV − stopaj\'+(s.kdvPaid?\' − satış KDV\':\'\')+\'. Kargo kesintisi Shopier API den otomatik gelir; panelde farklıysa kalem simgesiyle düzelt. Not sütunu siparişe özel hatırlatma içindir.</div>\';
   // other income / expenses
   h+=\'<h2>Diğer gelir / gider</h2><div class="card"><div class="form"><select id="e-type"><option value="gider">Gider</option><option value="gelir">Gelir</option></select><input type="text" id="e-title" placeholder="Başlık (filament, kutu, reklam…)"><input type="number" id="e-amt" step="any" min="0" placeholder="Tutar ₺"><input type="date" id="e-date" value="\'+ymd(now)+\'"><input type="text" id="e-note" placeholder="Not (isteğe bağlı)"><button onclick="addEntry()">Ekle</button></div>\'+
     \'<div class="scroll" style="margin-top:12px"><table class="t" style="min-width:520px"><tr><th>Tarih</th><th>Tür</th><th>Başlık</th><th class="r">Tutar</th><th></th></tr>\'+
     ents.map(e=>\'<tr><td>\'+esc(e.date.slice(5).split(\'-\').reverse().join(\'.\'))+\'</td><td><span class="pill \'+(e.type===\'gider\'?\'w\':\'b\')+\'">\'+e.type+\'</span></td><td>\'+esc(e.title)+(e.note?\'<div class="mu">\'+esc(e.note)+\'</div>\':\'\')+\'</td><td class="r \'+(e.type===\'gider\'?\'neg\':\'pos\')+\'">\'+(e.type===\'gider\'?\'-\':\'+\')+money(e.amount)+\'</td><td class="r"><button onclick="delEntry(\\'\'+e.id+\'\\',this)">Sil</button></td></tr>\').join(\'\')+
     (ents.length?\'\':\'<tr><td colspan="5" class="mu">Bu dönemde kayıt yok</td></tr>\')+\'</table></div></div>\';
   // settings
-  h+=\'<h2>Ayarlar</h2><div class="card"><div class="form"><label class="mu">Shopier komisyonu %<br><input type="number" id="s-fee" step="any" value="\'+s.shopierPct+\'"></label><label class="mu">Komisyon KDV %<br><input type="number" id="s-kk" step="any" value="\'+(s.komKdvPct||0)+\'"></label><label class="mu">Stopaj %<br><input type="number" id="s-st" step="any" value="\'+(s.stopajPct||0)+\'"></label><label class="mu">Satış KDV %<br><input type="number" id="s-kdv" step="any" value="\'+s.kdvPct+\'"></label><label class="mu" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="s-paid"\'+(s.kdvPaid?\' checked\':\'\')+\'> KDV ödüyoruz (kârdan düş)</label><button onclick="saveSet()">Kaydet</button></div>\'+
-    \'<div class="note" style="margin-top:8px">Şirket olmadığı için KDV şimdilik ödenmiyor: tutar bilgi olarak ayrı gösterilir, kâra dahil edilmez. Şirket kurulunca kutuyu işaretle. Shopier API komisyon, KDV ve stopaj kalemlerini vermiyor; oranlar gerçek bir siparişin dökümünden çıkarıldı (200 TL ürün: hizmet bedeli 12,47 → %6,235; KDV %20 bu bedelin üzerine; stopaj KDV hariç tutarın %1 oranı). Farklı bir sipariş uyuşmazsa oranları buradan düzelt.</div></div>\';
+  h+=\'<h2>Ayarlar</h2><div class="card"><div class="form"><label class="mu">Hizmet bedeli %<br><input type="number" id="s-fee" step="any" value="\'+s.shopierPct+\'"></label><label class="mu">+ sabit ₺ (sipariş başı)<br><input type="number" id="s-fx" step="any" value="\'+(s.komFixed||0)+\'"></label><label class="mu">Komisyon KDV %<br><input type="number" id="s-kk" step="any" value="\'+(s.komKdvPct||0)+\'"></label><label class="mu">Stopaj %<br><input type="number" id="s-st" step="any" value="\'+(s.stopajPct||0)+\'"></label><label class="mu">Satış KDV %<br><input type="number" id="s-kdv" step="any" value="\'+s.kdvPct+\'"></label><label class="mu" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="s-paid"\'+(s.kdvPaid?\' checked\':\'\')+\'> KDV ödüyoruz (kârdan düş)</label><button onclick="saveSet()">Kaydet</button></div>\'+
+    \'<div class="note" style="margin-top:8px">Şirket olmadığı için KDV şimdilik ödenmiyor: tutar bilgi olarak ayrı gösterilir, kâra dahil edilmez. Şirket kurulunca kutuyu işaretle. Shopier API hizmet bedeli, KDV ve stopaj kalemlerini vermiyor. Oranlar Tahsilatlar sayfasındaki iki gerçek siparişten çıkarıldı: hizmet bedeli = sipariş tutarı (kargo dahil) x %5,99 + 0,49 TL; KDV hizmet bedelinin %20 si; stopaj KDV hariç sipariş tutarının %1 i. Bir kuruş fark olabilir. Farklı bir sipariş uyuşmazsa buradan düzelt.</div></div>\';
   $(\'pro\').innerHTML=h;
 }
 load();setInterval(load,120000);
