@@ -634,7 +634,7 @@ function renderPro(){
   const PM=matchPayouts(all,P.payouts||[]);
   const waiting=all.filter(x=>x.c.valid&&!PM[x.o.id]),waitSum=waiting.reduce((a,x)=>a+x.c.tah,0);
   const paidOrders=all.filter(x=>x.c.valid&&PM[x.o.id]);
-  const bankCell=(id,valid)=>{if(!valid)return \'-\';const m=PM[id];return m?\'<span class="pill g" title="Banka gönderimi">\'+(m.st===\'paid\'?\'yatırıldı \':\'yolda \')+m.date.split(\'-\').reverse().slice(0,2).join(\'.\')+\'</span>\':\'<span class="pill w">bakiyede</span>\'};
+  const bankCell=(id,valid,tah)=>{if(!valid)return \'-\';const m=PM[id],amt=\' <b>\'+money(tah)+\'</b>\';return m?\'<span class="pill g" title="Banka gönderimi">\'+(m.st===\'paid\'?\'yatırıldı \':\'yolda \')+m.date.split(\'-\').reverse().slice(0,2).join(\'.\')+\'</span>\'+amt:\'<span class="pill w">bakiyede</span>\'+amt};
   const sum=(f)=>ok.reduce((a,x)=>a+f(x),0);
   const sales=sum(x=>x.o.subtotal),fee=sum(x=>x.c.fee),ship=sum(x=>x.c.ship),shipIn=sum(x=>x.o.shipping),kom=sum(x=>x.c.kom),komKdv=sum(x=>x.c.komKdv),stopaj=sum(x=>x.c.stopaj),kdv=sum(x=>x.c.kdv),cost=sum(x=>x.c.cost||0),orderNet=sum(x=>x.c.net);
   const miss=ok.filter(x=>x.c.miss).length;
@@ -694,7 +694,7 @@ function renderPro(){
       \'<td><input type="number" step="any" min="0" placeholder="maliyet" value="\'+(cs.cost==null?\'\':cs.cost)+\'" onchange="setCost(\\'\'+o.id+\'\\',\\'cost\\',this.value)"></td>\'+
       \'<td class="r">\'+money(c.ship)+(cs.ship!=null?\'<span class="pill w" title="elle düzeltildi">düzeltildi</span>\':c.shipEst?\'<span class="pill w" title="tarifede yok, API tutarı">tahmini</span>\':\'\')+\' <button class="pen" title="Düzenle (boş bırakırsan Shopier API değerine döner)" data-id="\'+o.id+\'" data-v="\'+c.ship+\'" onclick="editShip(this)">✎</button></td>\'+
       \'<td class="r">\'+money(c.kom)+\'</td><td class="r">\'+money(c.komKdv)+\'</td><td class="r">\'+money(c.stopaj)+\'</td><td class="r">\'+money(c.kdv)+\'</td><td class="r \'+(c.valid?(c.net>=0?\'pos\':\'neg\'):\'\')+\'">\'+(c.valid?money(c.net)+(c.miss?\'<span class="pill w">tahmini</span>\':\'\'):\'-\')+\'</td>\'+
-      \'<td>\'+bankCell(o.id,c.valid)+\'</td>\'+
+      \'<td>\'+bankCell(o.id,c.valid,c.tah)+\'</td>\'+
       \'<td><input type="text" maxlength="200" placeholder="not" value="\'+esc(cs.note||\'\')+\'" onchange="setNote(\\'\'+o.id+\'\\',this.value)"></td></tr>\'}).join(\'\')+
     (ords.length?\'\':\'<tr><td colspan="14" class="mu">Bu dönemde sipariş yok</td></tr>\')+\'</table></div>\'+
     \'<div class="note" style="margin-top:8px">Net kâr = ürün tutarı + müşteriden alınan kargo − Shopier kargo kesintisi − maliyet − hizmet bedeli − KDV − stopaj\'+(s.kdvPaid?\' − satış KDV\':\'\')+\'. Kargo kesintisi desi tarifesinden gelir (Ayarlar); tarifede olmayan desi için Shopier API tutarı tahmin olarak kullanılır. Kalem simgesiyle düzeltebilirsin. Not sütunu siparişe özel hatırlatma içindir.</div>\';
