@@ -212,7 +212,7 @@ async function ledgerGet(env) {
   if (!r.ok) throw new Error('ledger ' + r.status);
   const rows = await r.json();
   const d = (rows[0] && rows[0].data) || {};
-  return { costs: d.costs || {}, entries: d.entries || [], settings: { shopierPct: 5.99, komFixed: 0.49, komKdvPct: 20, stopajPct: 1, kdvPct: 20, kdvPaid: false, shipTable: { 2: 138.58, 4: 164.98 }, ...(d.settings || {}) } };
+  return { costs: d.costs || {}, entries: d.entries || [], settings: { shopierPct: 5.99, komFixed: 0.49, komKdvPct: 20, stopajPct: 1, kdvPct: 20, kdvPaid: false, shipTable: { 2: 138.58, 4: 164.98 }, openBal: null, realBal: null, ...(d.settings || {}) } };
 }
 async function ledgerSave(env, data) {
   const r = await fetch(sbUrl(env, 'hq_snapshot?on_conflict=id'), {
@@ -303,7 +303,9 @@ async function produstraApi(request, env, url, path) {
     if (b.shipTable && typeof b.shipTable === 'object') {
       for (const [k, v] of Object.entries(b.shipTable)) { const n = num(v); if (/^\d{1,3}$/.test(k) && n !== null && n >= 0 && n <= 5000) shipTable[k] = n; }
     }
-    L.settings = { shopierPct: sp, komFixed: fx, komKdvPct: kk, stopajPct: st, kdvPct: kp, kdvPaid: !!b.kdvPaid, shipTable };
+    const ob = num(b.openBal), rb = num(b.realBal);
+    if (Number.isNaN(ob) || Number.isNaN(rb)) return json({ error: 'invalid' }, 400);
+    L.settings = { shopierPct: sp, komFixed: fx, komKdvPct: kk, stopajPct: st, kdvPct: kp, kdvPaid: !!b.kdvPaid, shipTable, openBal: ob, realBal: rb };
   } else return json({ error: 'not found' }, 404);
   await ledgerSave(env, L);
   return json({ ledger: L });
@@ -538,8 +540,9 @@ function addEntry(){
 }
 function delEntry(id,b){if(b.dataset.s!==\'1\'){b.dataset.s=\'1\';b.textContent=\'Emin misin?\';return}proPost(\'entry/delete\',{id:id})}
 function saveSet(){
+  const nv=(id)=>{const v=String($(id).value).trim().replace(\',\',\'.\');return v===\'\'?null:Number(v)};
   const tb={};String($(\'s-sh\').value).split(\',\').forEach(x=>{const a=x.split(\':\');if(a.length===2){const k=a[0].trim(),v=Number(a[1].trim().replace(\',\',\'.\'));if(k&&!isNaN(v))tb[k]=v}});
-  proPost(\'settings\',{shopierPct:Number(String($(\'s-fee\').value).replace(\',\',\'.\')),komKdvPct:Number(String($(\'s-kk\').value).replace(\',\',\'.\')),stopajPct:Number(String($(\'s-st\').value).replace(\',\',\'.\')),komFixed:Number(String($(\'s-fx\').value).replace(\',\',\'.\')),kdvPct:Number(String($(\'s-kdv\').value).replace(\',\',\'.\')),shipTable:tb,kdvPaid:$(\'s-paid\').checked});
+  proPost(\'settings\',{shopierPct:Number(String($(\'s-fee\').value).replace(\',\',\'.\')),komKdvPct:Number(String($(\'s-kk\').value).replace(\',\',\'.\')),stopajPct:Number(String($(\'s-st\').value).replace(\',\',\'.\')),komFixed:Number(String($(\'s-fx\').value).replace(\',\',\'.\')),kdvPct:Number(String($(\'s-kdv\').value).replace(\',\',\'.\')),shipTable:tb,openBal:nv(\'s-ob\'),realBal:nv(\'s-rb\'),kdvPaid:$(\'s-paid\').checked});
 }
 function setPer(p){PER=p;renderPro()}
 function calc(o,L){
@@ -591,6 +594,19 @@ function rowsBar(items,fmt){
   const mx=Math.max(1,...items.map(i=>i.v));
   return items.map(i=>\'<div class="row"><span>\'+esc(i.k)+\'</span><span>\'+fmt(i)+\'</span></div><div class="bar"><i style="width:\'+Math.round(i.v*100/mx)+\'%"></i></div>\').join(\'\')||\'<div class="mu">Veri yok</div>\';
 }
+function balSvg(d){
+  const W=560,H=210,pl=56,pb=24,pt=14,pr=8;
+  const vs=d.map(x=>x.v),mx=Math.max(1,...vs),mn=Math.min(0,...vs);
+  const x=(i)=>pl+(W-pl-pr)*i/Math.max(1,d.length-1),y=(v)=>pt+(H-pt-pb)*(1-(v-mn)/(mx-mn));
+  let s=\'<svg class="chart" viewBox="0 0 \'+W+\' \'+H+\'"><defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#34d399" stop-opacity=".5"/><stop offset="1" stop-color="#34d399" stop-opacity="0"/></linearGradient></defs>\';
+  for(let i=0;i<=3;i++){const v=mn+(mx-mn)*i/3,yy=y(v);s+=\'<line x1="\'+pl+\'" x2="\'+(W-pr)+\'" y1="\'+yy+\'" y2="\'+yy+\'" stroke="rgba(255,255,255,.07)"/><text x="\'+(pl-6)+\'" y="\'+(yy+4)+\'" text-anchor="end" font-size="10" fill="#8a8fa8">\'+Math.round(v)+\'</text>\'}
+  if(mn<0)s+=\'<line x1="\'+pl+\'" x2="\'+(W-pr)+\'" y1="\'+y(0)+\'" y2="\'+y(0)+\'" stroke="rgba(248,113,113,.6)" stroke-dasharray="4 3"/>\';
+  const pts=d.map((p,i)=>x(i)+\',\'+y(p.v)).join(\' \');
+  s+=\'<polygon points="\'+pl+\',\'+y(0)+\' \'+pts+\' \'+x(d.length-1)+\',\'+y(0)+\'" fill="url(#bg)"/><polyline points="\'+pts+\'" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linejoin="round"/>\';
+  const li=d.length-1;s+=\'<circle cx="\'+x(li)+\'" cy="\'+y(d[li].v)+\'" r="3.8" fill="#fff"/>\';
+  [0,Math.floor(li/2),li].forEach(i=>{s+=\'<text x="\'+x(i)+\'" y="\'+(H-6)+\'" text-anchor="middle" font-size="10" fill="#8a8fa8">\'+esc(d[i].l)+\'</text>\'});
+  return s+\'</svg>\';
+}
 function matchPayouts(all,pays){
   const res={},used={};
   const cand=all.filter(x=>x.c.valid).map(x=>({id:x.o.id,d:x.d,v:Math.round(x.c.tah*100)}));
@@ -639,6 +655,25 @@ function renderPro(){
     K(\'Diğer gelir\',money(oin))+K(\'Diğer gider\',money(oout))+\'</div>\';
   const bal=P.balance,pays=P.payouts||[];
   h+=\'<div class="kpis" style="margin-top:12px">\'+K(\'Bankaya yatmayı bekleyen\',money(waitSum),waiting.length+\' sipariş bakiyede\'+(bal!=null&&Math.abs(bal-waitSum)>0.5?\' · Shopier bakiyesi \'+money(bal)+\' (fark var)\':\' · Shopier bakiyesiyle aynı\'))+K(\'Bankaya yatan\',money(pays.reduce((a,x)=>a+x.amount,0)),pays.length+\' gönderim · \'+paidOrders.length+\' sipariş\')+K(\'Son gönderim\',pays[0]?money(pays[0].amount):\'-\',pays[0]?pays[0].date.split(\'-\').reverse().join(\'.\'):\'\')+\'</div>\';
+  const paidTotal=pays.filter(x=>x.status===\'paid\').reduce((a,x)=>a+x.amount,0);
+  const allCost=all.filter(x=>x.c.valid).reduce((a,x)=>a+(x.c.cost||0),0),missAll=all.filter(x=>x.c.valid&&x.c.cost==null).length;
+  const allIn=L.entries.filter(e=>e.type===\'gelir\').reduce((a,e)=>a+e.amount,0),allOut=L.entries.filter(e=>e.type===\'gider\').reduce((a,e)=>a+e.amount,0);
+  const ob=s.openBal==null?0:Number(s.openBal),expected=ob+paidTotal+allIn-allOut-allCost;
+  const rb=s.realBal==null?null:Number(s.realBal),dif=rb==null?0:rb-expected;
+  h+=\'<h2>Şirket hesabı · olması gereken</h2><div class="kpis">\'+
+    K(\'Hesapta olması gereken\',money(expected),\'başlangıç \'+money(ob)+\' + Shopier yatan \'+money(paidTotal)+\' + diğer gelir \'+money(allIn)+\' − ürün maliyeti \'+money(allCost)+\' − diğer gider \'+money(allOut)+(missAll?\' · \'+missAll+\' siparişin maliyeti girilmedi\':\'\'))+
+    (rb==null?K(\'Hesaptaki gerçek bakiye\',\'-\',\'Ayarlardan girersen farkı gösteririm\'):K(\'Hesaptaki gerçek bakiye\',money(rb),\'senin girdiğin\')+K(\'Fark (gerçek − olması gereken)\',money(dif),Math.abs(dif)<1?\'tutuyor\':dif>0?\'hesapta fazla var: kayıt dışı gelir ya da eksik maliyet olabilir\':\'hesapta eksik var: kayıt dışı gider olabilir\',Math.abs(dif)<1?\'#34d399\':\'#fbbf24\'))+
+    \'</div>\';
+  const ev={};const addEv=(dt,v)=>{ev[dt]=(ev[dt]||0)+v};
+  pays.filter(x=>x.status===\'paid\').forEach(x=>addEv(x.date,x.amount));
+  L.entries.forEach(e=>addEv(e.date,e.type===\'gelir\'?e.amount:-e.amount));
+  all.filter(x=>x.c.valid&&x.c.cost).forEach(x=>addEv(x.d,-x.c.cost));
+  const evk=Object.keys(ev).sort(),bseries=[];
+  if(evk.length){
+    let run=ob;const st=new Date(evk[0]+\'T00:00:00\');
+    for(let dd=new Date(st),n=0;dd<=now&&n<500;dd.setDate(dd.getDate()+1),n++){const k=ymd(dd);run+=ev[k]||0;bseries.push({l:dd.getDate()+\' \'+MON[dd.getMonth()],v:Math.round(run*100)/100})}
+  }
+  h+=\'<div class="card" style="margin-top:12px"><div class="k">Şirket hesabı · olması gereken bakiyenin seyri</div>\'+(bseries.length>1?balSvg(bseries):\'<div class="mu">Veri yok</div>\')+\'<div class="note">Shopier den bankaya yatanlar ve diğer gelirler artırır; ürün maliyeti (sipariş gününde) ve diğer giderler azaltır.</div></div>\';
   // charts
   const months={};
   all.filter(x=>x.c.valid).forEach(x=>{const k=x.d.slice(0,7);(months[k]=months[k]||{a:0,b:0}).a+=x.o.subtotal;months[k].b+=x.c.net});
@@ -669,7 +704,7 @@ function renderPro(){
     ents.map(e=>\'<tr><td>\'+esc(e.date.slice(5).split(\'-\').reverse().join(\'.\'))+\'</td><td><span class="pill \'+(e.type===\'gider\'?\'w\':\'b\')+\'">\'+e.type+\'</span></td><td>\'+esc(e.title)+(e.note?\'<div class="mu">\'+esc(e.note)+\'</div>\':\'\')+\'</td><td class="r \'+(e.type===\'gider\'?\'neg\':\'pos\')+\'">\'+(e.type===\'gider\'?\'-\':\'+\')+money(e.amount)+\'</td><td class="r"><button onclick="delEntry(\\'\'+e.id+\'\\',this)">Sil</button></td></tr>\').join(\'\')+
     (ents.length?\'\':\'<tr><td colspan="5" class="mu">Bu dönemde kayıt yok</td></tr>\')+\'</table></div></div>\';
   // settings
-  h+=\'<h2>Ayarlar</h2><div class="card"><div class="form"><label class="mu">Hizmet bedeli %<br><input type="number" id="s-fee" step="any" value="\'+s.shopierPct+\'"></label><label class="mu">+ sabit ₺ (sipariş başı)<br><input type="number" id="s-fx" step="any" value="\'+(s.komFixed||0)+\'"></label><label class="mu">Komisyon KDV %<br><input type="number" id="s-kk" step="any" value="\'+(s.komKdvPct||0)+\'"></label><label class="mu">Stopaj %<br><input type="number" id="s-st" step="any" value="\'+(s.stopajPct||0)+\'"></label><label class="mu">Kargo tarifesi (desi:₺)<br><input type="text" id="s-sh" style="min-width:210px" value="\'+Object.entries(s.shipTable||{}).map(e=>e[0]+\':\'+e[1]).join(\', \')+\'"></label><label class="mu">Satış KDV %<br><input type="number" id="s-kdv" step="any" value="\'+s.kdvPct+\'"></label><label class="mu" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="s-paid"\'+(s.kdvPaid?\' checked\':\'\')+\'> KDV ödüyoruz (kârdan düş)</label><button onclick="saveSet()">Kaydet</button></div>\'+
+  h+=\'<h2>Ayarlar</h2><div class="card"><div class="form"><label class="mu">Hizmet bedeli %<br><input type="number" id="s-fee" step="any" value="\'+s.shopierPct+\'"></label><label class="mu">+ sabit ₺ (sipariş başı)<br><input type="number" id="s-fx" step="any" value="\'+(s.komFixed||0)+\'"></label><label class="mu">Komisyon KDV %<br><input type="number" id="s-kk" step="any" value="\'+(s.komKdvPct||0)+\'"></label><label class="mu">Stopaj %<br><input type="number" id="s-st" step="any" value="\'+(s.stopajPct||0)+\'"></label><label class="mu">Kargo tarifesi (desi:₺)<br><input type="text" id="s-sh" style="min-width:210px" value="\'+Object.entries(s.shipTable||{}).map(e=>e[0]+\':\'+e[1]).join(\', \')+\'"></label><label class="mu">Başlangıç bakiyesi ₺<br><input type="number" id="s-ob" step="any" value="\'+(s.openBal==null?\'\':s.openBal)+\'"></label><label class="mu">Hesaptaki gerçek bakiye ₺<br><input type="number" id="s-rb" step="any" value="\'+(s.realBal==null?\'\':s.realBal)+\'"></label><label class="mu">Satış KDV %<br><input type="number" id="s-kdv" step="any" value="\'+s.kdvPct+\'"></label><label class="mu" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="s-paid"\'+(s.kdvPaid?\' checked\':\'\')+\'> KDV ödüyoruz (kârdan düş)</label><button onclick="saveSet()">Kaydet</button></div>\'+
     \'<div class="note" style="margin-top:8px">Şirket olmadığı için KDV şimdilik ödenmiyor: tutar bilgi olarak ayrı gösterilir, kâra dahil edilmez. Şirket kurulunca kutuyu işaretle. Shopier API hizmet bedeli, KDV ve stopaj kalemlerini vermiyor. Oranlar Tahsilatlar sayfasındaki 6 gerçek siparişle doğrulandı: hizmet bedeli = sipariş tutarı (kargo dahil) x %5,99 + 0,49 TL; KDV hizmet bedelinin %20 si; stopaj KDV hariç sipariş tutarının %1 i. Bir kuruş fark olabilir. Farklı bir sipariş uyuşmazsa buradan düzelt.</div></div>\';
   $(\'pro\').innerHTML=h;
 }
