@@ -408,6 +408,7 @@ input[type=number]{width:96px}input[type=text]{min-width:160px}
 .scroll{overflow-x:auto}
 .big{font-size:34px;font-weight:800}
 .note{font-size:12px;color:var(--mu);line-height:1.6}
+.pen{padding:0 6px;border:none;background:none;color:var(--mu);cursor:pointer;font-size:14px}.pen:hover{color:var(--ac)}
 footer{margin-top:40px;color:var(--mu);font-size:11px;text-align:center}
 </style></head><body><div class="wrap">
 <header><div class="brand"><img src="/t4-logo.png" alt="T4"><div><b>T4 HQ</b><span>Komuta merkezi · yigitemreturkkan.com</span></div></div>
@@ -502,6 +503,12 @@ async function proPost(p,b){
   const d=await r.json();
   if(!r.ok){$(\'pmsg\').textContent=\'Kaydedilemedi: \'+(d.error||r.status);return}
   PRO.ledger=d.ledger;renderPro();
+}
+function editShip(b){
+  const id=b.dataset.id,td=b.parentNode;td.innerHTML=\'\';
+  const i=document.createElement(\'input\');i.type=\'number\';i.step=\'any\';i.min=\'0\';i.value=b.dataset.v;
+  i.onchange=()=>setCost(id,\'ship\',i.value);i.onblur=()=>setTimeout(renderPro,200);
+  td.appendChild(i);i.focus();i.select();
 }
 function setNote(id,v){proPost(\'cost\',{orderId:id,note:v})}
 function setCost(id,k,v){const b={orderId:id};b[k]=v===\'\'?null:Number(String(v).replace(\',\',\'.\'));proPost(\'cost\',b)}
@@ -600,11 +607,11 @@ function renderPro(){
     ords.map(x=>{const o=x.o,c=x.c,cs=L.costs[o.id]||{};
       return \'<tr style="\'+(c.valid?\'\':\'opacity:.5\')+\'"><td>\'+esc(x.d.slice(5).split(\'-\').reverse().join(\'.\'))+\'</td><td>\'+esc(o.title)+(c.valid?\'\':\'<span class="pill w">\'+(o.refunded?\'iade\':esc(o.status))+\'</span>\')+\'</td><td class="r">\'+money(o.subtotal)+\'</td><td class="r">\'+money(o.shipping)+\'</td>\'+
       \'<td><input type="number" step="any" min="0" placeholder="maliyet" value="\'+(cs.cost==null?\'\':cs.cost)+\'" onchange="setCost(\\'\'+o.id+\'\\',\\'cost\\',this.value)"></td>\'+
-      \'<td><input type="number" step="any" min="0" placeholder="\'+(o.shipCost||0)+\'" value="\'+(cs.ship==null?\'\':cs.ship)+\'" onchange="setCost(\\'\'+o.id+\'\\',\\'ship\\',this.value)"></td>\'+
+      \'<td class="r">\'+money(c.ship)+(cs.ship!=null?\'<span class="pill w" title="elle düzeltildi">düzeltildi</span>\':\'\')+\' <button class="pen" title="Düzenle (boş bırakırsan Shopier API değerine döner)" data-id="\'+o.id+\'" data-v="\'+c.ship+\'" onclick="editShip(this)">✎</button></td>\'+
       \'<td class="r">\'+money(c.kom)+\'</td><td class="r">\'+money(c.komKdv)+\'</td><td class="r">\'+money(c.stopaj)+\'</td><td class="r">\'+money(c.kdv)+\'</td><td class="r \'+(c.valid?(c.net>=0?\'pos\':\'neg\'):\'\')+\'">\'+(c.valid?money(c.net)+(c.miss?\'<span class="pill w">tahmini</span>\':\'\'):\'-\')+\'</td>\'+
       \'<td><input type="text" maxlength="200" placeholder="not" value="\'+esc(cs.note||\'\')+\'" onchange="setNote(\\'\'+o.id+\'\\',this.value)"></td></tr>\'}).join(\'\')+
     (ords.length?\'\':\'<tr><td colspan="12" class="mu">Bu dönemde sipariş yok</td></tr>\')+\'</table></div>\'+
-    \'<div class="note" style="margin-top:8px">Net kâr = ürün tutarı + müşteriden alınan kargo − Shopier kargo kesintisi − maliyet − komisyon − komisyon KDV − stopaj\'+(s.kdvPaid?\' − satış KDV\':\'\')+\'. Kargo kesintisi Shopier API kargo tutarıdır; Shopier panelindeki tutar farklıysa kutuya yazarak düzelt. Not sütunu siparişe özel hatırlatma içindir.</div>\';
+    \'<div class="note" style="margin-top:8px">Net kâr = ürün tutarı + müşteriden alınan kargo − Shopier kargo kesintisi − maliyet − komisyon − komisyon KDV − stopaj\'+(s.kdvPaid?\' − satış KDV\':\'\')+\'. Kargo kesintisi Shopier API den otomatik gelir; panelde farklıysa kalem simgesiyle düzelt. Not sütunu siparişe özel hatırlatma içindir.</div>\';
   // other income / expenses
   h+=\'<h2>Diğer gelir / gider</h2><div class="card"><div class="form"><select id="e-type"><option value="gider">Gider</option><option value="gelir">Gelir</option></select><input type="text" id="e-title" placeholder="Başlık (filament, kutu, reklam…)"><input type="number" id="e-amt" step="any" min="0" placeholder="Tutar ₺"><input type="date" id="e-date" value="\'+ymd(now)+\'"><input type="text" id="e-note" placeholder="Not (isteğe bağlı)"><button onclick="addEntry()">Ekle</button></div>\'+
     \'<div class="scroll" style="margin-top:12px"><table class="t" style="min-width:520px"><tr><th>Tarih</th><th>Tür</th><th>Başlık</th><th class="r">Tutar</th><th></th></tr>\'+
