@@ -427,6 +427,7 @@ input[type=number]{width:96px}input[type=text]{min-width:160px}
 .scroll{overflow-x:auto}
 .big{font-size:34px;font-weight:800}
 .note{font-size:12px;color:var(--mu);line-height:1.6}
+.pill.g{color:var(--ok);border-color:rgba(52,211,153,.45)}
 .pen{padding:0 6px;border:none;background:none;color:var(--mu);cursor:pointer;font-size:14px}.pen:hover{color:var(--ac)}
 footer{margin-top:40px;color:var(--mu);font-size:11px;text-align:center}
 </style></head><body><div class="wrap">
@@ -556,7 +557,8 @@ function calc(o,L){
   const shipEst=c.ship==null&&tbl==null&&ship>0;
   const cost=c.cost==null?null:Number(c.cost);
   const net=o.subtotal+o.shipping-ship-(cost||0)-fee-(s.kdvPaid?kdv:0);
-  return {valid,kom,komKdv,stopaj,fee,kdv,ship,shipEst,cost,net,miss:cost==null};
+  const tah=o.subtotal+o.shipping-ship-fee;
+  return {valid,kom,komKdv,stopaj,fee,kdv,ship,shipEst,cost,net,tah,miss:cost==null};
 }
 function barsSvg(d){
   const W=560,H=220,pl=46,pb=26,pt=14,pr=8;
@@ -589,12 +591,34 @@ function rowsBar(items,fmt){
   const mx=Math.max(1,...items.map(i=>i.v));
   return items.map(i=>\'<div class="row"><span>\'+esc(i.k)+\'</span><span>\'+fmt(i)+\'</span></div><div class="bar"><i style="width:\'+Math.round(i.v*100/mx)+\'%"></i></div>\').join(\'\')||\'<div class="mu">Veri yok</div>\';
 }
+function matchPayouts(all,pays){
+  const res={},used={};
+  const cand=all.filter(x=>x.c.valid).map(x=>({id:x.o.id,d:x.d,v:Math.round(x.c.tah*100)}));
+  pays.slice().sort((a,b)=>a.date<b.date?-1:1).forEach(pm=>{
+    const target=Math.round(pm.amount*100);
+    const pool=cand.filter(c=>!used[c.id]&&c.d<=pm.date).sort((a,b)=>a.d<b.d?-1:1).slice(-22),n=pool.length;
+    let best=null;
+    const dfs=(i,sum,pick)=>{
+      if(best)return;
+      if(pick.length&&Math.abs(sum-target)<=10){best=pick.slice();return}
+      if(i>=n||sum>target+10)return;
+      pick.push(i);dfs(i+1,sum+pool[i].v,pick);pick.pop();dfs(i+1,sum,pick);
+    };
+    dfs(0,0,[]);
+    if(best)best.forEach(i=>{used[pool[i].id]=1;res[pool[i].id]={st:pm.status===\'paid\'?\'paid\':\'way\',date:pm.date}});
+  });
+  return res;
+}
 function renderPro(){
   const P=PRO,L=P.ledger,s=L.settings,now=new Date();
   const cm=ymd(now).slice(0,7),pm=ymd(new Date(now.getFullYear(),now.getMonth()-1,1)).slice(0,7);
   const inP=(d)=>PER===\'all\'||(PER===\'month\'&&d.slice(0,7)===cm)||(PER===\'prev\'&&d.slice(0,7)===pm);
   const all=P.orders.map(o=>({o:o,c:calc(o,L),d:ymd(new Date(o.date))})).sort((a,b)=>b.o.date<a.o.date?-1:1);
   const ords=all.filter(x=>inP(x.d)),ok=ords.filter(x=>x.c.valid);
+  const PM=matchPayouts(all,P.payouts||[]);
+  const waiting=all.filter(x=>x.c.valid&&!PM[x.o.id]),waitSum=waiting.reduce((a,x)=>a+x.c.tah,0);
+  const paidOrders=all.filter(x=>x.c.valid&&PM[x.o.id]);
+  const bankCell=(id,valid)=>{if(!valid)return \'-\';const m=PM[id];return m?\'<span class="pill g" title="Banka gönderimi">\'+(m.st===\'paid\'?\'yatırıldı \':\'yolda \')+m.date.split(\'-\').reverse().slice(0,2).join(\'.\')+\'</span>\':\'<span class="pill w">bakiyede</span>\'};
   const sum=(f)=>ok.reduce((a,x)=>a+f(x),0);
   const sales=sum(x=>x.o.subtotal),fee=sum(x=>x.c.fee),ship=sum(x=>x.c.ship),shipIn=sum(x=>x.o.shipping),kom=sum(x=>x.c.kom),komKdv=sum(x=>x.c.komKdv),stopaj=sum(x=>x.c.stopaj),kdv=sum(x=>x.c.kdv),cost=sum(x=>x.c.cost||0),orderNet=sum(x=>x.c.net);
   const miss=ok.filter(x=>x.c.miss).length;
@@ -614,7 +638,7 @@ function renderPro(){
     K(\'KDV \'+(s.kdvPaid?\'(ödeniyor)\':\'(şimdilik ödenmiyor)\'),money(kdv),s.kdvPaid?\'kârdan düşüldü\':\'ödense net kâr: \'+money(netKdv))+
     K(\'Diğer gelir\',money(oin))+K(\'Diğer gider\',money(oout))+\'</div>\';
   const bal=P.balance,pays=P.payouts||[];
-  h+=\'<div class="kpis" style="margin-top:12px">\'+K(\'Shopier bakiyesi\',bal==null?\'-\':money(bal),\'henüz gönderilmemiş tahsilat\')+K(\'Gönderilen toplam\',money(pays.reduce((a,x)=>a+x.amount,0)),pays.length+\' para gönderimi\')+K(\'Son gönderim\',pays[0]?money(pays[0].amount):\'-\',pays[0]?pays[0].date.split(\'-\').reverse().join(\'.\'):\'\')+\'</div>\';
+  h+=\'<div class="kpis" style="margin-top:12px">\'+K(\'Bankaya yatmayı bekleyen\',money(waitSum),waiting.length+\' sipariş bakiyede\'+(bal!=null&&Math.abs(bal-waitSum)>0.5?\' · Shopier bakiyesi \'+money(bal)+\' (fark var)\':\' · Shopier bakiyesiyle aynı\'))+K(\'Bankaya yatan\',money(pays.reduce((a,x)=>a+x.amount,0)),pays.length+\' gönderim · \'+paidOrders.length+\' sipariş\')+K(\'Son gönderim\',pays[0]?money(pays[0].amount):\'-\',pays[0]?pays[0].date.split(\'-\').reverse().join(\'.\'):\'\')+\'</div>\';
   // charts
   const months={};
   all.filter(x=>x.c.valid).forEach(x=>{const k=x.d.slice(0,7);(months[k]=months[k]||{a:0,b:0}).a+=x.o.subtotal;months[k].b+=x.c.net});
@@ -629,14 +653,15 @@ function renderPro(){
     \'<div class="card"><div class="k">Ürünler · satış tutarı</div>\'+rowsBar(Object.values(prod).sort((a,b)=>b.v-a.v).slice(0,7).map(p=>({k:p.k,v:p.v,n:p.n})),i=>i.n+\' adet · \'+money(i.v))+\'</div>\'+
     \'<div class="card"><div class="k">Ödeme yöntemi · sipariş</div>\'+rowsBar(Object.values(pay),i=>i.v+\' sipariş\')+\'<div class="k" style="margin-top:16px">Sipariş durumu</div>\'+rowsBar(Object.entries(ords.reduce((a,x)=>{const k=x.o.refunded?\'iade\':x.o.status;a[k]=(a[k]||0)+1;return a},{})).map(e=>({k:e[0],v:e[1]})),i=>i.v)+\'</div></div>\';
   // order table
-  h+=\'<h2>Siparişler · maliyet gir, kârı gör</h2><div class="card scroll"><table class="t"><tr><th>Tarih</th><th>Ürün</th><th>Müşteri</th><th class="r">Ürün ₺</th><th class="r">Müşteri kargo</th><th>Maliyet ₺</th><th>Kargo kesintisi ₺</th><th class="r">Komisyon</th><th class="r">Kom. KDV</th><th class="r">Stopaj</th><th class="r">Satış KDV (bilgi)</th><th class="r">Net kâr</th><th>Not</th></tr>\'+
+  h+=\'<h2>Siparişler · maliyet gir, kârı gör</h2><div class="card scroll"><table class="t"><tr><th>Tarih</th><th>Ürün</th><th>Müşteri</th><th class="r">Ürün ₺</th><th class="r">Müşteri kargo</th><th>Maliyet ₺</th><th>Kargo kesintisi ₺</th><th class="r">Komisyon</th><th class="r">Kom. KDV</th><th class="r">Stopaj</th><th class="r">Satış KDV (bilgi)</th><th class="r">Net kâr</th><th>Banka</th><th>Not</th></tr>\'+
     ords.map(x=>{const o=x.o,c=x.c,cs=L.costs[o.id]||{};
       return \'<tr style="\'+(c.valid?\'\':\'opacity:.5\')+\'"><td>\'+esc(x.d.slice(5).split(\'-\').reverse().join(\'.\'))+\'</td><td>\'+esc(o.title)+(c.valid?\'\':\'<span class="pill w">\'+(o.refunded?\'iade\':esc(o.status))+\'</span>\')+\'</td><td>\'+esc(o.customer||\'\')+(o.tel?\'<div class="mu"><a href="tel:+\'+esc(o.tel)+\'">\'+esc(o.phone)+\'</a></div>\':\'\')+\'</td><td class="r">\'+money(o.subtotal)+\'</td><td class="r">\'+money(o.shipping)+\'</td>\'+
       \'<td><input type="number" step="any" min="0" placeholder="maliyet" value="\'+(cs.cost==null?\'\':cs.cost)+\'" onchange="setCost(\\'\'+o.id+\'\\',\\'cost\\',this.value)"></td>\'+
       \'<td class="r">\'+money(c.ship)+(cs.ship!=null?\'<span class="pill w" title="elle düzeltildi">düzeltildi</span>\':c.shipEst?\'<span class="pill w" title="tarifede yok, API tutarı">tahmini</span>\':\'\')+\' <button class="pen" title="Düzenle (boş bırakırsan Shopier API değerine döner)" data-id="\'+o.id+\'" data-v="\'+c.ship+\'" onclick="editShip(this)">✎</button></td>\'+
       \'<td class="r">\'+money(c.kom)+\'</td><td class="r">\'+money(c.komKdv)+\'</td><td class="r">\'+money(c.stopaj)+\'</td><td class="r">\'+money(c.kdv)+\'</td><td class="r \'+(c.valid?(c.net>=0?\'pos\':\'neg\'):\'\')+\'">\'+(c.valid?money(c.net)+(c.miss?\'<span class="pill w">tahmini</span>\':\'\'):\'-\')+\'</td>\'+
+      \'<td>\'+bankCell(o.id,c.valid)+\'</td>\'+
       \'<td><input type="text" maxlength="200" placeholder="not" value="\'+esc(cs.note||\'\')+\'" onchange="setNote(\\'\'+o.id+\'\\',this.value)"></td></tr>\'}).join(\'\')+
-    (ords.length?\'\':\'<tr><td colspan="13" class="mu">Bu dönemde sipariş yok</td></tr>\')+\'</table></div>\'+
+    (ords.length?\'\':\'<tr><td colspan="14" class="mu">Bu dönemde sipariş yok</td></tr>\')+\'</table></div>\'+
     \'<div class="note" style="margin-top:8px">Net kâr = ürün tutarı + müşteriden alınan kargo − Shopier kargo kesintisi − maliyet − hizmet bedeli − KDV − stopaj\'+(s.kdvPaid?\' − satış KDV\':\'\')+\'. Kargo kesintisi desi tarifesinden gelir (Ayarlar); tarifede olmayan desi için Shopier API tutarı tahmin olarak kullanılır. Kalem simgesiyle düzeltebilirsin. Not sütunu siparişe özel hatırlatma içindir.</div>\';
   // other income / expenses
   h+=\'<h2>Diğer gelir / gider</h2><div class="card"><div class="form"><select id="e-type"><option value="gider">Gider</option><option value="gelir">Gelir</option></select><input type="text" id="e-title" placeholder="Başlık (filament, kutu, reklam…)"><input type="number" id="e-amt" step="any" min="0" placeholder="Tutar ₺"><input type="date" id="e-date" value="\'+ymd(now)+\'"><input type="text" id="e-note" placeholder="Not (isteğe bağlı)"><button onclick="addEntry()">Ekle</button></div>\'+
