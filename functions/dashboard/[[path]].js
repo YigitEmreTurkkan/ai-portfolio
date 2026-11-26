@@ -255,6 +255,9 @@ async function shopierOrders(env) {
     subtotal: Number((o.totals || {}).subtotal || 0),
     shipping: Number((o.totals || {}).shipping || 0),
     total: Number((o.totals || {}).total || 0),
+    customer: [(o.shippingInfo || {}).firstName, (o.shippingInfo || {}).lastName].filter(Boolean).join(' ').slice(0, 60),
+    phone: String((o.shippingInfo || {}).phone || '').slice(0, 25),
+    tel: String((o.shippingInfo || {}).phone || '').replace(/\D/g, '').slice(0, 15),
     shipCost: (o.fulfillments || []).reduce((a, f) => a + Number(f.cost || 0), 0),
     refunded: (o.refunds || []).length > 0 || (o.returns || []).length > 0,
   }));
@@ -617,14 +620,14 @@ function renderPro(){
     \'<div class="card"><div class="k">Ürünler · satış tutarı</div>\'+rowsBar(Object.values(prod).sort((a,b)=>b.v-a.v).slice(0,7).map(p=>({k:p.k,v:p.v,n:p.n})),i=>i.n+\' adet · \'+money(i.v))+\'</div>\'+
     \'<div class="card"><div class="k">Ödeme yöntemi · sipariş</div>\'+rowsBar(Object.values(pay),i=>i.v+\' sipariş\')+\'<div class="k" style="margin-top:16px">Sipariş durumu</div>\'+rowsBar(Object.entries(ords.reduce((a,x)=>{const k=x.o.refunded?\'iade\':x.o.status;a[k]=(a[k]||0)+1;return a},{})).map(e=>({k:e[0],v:e[1]})),i=>i.v)+\'</div></div>\';
   // order table
-  h+=\'<h2>Siparişler · maliyet gir, kârı gör</h2><div class="card scroll"><table class="t"><tr><th>Tarih</th><th>Ürün</th><th class="r">Ürün ₺</th><th class="r">Müşteri kargo</th><th>Maliyet ₺</th><th>Kargo kesintisi ₺</th><th class="r">Komisyon</th><th class="r">Kom. KDV</th><th class="r">Stopaj</th><th class="r">Satış KDV (bilgi)</th><th class="r">Net kâr</th><th>Not</th></tr>\'+
+  h+=\'<h2>Siparişler · maliyet gir, kârı gör</h2><div class="card scroll"><table class="t"><tr><th>Tarih</th><th>Ürün</th><th>Müşteri</th><th class="r">Ürün ₺</th><th class="r">Müşteri kargo</th><th>Maliyet ₺</th><th>Kargo kesintisi ₺</th><th class="r">Komisyon</th><th class="r">Kom. KDV</th><th class="r">Stopaj</th><th class="r">Satış KDV (bilgi)</th><th class="r">Net kâr</th><th>Not</th></tr>\'+
     ords.map(x=>{const o=x.o,c=x.c,cs=L.costs[o.id]||{};
-      return \'<tr style="\'+(c.valid?\'\':\'opacity:.5\')+\'"><td>\'+esc(x.d.slice(5).split(\'-\').reverse().join(\'.\'))+\'</td><td>\'+esc(o.title)+(c.valid?\'\':\'<span class="pill w">\'+(o.refunded?\'iade\':esc(o.status))+\'</span>\')+\'</td><td class="r">\'+money(o.subtotal)+\'</td><td class="r">\'+money(o.shipping)+\'</td>\'+
+      return \'<tr style="\'+(c.valid?\'\':\'opacity:.5\')+\'"><td>\'+esc(x.d.slice(5).split(\'-\').reverse().join(\'.\'))+\'</td><td>\'+esc(o.title)+(c.valid?\'\':\'<span class="pill w">\'+(o.refunded?\'iade\':esc(o.status))+\'</span>\')+\'</td><td>\'+esc(o.customer||\'\')+(o.tel?\'<div class="mu"><a href="tel:+\'+esc(o.tel)+\'">\'+esc(o.phone)+\'</a></div>\':\'\')+\'</td><td class="r">\'+money(o.subtotal)+\'</td><td class="r">\'+money(o.shipping)+\'</td>\'+
       \'<td><input type="number" step="any" min="0" placeholder="maliyet" value="\'+(cs.cost==null?\'\':cs.cost)+\'" onchange="setCost(\\'\'+o.id+\'\\',\\'cost\\',this.value)"></td>\'+
       \'<td class="r">\'+money(c.ship)+(cs.ship!=null?\'<span class="pill w" title="elle düzeltildi">düzeltildi</span>\':\'\')+\' <button class="pen" title="Düzenle (boş bırakırsan Shopier API değerine döner)" data-id="\'+o.id+\'" data-v="\'+c.ship+\'" onclick="editShip(this)">✎</button></td>\'+
       \'<td class="r">\'+money(c.kom)+\'</td><td class="r">\'+money(c.komKdv)+\'</td><td class="r">\'+money(c.stopaj)+\'</td><td class="r">\'+money(c.kdv)+\'</td><td class="r \'+(c.valid?(c.net>=0?\'pos\':\'neg\'):\'\')+\'">\'+(c.valid?money(c.net)+(c.miss?\'<span class="pill w">tahmini</span>\':\'\'):\'-\')+\'</td>\'+
       \'<td><input type="text" maxlength="200" placeholder="not" value="\'+esc(cs.note||\'\')+\'" onchange="setNote(\\'\'+o.id+\'\\',this.value)"></td></tr>\'}).join(\'\')+
-    (ords.length?\'\':\'<tr><td colspan="12" class="mu">Bu dönemde sipariş yok</td></tr>\')+\'</table></div>\'+
+    (ords.length?\'\':\'<tr><td colspan="13" class="mu">Bu dönemde sipariş yok</td></tr>\')+\'</table></div>\'+
     \'<div class="note" style="margin-top:8px">Net kâr = ürün tutarı + müşteriden alınan kargo − Shopier kargo kesintisi − maliyet − hizmet bedeli − KDV − stopaj\'+(s.kdvPaid?\' − satış KDV\':\'\')+\'. Kargo kesintisi Shopier API den otomatik gelir; panelde farklıysa kalem simgesiyle düzelt. Not sütunu siparişe özel hatırlatma içindir.</div>\';
   // other income / expenses
   h+=\'<h2>Diğer gelir / gider</h2><div class="card"><div class="form"><select id="e-type"><option value="gider">Gider</option><option value="gelir">Gelir</option></select><input type="text" id="e-title" placeholder="Başlık (filament, kutu, reklam…)"><input type="number" id="e-amt" step="any" min="0" placeholder="Tutar ₺"><input type="date" id="e-date" value="\'+ymd(now)+\'"><input type="text" id="e-note" placeholder="Not (isteğe bağlı)"><button onclick="addEntry()">Ekle</button></div>\'+
