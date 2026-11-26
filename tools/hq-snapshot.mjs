@@ -70,7 +70,33 @@ function projects() {
   return out;
 }
 
-const data = { at: new Date().toISOString(), tasks: tasks(), sales: sales(), projects: projects() };
+// ---- Shopier orders: counts and totals only (no customer data). Key: keys/shopier.key ----
+async function shopier() {
+  const kf = resolve(repos, 'keys/shopier.key');
+  if (!existsSync(kf)) return null;
+  const key = readFileSync(kf, 'utf8').trim();
+  const now = new Date();
+  const iso = (d) => d.toISOString().replace(/\.\d+Z$/, 'Z');
+  const since = new Date(now.getTime() - 90 * 864e5);
+  const all = [];
+  for (let page = 1; page <= 20; page++) {
+    const u = `https://api.shopier.com/v1/orders?dateStart=${iso(since)}&dateEnd=${iso(now)}&limit=50&page=${page}`;
+    const r = await fetch(u, { headers: { Authorization: 'Bearer ' + key, Accept: 'application/json' } });
+    if (!r.ok) { console.error('Shopier ' + r.status); return null; }
+    all.push(...(await r.json()));
+    if (page >= Number(r.headers.get('Shopier-Pagination-Total-Pages') || 1)) break;
+  }
+  const paid = all.filter((o) => o.paymentStatus === 'paid');
+  const sum = (days) => {
+    const from = now.getTime() - days * 864e5;
+    const l = paid.filter((o) => new Date(o.dateCreated).getTime() >= from);
+    return { n: l.length, total: Math.round(l.reduce((a, o) => a + Number(o.totals?.total || 0), 0)) };
+  };
+  const open = all.filter((o) => o.status !== 'fulfilled' && o.status !== 'cancelled').length;
+  return { d1: sum(1), d7: sum(7), d30: sum(30), d90: sum(90), open, last: paid[0]?.dateCreated || null };
+}
+
+const data = { at: new Date().toISOString(), tasks: tasks(), sales: sales(), projects: projects(), shopier: await shopier() };
 const r = await fetch(secrets.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/hq_snapshot?on_conflict=id', {
   method: 'POST',
   headers: {

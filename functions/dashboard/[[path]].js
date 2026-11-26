@@ -15,7 +15,7 @@ const SITES = [
 ];
 
 const COOKIE = 'dash';
-const MAX_AGE = 60 * 60 * 24 * 7;
+const MAX_AGE = 60 * 60 * 24 * 90; // log in once; this browser stays signed in for 90 days (HttpOnly, Secure, SameSite=Strict)
 const fails = new Map(); // ip -> {n, until}  (per isolate; a soft brake, not the only defence)
 
 const enc = new TextEncoder();
@@ -23,6 +23,11 @@ const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart
 async function hmac(key, msg) {
   const k = await crypto.subtle.importKey('raw', enc.encode(key), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return hex(await crypto.subtle.sign('HMAC', k, enc.encode(msg)));
+}
+// Slow password hash (PBKDF2-SHA256, 100k rounds = Workers maximum). Salt is the DASH_SALT string itself.
+async function pbkdf2(password, salt) {
+  const k = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  return hex(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: enc.encode(salt), iterations: 100000 }, k, 256));
 }
 function same(a, b) {
   if (a.length !== b.length) return false;
@@ -48,6 +53,10 @@ const baseHeaders = {
   'X-Robots-Tag': 'noindex, nofollow',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'no-referrer',
+  'X-Content-Type-Options': 'nosniff',
+  'Strict-Transport-Security': 'max-age=31536000',
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Content-Security-Policy': "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
 };
 const html = (body, status = 200) =>
   new Response(body, { status, headers: { ...baseHeaders, 'Content-Type': 'text/html; charset=utf-8' } });
@@ -184,8 +193,8 @@ async function safe(fn) {
 
 // ---------- routes ----------
 
-// TEMPORARY: panel is open without a password (owner choice, 24 Nov 2026). Set to false to require the login again.
-const OPEN = true;
+// Password required (26 Nov 2026). Never set to true again: the panel shows revenue.
+const OPEN = false;
 
 export async function onRequest({ request, env }) {
   const url = new URL(request.url);
@@ -193,11 +202,14 @@ export async function onRequest({ request, env }) {
   const ip = request.headers.get('CF-Connecting-IP') || 'x';
 
   if (path === '/dashboard/login' && request.method === 'POST') {
+    // CSRF / cross-site posts: the login form is only ever submitted from our own origin.
+    const origin = request.headers.get('Origin');
+    if (origin && origin !== url.origin) return html(loginPage('Geçersiz istek.'), 403);
     const f = fails.get(ip) || { n: 0, until: 0 };
     if (f.until > Date.now()) return html(loginPage('Çok fazla deneme. Biraz bekleyin.'), 429);
     if (!env.DASH_SALT || !env.DASH_PASS_HASH || !env.DASH_SECRET) return html(loginPage('Şifre henüz tanımlanmamış.'), 503);
     const form = await request.formData();
-    const given = await hmac(env.DASH_SALT, String(form.get('p') || ''));
+    const given = await pbkdf2(String(form.get('p') || '').slice(0, 200), env.DASH_SALT);
     if (same(given, env.DASH_PASS_HASH)) {
       fails.delete(ip);
       const exp = String(Math.floor(Date.now() / 1000) + MAX_AGE);
@@ -291,6 +303,7 @@ footer{margin-top:40px;color:var(--mu);font-size:11px;text-align:center}
 <h2>Ziyaret · son 7 gün</h2><div class="grid" id="traffic"></div>
 <h2>ChainBud uygulaması</h2><div class="grid" id="cb"></div><div class="card" id="cbev" style="margin-top:12px"></div>
 <h2>Poliçem AI</h2><div class="grid" id="pol"></div>
+<h2>Shopier siparişleri</h2><div class="grid" id="shop"></div>
 <h2>Satış hattı · Poliçem AI acenteleri</h2><div class="grid" id="sales"></div>
 <h2>Görevler</h2><div class="grid" id="tasks"></div>
 <h2>Projeler · git durumu</h2><div class="grid" id="projects"></div>
@@ -335,6 +348,10 @@ async function load(){
     card('Acente',p.agencies_total,'<div class="mu">'+p.agencies_approved+' onaylı · '+p.agencies_pending+' bekleyen</div>')+
     card('Son 7 gün kayıt',p.signups_7d,'<div class="mu">Son kayıt: '+(p.last_signup?new Date(p.last_signup).toLocaleDateString('tr-TR'):'-')+'</div>')+
     card('Poliçe',p.policies_total,'<div class="mu">Son 7 gün: '+p.policies_7d+'</div>')+card('Müşteri kaydı',p.customers_total);
+  const sh=h.shopier,tl=(n)=>Number(n).toLocaleString('tr-TR')+' ₺';
+  $('shop').innerHTML=!sh?'<div class="mu">Shopier verisi yok (hq.ps1 panel çalıştır)</div>':
+    [['Bugün (24 sa)',sh.d1],['7 gün',sh.d7],['30 gün',sh.d30],['90 gün',sh.d90]].map(([k,x])=>card(k,x.n+' sipariş','<div class="mu">'+tl(x.total)+'</div>')).join('')+
+    card('Bekleyen sipariş',sh.open,'<div class="mu">'+(sh.last?'son sipariş '+ago(sh.last):'')+'</div>');
   if(!h.sales){$('sales').innerHTML='<div class="mu">Anlık görüntü yok (hq-snapshot çalıştır)</div>'}else{
     const tot=h.sales.total||1;
     $('sales').innerHTML=Object.entries(h.sales.counts).sort((a,b)=>b[1]-a[1]).map(([k,n])=>'<div class="card"><div class="k">'+esc(k)+'</div><div class="v">'+n+'</div><div class="bar"><i style="width:'+pct(n,tot)+'%"></i></div><div class="mu">%'+pct(n,tot)+'</div></div>').join('');

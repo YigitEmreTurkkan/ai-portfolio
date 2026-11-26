@@ -2,7 +2,7 @@
 // Run:  node tools/dash-setup.mjs        (you type the password; it is never printed)
 // Output: ../keys/dash-secrets.json  (outside git). Then add the API values to the same file and upload:
 //   npx wrangler pages secret bulk ../keys/dash-secrets.json --project-name <pages-project>
-import { createHmac, randomBytes } from 'node:crypto';
+import { pbkdf2Sync, randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -39,7 +39,7 @@ const salt = randomBytes(24).toString('hex');
 const secrets = existsSync(out) ? JSON.parse(readFileSync(out, 'utf8')) : {};
 Object.assign(secrets, {
   DASH_SALT: salt,
-  DASH_PASS_HASH: createHmac('sha256', salt).update(p1).digest('hex'),
+  DASH_PASS_HASH: pbkdf2Sync(p1, salt, 100000, 32, 'sha256').toString('hex'),
   DASH_SECRET: randomBytes(32).toString('hex'),
 });
 for (const k of ['CF_ACCOUNT_ID', 'CF_API_TOKEN', 'SUPABASE_URL', 'SUPABASE_SERVICE_KEY']) secrets[k] ??= '';
