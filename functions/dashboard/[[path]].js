@@ -327,7 +327,7 @@ export async function onRequest({ request, env }) {
   }
 
   if (!OPEN && !(await authed(request, env))) {
-    return path === '/dashboard/api/data' ? json({ error: 'unauthorized' }, 401) : html(loginPage(''));
+    return path.startsWith('/dashboard/api/') ? json({ error: 'unauthorized' }, 401) : html(loginPage(''));
   }
 
   if (path.startsWith('/dashboard/api/produstra')) return safe(() => produstraApi(request, env, url, path)).then((r) => (r instanceof Response ? r : json(r, 500)));
