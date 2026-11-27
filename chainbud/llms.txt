@@ -1,0 +1,18 @@
+# ChainBud
+
+> ChainBud is a free habit tracker where a cute virtual pet grows as you keep your streak. 6 buddies, 8 levels, flexible weekly goals, mood journal. iOS and Android.
+
+## Questions
+- What is ChainBud? ChainBud is a habit tracker with a virtual pet. Each completed day adds a link to your chain and your buddy grows through 8 levels.
+- Is ChainBud free? Yes. ChainBud is free to use. An optional Premium subscription removes interstitial ads and adds weekly Streak Shields, vacation mode, unlimited Star Catch rounds, exclusive cosmetics and all mood and habit insights.
+- What happens if I miss a day? You choose how many days a week count, and the others are rest days. You can recover yesterday if you forgot to check in, and Streak Shields protect your progress.
+- Which companions can I choose? Six: a bunny, a lion, a panda, a fox, an owl and a bear. Each one evolves through 8 levels.
+- Does ChainBud track mood and period cycles? Yes. There is a mood journal and an optional cycle tracker. The cycle tracker is not a medical device and is not for contraception.
+- Where can I download ChainBud? On the App Store for iPhone and on Google Play for Android. The app is available in 13 languages.
+
+## Links
+- [Website](https://yigitemreturkkan.com/chainbud/)
+- [App Store](https://apps.apple.com/app/id6789577079)
+- [Google Play](https://play.google.com/store/apps/details?id=com.chainbud.chainbud)
+- [Privacy](https://yigitemreturkkan.com/chainbud/privacy)
+- [Terms](https://yigitemreturkkan.com/chainbud/terms)

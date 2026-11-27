@@ -1125,3 +1125,11 @@ body.lang-en flex.lang-en {
 @media (prefers-reduced-motion: reduce) {
   .hero-icon { animation: none; }
 }
+
+/* FAQ */
+.faq { padding: 80px 0; }
+.faq .container { max-width: 760px; }
+.faq .section-title { margin-bottom: 28px; text-align: center; }
+.faq details { background: var(--surface-color); border-radius: 16px; padding: 18px 22px; margin-bottom: 12px; }
+.faq summary { cursor: pointer; font-weight: 700; }
+.faq p { margin-top: 10px; line-height: 1.6; opacity: .85; }
